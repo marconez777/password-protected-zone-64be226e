@@ -1,9 +1,11 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUsageData } from "@/hooks/useUsageData";
 import { format, isPast, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client"; // Added missing import
 import { 
   BarChart3, 
   Calendar, 
