@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ResourceForm } from '@/components/ResourceForm';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ResourceType } from '@/hooks/useResourceLimits';
 import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -167,12 +166,7 @@ export function SearchFunnelForm() {
   );
 
   return (
-    <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">Funil de Busca</h1>
-      <p className="mb-6 text-muted-foreground">
-        Preencha as informações abaixo e clique em enviar
-      </p>
-      
+    <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="formulario">Formulário</TabsTrigger>
