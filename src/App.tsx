@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import UpdatePassword from "./pages/UpdatePassword";
 import Subscribe from "./pages/Subscribe";
 import Dashboard from "./pages/Dashboard";
+import SearchFunnel from "./pages/SearchFunnel";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -37,6 +38,7 @@ const App = () => (
             {/* Rotas protegidas */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/funil-de-busca" element={<SearchFunnel />} />
             </Route>
             
             {/* Rota de fallback */}

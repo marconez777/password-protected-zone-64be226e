@@ -6,7 +6,7 @@ export interface ResourceFormProps {
   title: string;
   description: string;
   webhookUrl?: string;
-  onSubmit: () => Promise<void>;
+  onSubmit: () => Promise<boolean | void>;
   children: React.ReactNode;
   resultComponent?: React.ReactNode;
 }

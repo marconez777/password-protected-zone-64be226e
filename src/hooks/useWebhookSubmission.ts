@@ -17,7 +17,7 @@ export function useWebhookSubmission(
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const submitToWebhook = async (formData: any) => {
+  const submitToWebhook = async (formData: any): Promise<any> => {
     if (!user) {
       toast({
         title: "Erro de autenticação",
@@ -30,6 +30,8 @@ export function useWebhookSubmission(
     setIsLoading(true);
     
     try {
+      console.log("Enviando dados para o webhook:", webhookUrl, formData);
+      
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -43,15 +45,12 @@ export function useWebhookSubmission(
       }
 
       const resultData = await response.json();
+      console.log("Resposta do webhook:", resultData);
+      
       setResult(resultData);
       
       // Save to database
       await saveResultToDatabase(resourceType, formData, resultData);
-      
-      toast({
-        title: "Sucesso!",
-        description: "Seu conteúdo foi gerado com sucesso.",
-      });
       
       return resultData;
     } catch (error) {
