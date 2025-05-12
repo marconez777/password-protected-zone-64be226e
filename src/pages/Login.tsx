@@ -75,8 +75,8 @@ const Login = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-2">
-            <div className="rounded-md bg-primary w-10 h-10 flex items-center justify-center text-white font-bold">
-              A
+            <div className="rounded-md bg-mkranker-purple w-10 h-10 flex items-center justify-center text-white font-bold">
+              M
             </div>
           </div>
           <CardTitle className="text-2xl font-medium text-center">Login</CardTitle>
@@ -122,7 +122,7 @@ const Login = () => {
               </div>
             </div>
             
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple" disabled={isLoading}>
               {isLoading ? (
                 <span className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -141,13 +141,13 @@ const Login = () => {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <div className="text-sm text-center text-gray-500">
-            <Link to="/reset-password" className="text-primary hover:underline">
+            <Link to="/reset-password" className="text-mkranker-purple hover:underline">
               Forgot your password?
             </Link>
           </div>
           <div className="text-sm text-center text-gray-500">
             Don't have an account?{" "}
-            <Link to="/register" className="text-primary hover:underline">
+            <Link to="/register" className="text-mkranker-purple hover:underline">
               Sign up
             </Link>
           </div>

@@ -14,7 +14,9 @@ import {
   LogOut, 
   Settings, 
   User, 
-  Users
+  Users,
+  Search,
+  FileText
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,10 +30,12 @@ import {
   SidebarMenuButton, 
   SidebarHeader,
   SidebarFooter,
-  SidebarTrigger
+  SidebarTrigger,
+  SidebarGroup,
+  SidebarGroupLabel
 } from "@/components/ui/sidebar";
-import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { ChartContainer, ChartLegend } from "@/components/ui/chart";
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
 const Dashboard = () => {
   const { session, user } = useAuth();
@@ -54,7 +58,7 @@ const Dashboard = () => {
     { name: 'Jun', value: 28 },
   ];
   
-  const COLORS = ['#6366F1', '#E5E7EB'];
+  const COLORS = ['#8260d0', '#E5E7EB'];
 
   useEffect(() => {
     // If not authenticated, redirect to login
@@ -106,7 +110,7 @@ const Dashboard = () => {
   if (!user || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -114,47 +118,62 @@ const Dashboard = () => {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gray-50">
-        <Sidebar variant="inset" side="left">
-          <SidebarHeader className="flex items-center px-6 py-5 border-b border-sidebar-border">
+        <Sidebar className="bg-mkranker-sidebar-bg border-r border-gray-200">
+          <SidebarHeader className="flex items-center px-6 py-5 border-b border-gray-200">
             <div className="flex items-center gap-2">
-              <div className="rounded-md bg-primary w-8 h-8 flex items-center justify-center text-white font-bold">
-                A
+              <div className="rounded-md bg-mkranker-purple w-8 h-8 flex items-center justify-center text-white font-bold">
+                M
               </div>
-              <span className="text-lg font-medium">AppName</span>
+              <span className="text-lg font-medium text-gray-800">MKRanker</span>
             </div>
           </SidebarHeader>
           
           <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive tooltip="Dashboard">
-                  <LayoutDashboard />
-                  <span>Dashboard</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Analytics">
-                  <BarChart3 />
-                  <span>Analytics</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Users">
-                  <Users />
-                  <span>Users</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Settings">
-                  <Settings />
-                  <span>Settings</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-mkranker-sidebar-text">GENERAL</SidebarGroupLabel>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton isActive className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active data-[active=true]:bg-mkranker-purple/10" tooltip="Dashboard">
+                    <Home className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active" />
+                    <span>Dashboard</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+            
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-mkranker-sidebar-text">APPS</SidebarGroupLabel>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Search">
+                    <Search className="text-mkranker-sidebar-text" />
+                    <span>Funil de Busca</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Users">
+                    <Users className="text-mkranker-sidebar-text" />
+                    <span>Mercado e Público Alvo</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Analytics">
+                    <BarChart3 className="text-mkranker-sidebar-text" />
+                    <span>Palavras Chaves</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Documents">
+                    <FileText className="text-mkranker-sidebar-text" />
+                    <span>Texto SEO para LP</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarContent>
           
-          <SidebarFooter className="mt-auto border-t border-sidebar-border p-4">
-            <SidebarMenuButton onClick={handleLogout}>
+          <SidebarFooter className="mt-auto border-t border-gray-200 p-4">
+            <SidebarMenuButton onClick={handleLogout} className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
               <LogOut />
               <span>Log out</span>
             </SidebarMenuButton>
@@ -169,11 +188,11 @@ const Dashboard = () => {
             </div>
             <SidebarTrigger className="block md:hidden" />
             <div className="hidden md:flex items-center gap-4">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="border-gray-200 text-gray-700">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="border-gray-200 text-gray-700">
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </Button>
@@ -181,7 +200,7 @@ const Dashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Total Analyses</CardTitle>
               </CardHeader>
@@ -197,7 +216,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Keywords Researched</CardTitle>
               </CardHeader>
@@ -213,7 +232,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Usage Limits</CardTitle>
               </CardHeader>
@@ -227,7 +246,7 @@ const Dashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium">Usage Overview</CardTitle>
               </CardHeader>
@@ -255,7 +274,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium">Activity Trend</CardTitle>
               </CardHeader>
@@ -270,7 +289,7 @@ const Dashboard = () => {
                       <Line 
                         type="monotone" 
                         dataKey="value" 
-                        stroke="#6366F1" 
+                        stroke="#8260d0" 
                         strokeWidth={2} 
                         dot={{ r: 4 }}
                         activeDot={{ r: 6 }}
@@ -283,7 +302,7 @@ const Dashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium">Subscription Details</CardTitle>
               </CardHeader>
@@ -312,12 +331,12 @@ const Dashboard = () => {
                     </div>
                     <span className="font-medium">June 10, 2025</span>
                   </div>
-                  <Button className="w-full mt-4">Manage Subscription</Button>
+                  <Button className="w-full mt-4 bg-mkranker-purple hover:bg-mkranker-dark-purple">Manage Subscription</Button>
                 </div>
               </CardContent>
             </Card>
             
-            <Card>
+            <Card className="border border-gray-200 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg font-medium">Account Information</CardTitle>
               </CardHeader>
@@ -344,7 +363,7 @@ const Dashboard = () => {
                     </div>
                     <span className="font-medium">{new Date(user?.created_at).toLocaleDateString()}</span>
                   </div>
-                  <Button variant="outline" className="w-full mt-4">Edit Profile</Button>
+                  <Button variant="outline" className="w-full mt-4 border-gray-200">Edit Profile</Button>
                 </div>
               </CardContent>
             </Card>
