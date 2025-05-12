@@ -146,6 +146,52 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_get_user_usage: {
+        Args: { user_email: string }
+        Returns: {
+          email: string
+          user_id: string
+          keyword_count: number
+          market_research_count: number
+          search_funnel_count: number
+          seo_text_count: number
+          topic_research_count: number
+          metadata_generation_count: number
+        }[]
+      }
+      admin_list_subscriptions: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          user_id: string
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          is_active: boolean
+          current_period_end: string
+          updated_at: string
+        }[]
+      }
+      admin_reset_user_usage: {
+        Args: {
+          user_email: string
+          reset_all?: boolean
+          reset_keyword?: boolean
+          reset_market_research?: boolean
+          reset_search_funnel?: boolean
+          reset_seo_text?: boolean
+          reset_topic_research?: boolean
+          reset_metadata_generation?: boolean
+        }
+        Returns: string
+      }
+      admin_update_user_subscription: {
+        Args: {
+          user_email: string
+          new_plan_type: Database["public"]["Enums"]["plan_type"]
+          is_active: boolean
+          expiration_date: string
+        }
+        Returns: string
+      }
       increment_user_usage: {
         Args: { resource_type: string }
         Returns: boolean

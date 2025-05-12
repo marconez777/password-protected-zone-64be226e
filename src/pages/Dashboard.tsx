@@ -3,24 +3,34 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { format, addDays, isPast, differenceInDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { 
   BarChart3, 
-  ChevronRight, 
+  Calendar, 
+  Check, 
+  ChevronRight,
   Clock, 
   CreditCard, 
   DollarSign, 
+  FileText, 
   Home, 
-  LayoutDashboard, 
   LogOut, 
+  Search,
   Settings, 
   User, 
   Users,
-  Search,
-  FileText
+  X,
+  Bell,
 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 import { 
   SidebarProvider, 
   Sidebar, 
@@ -34,73 +44,188 @@ import {
   SidebarGroup,
   SidebarGroupLabel
 } from "@/components/ui/sidebar";
-import { ChartContainer, ChartLegend } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+
+// Tipos para os dados
+interface Subscription {
+  id: string;
+  user_id: string;
+  is_active: boolean;
+  plan_type: 'solo' | 'discovery' | 'escala';
+  current_period_end: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Usage {
+  id: string;
+  user_id: string;
+  keyword_count: number;
+  market_research_count: number;
+  search_funnel_count: number;
+  seo_text_count: number;
+  topic_research_count: number;
+  metadata_generation_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface PlanLimit {
+  id: string;
+  plan_type: 'solo' | 'discovery' | 'escala';
+  keyword_limit: number | null;
+  market_research_limit: number | null;
+  search_funnel_limit: number | null;
+  seo_text_limit: number | null;
+  topic_research_limit: number | null;
+  metadata_generation_limit: number | null;
+  created_at: string;
+  updated_at: string;
+}
 
 const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
-  const [subscriptionData, setSubscriptionData] = useState<{ is_active: boolean, plan_type: string } | null>(null);
+  const { toast } = useToast();
+  
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [usage, setUsage] = useState<Usage | null>(null);
+  const [planLimits, setPlanLimits] = useState<PlanLimit | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Sample data for charts
-  const pieData = [
-    { name: 'Used', value: 65 },
-    { name: 'Available', value: 35 },
-  ];
+  // Determinar o status da assinatura
+  const getSubscriptionStatus = () => {
+    if (!subscription) return "pendente";
+    
+    if (!subscription.is_active) return "pendente";
+    
+    if (subscription.current_period_end) {
+      const endDate = new Date(subscription.current_period_end);
+      if (isPast(endDate)) return "expirado";
+      return "ativo";
+    }
+    
+    return "ativo";
+  };
+
+  // Verificar se o plano está prestes a expirar
+  const isExpiringSoon = () => {
+    if (!subscription || !subscription.current_period_end) return false;
+    
+    const endDate = new Date(subscription.current_period_end);
+    const daysLeft = differenceInDays(endDate, new Date());
+    return daysLeft <= 5 && daysLeft >= 0;
+  };
+
+  // Formatar data de vencimento
+  const formatExpirationDate = () => {
+    if (!subscription || !subscription.current_period_end) return "N/A";
+    return format(new Date(subscription.current_period_end), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  };
   
-  const lineData = [
-    { name: 'Jan', value: 12 },
-    { name: 'Feb', value: 19 },
-    { name: 'Mar', value: 15 },
-    { name: 'Apr', value: 25 },
-    { name: 'May', value: 32 },
-    { name: 'Jun', value: 28 },
-  ];
-  
-  const COLORS = ['#8260d0', '#E5E7EB'];
+  // Calcular porcentagem de uso
+  const calculateUsagePercentage = (used: number, limit: number | null) => {
+    if (limit === null) return 0; // Plano escala (ilimitado)
+    if (limit === 0) return 100; // Evitar divisão por zero
+    return Math.min(Math.round((used / limit) * 100), 100);
+  };
+
+  // Formatar limite com base no plano
+  const formatLimit = (limit: number | null) => {
+    if (limit === null) return "Ilimitado";
+    return limit.toString();
+  };
 
   useEffect(() => {
-    // If not authenticated, redirect to login
+    // Se não autenticado, redirecionar para login
     if (!session) {
       navigate("/login");
       return;
     }
 
-    // Check subscription status
-    const checkSubscription = async () => {
-      if (!user?.id) return;
-      
+    const loadData = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        // Carregar dados da assinatura
+        const { data: subscriptionData, error: subscriptionError } = await supabase
           .from("subscriptions")
-          .select("is_active, plan_type")
-          .eq("user_id", user.id)
+          .select("*")
+          .eq("user_id", user?.id)
           .single();
 
-        if (error) {
-          console.error("Error checking subscription:", error);
+        if (subscriptionError) {
+          console.error("Erro ao carregar assinatura:", subscriptionError);
+          toast({
+            title: "Erro ao carregar dados",
+            description: "Não foi possível carregar os dados da sua assinatura.",
+            variant: "destructive",
+          });
           navigate("/subscribe");
           return;
         }
 
-        if (!data || !data.is_active) {
+        // Se não tiver assinatura, redirecionar para página de planos
+        if (!subscriptionData) {
           navigate("/subscribe");
           return;
         }
-        
-        setSubscriptionData(data);
+
+        setSubscription(subscriptionData);
+
+        // Carregar dados de uso
+        const { data: usageData, error: usageError } = await supabase
+          .from("user_usage")
+          .select("*")
+          .eq("user_id", user?.id)
+          .single();
+
+        if (usageError && usageError.code !== 'PGRST116') { // PGRST116 = No rows found
+          console.error("Erro ao carregar dados de uso:", usageError);
+        }
+
+        // Se não tiver dados de uso, criar um registro vazio
+        if (!usageData) {
+          const { data: newUsageData, error: newUsageError } = await supabase
+            .from("user_usage")
+            .insert([{ user_id: user?.id }])
+            .select()
+            .single();
+
+          if (newUsageError) {
+            console.error("Erro ao criar registro de uso:", newUsageError);
+          } else {
+            setUsage(newUsageData);
+          }
+        } else {
+          setUsage(usageData);
+        }
+
+        // Carregar limites do plano
+        const { data: planLimitsData, error: planLimitsError } = await supabase
+          .from("plan_limits")
+          .select("*")
+          .eq("plan_type", subscriptionData.plan_type)
+          .single();
+
+        if (planLimitsError) {
+          console.error("Erro ao carregar limites do plano:", planLimitsError);
+        } else {
+          setPlanLimits(planLimitsData);
+        }
+
       } catch (err) {
-        console.error("Error:", err);
-        navigate("/subscribe");
+        console.error("Erro:", err);
+        toast({
+          title: "Erro ao carregar dados",
+          description: "Ocorreu um erro ao carregar os dados do seu painel.",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
 
-    checkSubscription();
-  }, [session, user, navigate]);
+    loadData();
+  }, [session, user, navigate, toast]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -114,6 +239,10 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  const subscriptionStatus = getSubscriptionStatus();
+  const expirationDate = formatExpirationDate();
+  const expiringSoon = isExpiringSoon();
 
   return (
     <SidebarProvider>
@@ -130,10 +259,10 @@ const Dashboard = () => {
           
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-mkranker-sidebar-text">GENERAL</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-mkranker-sidebar-text">GERAL</SidebarGroupLabel>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton isActive className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active data-[active=true]:bg-mkranker-purple/10" tooltip="Dashboard">
+                  <SidebarMenuButton isActive className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active data-[active=true]:bg-mkranker-purple/10">
                     <Home className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active" />
                     <span>Dashboard</span>
                   </SidebarMenuButton>
@@ -142,28 +271,28 @@ const Dashboard = () => {
             </SidebarGroup>
             
             <SidebarGroup>
-              <SidebarGroupLabel className="text-mkranker-sidebar-text">APPS</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-mkranker-sidebar-text">FERRAMENTAS</SidebarGroupLabel>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Search">
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
                     <Search className="text-mkranker-sidebar-text" />
                     <span>Funil de Busca</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Users">
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
                     <Users className="text-mkranker-sidebar-text" />
                     <span>Mercado e Público Alvo</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Analytics">
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
                     <BarChart3 className="text-mkranker-sidebar-text" />
                     <span>Palavras Chaves</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10" tooltip="Documents">
+                  <SidebarMenuButton className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
                     <FileText className="text-mkranker-sidebar-text" />
                     <span>Texto SEO para LP</span>
                   </SidebarMenuButton>
@@ -175,7 +304,7 @@ const Dashboard = () => {
           <SidebarFooter className="mt-auto border-t border-gray-200 p-4">
             <SidebarMenuButton onClick={handleLogout} className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10">
               <LogOut />
-              <span>Log out</span>
+              <span>Sair</span>
             </SidebarMenuButton>
           </SidebarFooter>
         </Sidebar>
@@ -184,186 +313,299 @@ const Dashboard = () => {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-2xl font-medium text-gray-800">Dashboard</h1>
-              <p className="text-gray-500">Welcome, {user?.user_metadata?.full_name || "User"}</p>
+              <p className="text-gray-500">Bem-vindo, {user?.user_metadata?.full_name || "Usuário"}</p>
             </div>
             <SidebarTrigger className="block md:hidden" />
             <div className="hidden md:flex items-center gap-4">
               <Button variant="outline" size="sm" className="border-gray-200 text-gray-700">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
-              <Button variant="outline" size="sm" className="border-gray-200 text-gray-700">
                 <User className="w-4 h-4 mr-2" />
-                Profile
+                Perfil
               </Button>
             </div>
           </div>
+
+          {/* Aviso de expiração */}
+          {expiringSoon && (
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-6 flex items-center">
+              <Bell className="h-5 w-5 text-amber-500 mr-2" />
+              <div>
+                <h3 className="font-medium text-amber-700">Sua assinatura está prestes a expirar</h3>
+                <p className="text-sm text-amber-600">Renove seu plano até {expirationDate} para continuar usando todos os recursos.</p>
+              </div>
+            </div>
+          )}
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">Total Analyses</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-medium">254</span>
-                  <span className="ml-2 text-sm text-green-500 flex items-center">
-                    +12%
-                    <ChevronRight className="h-4 w-4 rotate-90" />
+          {/* Informações da Assinatura */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 className="text-xl font-medium mb-4">Informações da Assinatura</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500 mb-1">Plano Atual</span>
+                <div className="flex items-center">
+                  <span className="text-lg font-medium capitalize">
+                    {subscription?.plan_type === 'solo' ? 'Solo' : 
+                     subscription?.plan_type === 'discovery' ? 'Discovery' : 
+                     subscription?.plan_type === 'escala' ? 'Escala' : 'N/A'}
                   </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-auto p-1 ml-2">
+                        <CreditCard className="h-4 w-4 text-gray-400" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="w-48 text-xs">
+                        {subscription?.plan_type === 'solo' ? 'Plano mensal com recursos básicos' : 
+                         subscription?.plan_type === 'discovery' ? 'Plano anual com recursos avançados' : 
+                         subscription?.plan_type === 'escala' ? 'Plano com recursos ilimitados' : 'N/A'}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Compared to last month</p>
-              </CardContent>
-            </Card>
+              </div>
+              
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500 mb-1">Status</span>
+                <div className="flex items-center">
+                  {subscriptionStatus === 'ativo' && (
+                    <Badge className="bg-green-100 text-green-800 hover:bg-green-200 px-2 py-0.5 text-xs">
+                      <Check className="h-3 w-3 mr-1" />
+                      Ativo
+                    </Badge>
+                  )}
+                  {subscriptionStatus === 'pendente' && (
+                    <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 px-2 py-0.5 text-xs">
+                      <Clock className="h-3 w-3 mr-1" />
+                      Pendente
+                    </Badge>
+                  )}
+                  {subscriptionStatus === 'expirado' && (
+                    <Badge className="bg-red-100 text-red-800 hover:bg-red-200 px-2 py-0.5 text-xs">
+                      <X className="h-3 w-3 mr-1" />
+                      Expirado
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex flex-col">
+                <span className="text-sm text-gray-500 mb-1">Vencimento</span>
+                <div className="flex items-center">
+                  <span className="text-lg font-medium">{expirationDate}</span>
+                  <Calendar className="h-4 w-4 text-gray-400 ml-2" />
+                </div>
+              </div>
+            </div>
             
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">Keywords Researched</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-medium">1,423</span>
-                  <span className="ml-2 text-sm text-green-500 flex items-center">
-                    +5%
-                    <ChevronRight className="h-4 w-4 rotate-90" />
-                  </span>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Compared to last month</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">Usage Limits</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-medium">65%</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Of monthly quota used</p>
-              </CardContent>
-            </Card>
+            {(subscriptionStatus === 'pendente' || subscriptionStatus === 'expirado') && (
+              <div className="mt-6">
+                <Button 
+                  className="bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                  onClick={() => navigate("/subscribe")}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {subscriptionStatus === 'expirado' ? 'Renovar Assinatura' : 'Ativar Assinatura'}
+                </Button>
+              </div>
+            )}
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">Usage Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64">
-                  <ChartContainer config={{}}>
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <ChartLegend verticalAlign="bottom" height={36} content={renderLegend} />
-                    </PieChart>
-                  </ChartContainer>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">Activity Trend</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64">
-                  <ChartContainer config={{}}>
-                    <LineChart data={lineData}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                      <YAxis axisLine={false} tickLine={false} />
-                      <Tooltip />
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke="#8260d0" 
-                        strokeWidth={2} 
-                        dot={{ r: 4 }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
-                  </ChartContainer>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Uso de Recursos */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 className="text-xl font-medium mb-6">Uso de Recursos</h2>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[250px]">Recurso</TableHead>
+                    <TableHead className="w-[180px]">Utilizado</TableHead>
+                    <TableHead className="w-[180px]">Limite</TableHead>
+                    <TableHead>Uso</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {/* Pesquisas de Mercado */}
+                  <TableRow>
+                    <TableCell className="font-medium">Pesquisas de Mercado</TableCell>
+                    <TableCell>{usage?.market_research_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.market_research_limit)}</TableCell>
+                    <TableCell className="w-[300px]">
+                      {planLimits?.market_research_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.market_research_count || 0, planLimits?.market_research_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.market_research_count || 0, planLimits?.market_research_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Funis de Busca */}
+                  <TableRow>
+                    <TableCell className="font-medium">Funis de Busca</TableCell>
+                    <TableCell>{usage?.search_funnel_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.search_funnel_limit)}</TableCell>
+                    <TableCell>
+                      {planLimits?.search_funnel_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.search_funnel_count || 0, planLimits?.search_funnel_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.search_funnel_count || 0, planLimits?.search_funnel_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Palavras-chave */}
+                  <TableRow>
+                    <TableCell className="font-medium">Palavras-chave</TableCell>
+                    <TableCell>{usage?.keyword_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.keyword_limit)}</TableCell>
+                    <TableCell>
+                      {planLimits?.keyword_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.keyword_count || 0, planLimits?.keyword_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.keyword_count || 0, planLimits?.keyword_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Textos SEO */}
+                  <TableRow>
+                    <TableCell className="font-medium">Textos SEO</TableCell>
+                    <TableCell>{usage?.seo_text_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.seo_text_limit)}</TableCell>
+                    <TableCell>
+                      {planLimits?.seo_text_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.seo_text_count || 0, planLimits?.seo_text_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.seo_text_count || 0, planLimits?.seo_text_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Pautas para Blog */}
+                  <TableRow>
+                    <TableCell className="font-medium">Pautas para Blog</TableCell>
+                    <TableCell>{usage?.topic_research_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.topic_research_limit)}</TableCell>
+                    <TableCell>
+                      {planLimits?.topic_research_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.topic_research_count || 0, planLimits?.topic_research_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.topic_research_count || 0, planLimits?.topic_research_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  
+                  {/* Meta Dados */}
+                  <TableRow>
+                    <TableCell className="font-medium">Meta Dados</TableCell>
+                    <TableCell>{usage?.metadata_generation_count || 0}</TableCell>
+                    <TableCell>{formatLimit(planLimits?.metadata_generation_limit)}</TableCell>
+                    <TableCell>
+                      {planLimits?.metadata_generation_limit === null ? (
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Ilimitado</Badge>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Progress 
+                            value={calculateUsagePercentage(usage?.metadata_generation_count || 0, planLimits?.metadata_generation_limit)} 
+                            className="h-2"
+                          />
+                          <span className="text-xs text-gray-500">
+                            {calculateUsagePercentage(usage?.metadata_generation_count || 0, planLimits?.metadata_generation_limit)}%
+                          </span>
+                        </div>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">Subscription Details</CardTitle>
+          {/* Páginas e Ferramentas Principais */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">Funil de Busca</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <DollarSign className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Plan Type</span>
-                    </div>
-                    <span className="font-medium">{subscriptionData?.plan_type || 'Monthly'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <CreditCard className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Status</span>
-                    </div>
-                    <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs">
-                      Active
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <Clock className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Next Billing</span>
-                    </div>
-                    <span className="font-medium">June 10, 2025</span>
-                  </div>
-                  <Button className="w-full mt-4 bg-mkranker-purple hover:bg-mkranker-dark-purple">Manage Subscription</Button>
+                <div className="flex justify-between items-center">
+                  <Search className="h-8 w-8 text-mkranker-purple" />
+                  <ChevronRight className="h-5 w-5 text-gray-400" />
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="border border-gray-200 shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg font-medium">Account Information</CardTitle>
+            <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">Mercado e Público</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <User className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Full Name</span>
-                    </div>
-                    <span className="font-medium">{user?.user_metadata?.full_name || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <Home className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Email</span>
-                    </div>
-                    <span className="font-medium">{user?.email}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center">
-                      <Clock className="w-5 h-5 mr-2 text-gray-500" />
-                      <span>Member Since</span>
-                    </div>
-                    <span className="font-medium">{new Date(user?.created_at).toLocaleDateString()}</span>
-                  </div>
-                  <Button variant="outline" className="w-full mt-4 border-gray-200">Edit Profile</Button>
+                <div className="flex justify-between items-center">
+                  <Users className="h-8 w-8 text-mkranker-purple" />
+                  <ChevronRight className="h-5 w-5 text-gray-400" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">Palavras Chaves</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <BarChart3 className="h-8 w-8 text-mkranker-purple" />
+                  <ChevronRight className="h-5 w-5 text-gray-400" />
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-gray-500">Texto SEO para LP</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <FileText className="h-8 w-8 text-mkranker-purple" />
+                  <ChevronRight className="h-5 w-5 text-gray-400" />
                 </div>
               </CardContent>
             </Card>
@@ -371,25 +613,6 @@ const Dashboard = () => {
         </main>
       </div>
     </SidebarProvider>
-  );
-};
-
-// Custom legend component for the pie chart
-const renderLegend = (props: any) => {
-  const { payload } = props;
-  
-  return (
-    <div className="flex justify-center mt-4">
-      {payload.map((entry: any, index: number) => (
-        <div key={`item-${index}`} className="flex items-center mx-4">
-          <div 
-            className="w-3 h-3 rounded-sm mr-2" 
-            style={{ backgroundColor: entry.color }}
-          />
-          <span className="text-xs text-gray-600">{entry.value}</span>
-        </div>
-      ))}
-    </div>
   );
 };
 

@@ -31,8 +31,8 @@ const RegisterSuccess = () => {
         <CardFooter className="flex flex-col space-y-3">
           {user ? (
             <Button asChild variant="default" className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
-              <Link to="/subscribe">
-                Escolher um plano
+              <Link to="/dashboard">
+                Acessar Dashboard
               </Link>
             </Button>
           ) : (
