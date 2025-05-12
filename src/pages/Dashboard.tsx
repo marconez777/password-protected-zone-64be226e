@@ -2,12 +2,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useSupabaseClient } from "@/hooks/useSupabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
-  const supabase = useSupabaseClient();
 
   useEffect(() => {
     // Se não estiver autenticado, redirecionar para login
@@ -19,19 +18,30 @@ const Dashboard = () => {
     const checkSubscription = async () => {
       if (!user?.id) return;
       
-      const { data, error } = await supabase
-        .from("subscriptions")
-        .select("is_active")
-        .eq("user_id", user.id)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from("subscriptions")
+          .select("is_active")
+          .eq("user_id", user.id)
+          .single();
 
-      if (error || !data?.is_active) {
+        if (error) {
+          console.error("Error checking subscription:", error);
+          navigate("/subscribe");
+          return;
+        }
+
+        if (!data || !data.is_active) {
+          navigate("/subscribe");
+        }
+      } catch (err) {
+        console.error("Error:", err);
         navigate("/subscribe");
       }
     };
 
     checkSubscription();
-  }, [session, user, navigate, supabase]);
+  }, [session, user, navigate]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

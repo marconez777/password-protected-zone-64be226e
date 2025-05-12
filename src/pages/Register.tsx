@@ -47,17 +47,22 @@ const Register = () => {
 
       // Create a profile record
       if (data.user) {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .insert([
-            {
-              id: data.user.id,
-              full_name: name,
-              email: email,
-            },
-          ]);
+        try {
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert([
+              {
+                id: data.user.id,
+                full_name: name,
+                email: email,
+              },
+            ]);
 
-        if (profileError) throw profileError;
+          if (profileError) throw profileError;
+        } catch (err) {
+          console.error("Error creating profile:", err);
+          // Continue with registration even if profile creation fails
+        }
       }
 
       // Navigate to success page

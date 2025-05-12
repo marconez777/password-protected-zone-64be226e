@@ -26,18 +26,30 @@ const Login = () => {
       if (error) throw error;
 
       // Check if subscription is active
-      const { data: subscriptionData, error: subscriptionError } = await supabase
-        .from("subscriptions")
-        .select("is_active")
-        .eq("user_id", data.user.id)
-        .single();
+      try {
+        const { data: subscriptionData, error: subscriptionError } = await supabase
+          .from("subscriptions")
+          .select("is_active")
+          .eq("user_id", data.user.id)
+          .single();
 
-      if (subscriptionError || !subscriptionData?.is_active) {
+        if (subscriptionError) {
+          console.error("Error checking subscription:", subscriptionError);
+          navigate("/subscribe");
+          return;
+        }
+
+        if (!subscriptionData || !subscriptionData.is_active) {
+          navigate("/subscribe");
+          toast({
+            title: "Assinatura necessária",
+            description: "Você precisa ter um plano ativo para acessar o sistema.",
+          });
+          return;
+        }
+      } catch (err) {
+        console.error("Error checking subscription:", err);
         navigate("/subscribe");
-        toast({
-          title: "Assinatura necessária",
-          description: "Você precisa ter um plano ativo para acessar o sistema.",
-        });
         return;
       }
 
