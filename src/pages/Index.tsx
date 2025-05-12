@@ -1,12 +1,36 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div>
+      <h1>Sistema de Autenticação</h1>
+      <p>Bem-vindo ao sistema de autenticação com verificação de assinatura ativa.</p>
+      
+      {user ? (
+        <div>
+          <p>Você já está logado como {user.email}</p>
+          <Link to="/dashboard">
+            <button>Ir para o Dashboard</button>
+          </Link>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
+          <Link to="/register">
+            <button>Cadastre-se</button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
