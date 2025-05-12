@@ -102,6 +102,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_results: {
+        Row: {
+          data_criacao: string
+          id: string
+          input_original: Json
+          output_gerado: Json
+          tipo_recurso: string
+          user_id: string
+        }
+        Insert: {
+          data_criacao?: string
+          id?: string
+          input_original: Json
+          output_gerado: Json
+          tipo_recurso: string
+          user_id: string
+        }
+        Update: {
+          data_criacao?: string
+          id?: string
+          input_original?: Json
+          output_gerado?: Json
+          tipo_recurso?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_usage: {
         Row: {
           created_at: string

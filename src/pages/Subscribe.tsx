@@ -1,317 +1,124 @@
 
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Check, ArrowRight, Loader2, Crown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Check } from 'lucide-react';
 
-const Subscribe = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
-
-  // Verificar se há erro na URL (redirecionamento após falha de pagamento)
-  const searchParams = new URLSearchParams(location.search);
-  const paymentError = searchParams.get("error") === "payment_failed";
-  
-  if (paymentError) {
-    toast({
-      title: "Falha no pagamento",
-      description: "Não foi possível processar seu pagamento. Por favor, tente novamente.",
-      variant: "destructive",
-    });
-  }
-
-  const handleSubscribe = async (planType: string) => {
-    if (!user) {
-      toast({
-        title: "Usuário não autenticado",
-        description: "Você precisa fazer login antes de assinar um plano.",
-        variant: "destructive",
-      });
-      navigate("/login");
-      return;
-    }
-
-    setIsLoading(prev => ({ ...prev, [planType]: true }));
-
-    try {
-      const response = await supabase.functions.invoke("mercado-pago", {
-        body: {
-          planType,
-          userId: user.id,
-          successUrl: window.location.origin + "/dashboard",
-          failureUrl: window.location.origin + "/subscribe?error=payment_failed",
-        },
-      });
-
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-
-      // Redirecionar para a página de checkout do Mercado Pago
-      window.location.href = response.data.init_point;
-    } catch (error) {
-      console.error("Erro ao processar assinatura:", error);
-      toast({
-        title: "Erro ao processar assinatura",
-        description: "Não foi possível iniciar o processo de assinatura. Tente novamente mais tarde.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(prev => ({ ...prev, [planType]: false }));
-    }
-  };
-
+// Use a consistent color for the check icons
+const Feature = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-50 py-12 px-4">
-      <div className="w-full max-w-6xl">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold mb-3 text-gray-800">Escolha seu plano</h1>
-          <p className="text-gray-600 max-w-xl mx-auto">
-            Para acessar o sistema, você precisa ter um plano ativo.
-            Escolha o plano que melhor se adequa às suas necessidades.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {/* Plano Solo */}
-          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold">Solo</CardTitle>
-              <CardDescription>Plano para profissionais individuais</CardDescription>
-              <div className="mt-2">
-                <span className="text-3xl font-bold">R$97</span>
-                <span className="text-gray-500">/mês</span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>5 Pesquisas de Mercado</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>5 Funis de Busca</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>20 Pesquisas de Palavras Chave</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>15 Textos Otimizados SEO</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>5 Pesquisas de Pautas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>50 Gerações de Meta Dados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Treinamentos Gravados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Aulas Ao Vivo</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Mentoria em grupo (1 por mês)</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full"
-                onClick={() => handleSubscribe("solo")}
-                disabled={isLoading["solo"]}
-              >
-                {isLoading["solo"] ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processando
-                  </>
-                ) : (
-                  <>
-                    <span>Começar Agora</span>
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
-
-          {/* Plano Discovery */}
-          <Card className="border-2 border-primary shadow-md transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="bg-primary text-primary-foreground text-xs font-semibold py-1 px-3 rounded-full w-fit mb-2">
-                Mais Popular
-              </div>
-              <CardTitle className="text-xl font-semibold">Discovery</CardTitle>
-              <CardDescription>Plano para pequenas empresas</CardDescription>
-              <div className="mt-2">
-                <span className="text-3xl font-bold">R$297</span>
-                <span className="text-gray-500">/mês</span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>15 Pesquisas de Mercado</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>15 Funis de Busca</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>60 Pesquisas de Palavras Chave</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>60 Textos Otimizados SEO</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>15 Pesquisas de Pautas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>100 Gerações de Meta Dados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Treinamentos Gravados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Aulas Ao Vivo</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Mentoria Individual (1 por mês)</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full"
-                onClick={() => handleSubscribe("discovery")}
-                disabled={isLoading["discovery"]}
-              >
-                {isLoading["discovery"] ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processando
-                  </>
-                ) : (
-                  <>
-                    <span>Começar Agora</span>
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
-
-          {/* Plano Escala */}
-          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold">Escala</CardTitle>
-              <CardDescription>Plano para empresas em crescimento</CardDescription>
-              <div className="mt-2">
-                <span className="text-3xl font-bold">R$997</span>
-                <span className="text-gray-500">/mês</span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center mb-3 text-primary">
-                <Crown className="h-5 w-5 mr-2" />
-                <span className="text-sm font-medium">Todas as ferramentas ilimitadas:</span>
-              </div>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Pesquisas de Mercado Ilimitadas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Funis de Busca Ilimitados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Palavras Chave Ilimitadas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Textos Otimizados SEO Ilimitados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Pesquisas de Pautas Ilimitadas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Gerações de Meta Dados Ilimitadas</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Treinamentos Gravados</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Aulas Ao Vivo</span>
-                </li>
-                <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-primary" />
-                  <span>Mentoria Individual (2 por mês)</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                className="w-full"
-                onClick={() => handleSubscribe("escala")}
-                disabled={isLoading["escala"]}
-              >
-                {isLoading["escala"] ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Processando
-                  </>
-                ) : (
-                  <>
-                    <span>Começar Agora</span>
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">
-            Já tem um plano ativo?{" "}
-            <Link to="/login" className="text-mkranker-purple hover:underline">
-              Faça login
-            </Link>
-          </p>
-        </div>
-      </div>
+    <div className="flex items-center space-x-2 text-sm">
+      <Check className="h-4 w-4 text-primary" /> {/* Use primary color consistently */}
+      <span>{children}</span>
     </div>
   );
 };
 
-export default Subscribe;
+const PlanCard = ({
+  name,
+  description,
+  price,
+  features,
+  isPopular,
+  buttonText = "Assinar"
+}: {
+  name: string;
+  description: string;
+  price: string;
+  features: string[];
+  isPopular?: boolean;
+  buttonText?: string;
+}) => (
+  <Card className={`flex flex-col justify-between ${isPopular ? 'border-primary' : ''}`}>
+    <div>
+      <CardHeader>
+        <CardTitle>{name}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="mb-4">
+          <span className="text-3xl font-bold">{price}</span>
+          <span className="text-muted-foreground">/mês</span>
+        </div>
+        <div className="space-y-2">
+          {features.map((feature, i) => (
+            <Feature key={i}>{feature}</Feature>
+          ))}
+        </div>
+      </CardContent>
+    </div>
+    <CardFooter>
+      <Button className="w-full" variant={isPopular ? "default" : "outline"}>
+        {buttonText}
+      </Button>
+    </CardFooter>
+  </Card>
+);
+
+export default function Subscribe() {
+  return (
+    <div className="container py-10">
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold tracking-tight">Planos de Assinatura</h1>
+        <p className="text-muted-foreground mt-2">
+          Escolha o plano que melhor se adapta às suas necessidades
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6 mt-8">
+        <PlanCard
+          name="Solo"
+          description="Para profissionais iniciantes e freelancers"
+          price="R$197"
+          features={[
+            "3 pesquisas de palavra-chave",
+            "1 análise de mercado",
+            "1 funil de busca",
+            "5 textos SEO",
+            "3 ideias de conteúdo",
+            "10 metadados"
+          ]}
+        />
+        
+        <PlanCard
+          name="Discovery"
+          description="Para pequenas empresas e agências"
+          price="R$397"
+          features={[
+            "15 pesquisas de palavra-chave",
+            "5 análises de mercado",
+            "5 funís de busca",
+            "20 textos SEO",
+            "10 ideias de conteúdo",
+            "50 metadados"
+          ]}
+          isPopular={true}
+        />
+        
+        <PlanCard
+          name="Escala"
+          description="Para empresas em crescimento e marcas estabelecidas"
+          price="R$997"
+          features={[
+            "Pesquisas ilimitadas de palavra-chave",
+            "Análises ilimitadas de mercado",
+            "Funís de busca ilimitados",
+            "Textos SEO ilimitados",
+            "Ideias de conteúdo ilimitadas",
+            "Metadados ilimitados"
+          ]}
+        />
+      </div>
+
+      <div className="text-center mt-12">
+        <h2 className="text-xl font-semibold mb-2">Não encontrou o que precisava?</h2>
+        <p className="text-muted-foreground">
+          Entre em contato conosco para saber mais sobre nossos planos corporativos.
+        </p>
+        <Button variant="link" className="mt-2">
+          Fale com nossa equipe
+        </Button>
+      </div>
+    </div>
+  );
+}
