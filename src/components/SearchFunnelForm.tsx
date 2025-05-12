@@ -181,7 +181,7 @@ export function SearchFunnelForm() {
         
         <TabsContent value="formulario">
           <ResourceForm
-            resourceType="search_funnel" as ResourceType
+            resourceType="search_funnel"
             title="Funil de Busca"
             description="Preencha as informações abaixo e clique em gerar"
             webhookUrl={WEBHOOK_URL}
