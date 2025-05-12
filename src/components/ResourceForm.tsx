@@ -106,7 +106,7 @@ export function ResourceForm({
       toast({
         title: "Erro ao salvar resultado",
         description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
-        variant: "warning",
+        variant: "destructive", // Changed from "warning" to "destructive"
       });
     }
   };
@@ -220,7 +220,7 @@ export function useWebhookSubmission(
       toast({
         title: "Erro ao salvar resultado",
         description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
-        variant: "warning",
+        variant: "destructive", // Changed from "warning" to "destructive"
       });
     }
   };
