@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 const RegisterSuccess = () => {
+  const { user } = useAuth();
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <Card className="w-full max-w-md">
@@ -26,11 +29,19 @@ const RegisterSuccess = () => {
           </p>
         </CardContent>
         <CardFooter className="flex flex-col space-y-3">
-          <Button asChild variant="default" className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
-            <Link to="/login">
-              Fazer login
-            </Link>
-          </Button>
+          {user ? (
+            <Button asChild variant="default" className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
+              <Link to="/subscribe">
+                Escolher um plano
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild variant="default" className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
+              <Link to="/login">
+                Fazer login
+              </Link>
+            </Button>
+          )}
           <Button asChild variant="outline" className="w-full">
             <Link to="/subscribe">
               Ver planos

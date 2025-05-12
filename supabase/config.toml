@@ -1,1 +1,5 @@
+
 project_id = "buizhanvxiykyapyndsh"
+
+[functions.mercado-pago]
+verify_jwt = false

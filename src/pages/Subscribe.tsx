@@ -1,10 +1,73 @@
 
-import { Link } from "react-router-dom";
-import { Check, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Check, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Subscribe = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
+
+  // Verificar se há erro na URL (redirecionamento após falha de pagamento)
+  const searchParams = new URLSearchParams(location.search);
+  const paymentError = searchParams.get("error") === "payment_failed";
+  
+  if (paymentError) {
+    toast({
+      title: "Falha no pagamento",
+      description: "Não foi possível processar seu pagamento. Por favor, tente novamente.",
+      variant: "destructive",
+    });
+  }
+
+  const handleSubscribe = async (planType: string) => {
+    if (!user) {
+      toast({
+        title: "Usuário não autenticado",
+        description: "Você precisa fazer login antes de assinar um plano.",
+        variant: "destructive",
+      });
+      navigate("/login");
+      return;
+    }
+
+    setIsLoading(prev => ({ ...prev, [planType]: true }));
+
+    try {
+      const response = await supabase.functions.invoke("mercado-pago", {
+        body: {
+          planType,
+          userId: user.id,
+          successUrl: window.location.origin + "/dashboard",
+          failureUrl: window.location.origin + "/subscribe?error=payment_failed",
+        },
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      // Redirecionar para a página de checkout do Mercado Pago
+      window.location.href = response.data.init_point;
+    } catch (error) {
+      console.error("Erro ao processar assinatura:", error);
+      toast({
+        title: "Erro ao processar assinatura",
+        description: "Não foi possível iniciar o processo de assinatura. Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(prev => ({ ...prev, [planType]: false }));
+    }
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-12 px-4">
       <div className="w-full max-w-5xl">
@@ -44,9 +107,22 @@ const Subscribe = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                <span>Assinar agora</span>
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button 
+                className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                onClick={() => handleSubscribe("solo")}
+                disabled={isLoading["solo"]}
+              >
+                {isLoading["solo"] ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processando
+                  </>
+                ) : (
+                  <>
+                    <span>Assinar agora</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </CardFooter>
           </Card>
@@ -85,9 +161,22 @@ const Subscribe = () => {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                <span>Assinar agora</span>
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button 
+                className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                onClick={() => handleSubscribe("discovery")}
+                disabled={isLoading["discovery"]}
+              >
+                {isLoading["discovery"] ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processando
+                  </>
+                ) : (
+                  <>
+                    <span>Assinar agora</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </CardFooter>
           </Card>

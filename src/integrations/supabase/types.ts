@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      plan_limits: {
+        Row: {
+          created_at: string
+          id: string
+          keyword_limit: number | null
+          market_research_limit: number | null
+          metadata_generation_limit: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          search_funnel_limit: number | null
+          seo_text_limit: number | null
+          topic_research_limit: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword_limit?: number | null
+          market_research_limit?: number | null
+          metadata_generation_limit?: number | null
+          plan_type: Database["public"]["Enums"]["plan_type"]
+          search_funnel_limit?: number | null
+          seo_text_limit?: number | null
+          topic_research_limit?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword_limit?: number | null
+          market_research_limit?: number | null
+          metadata_generation_limit?: number | null
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          search_funnel_limit?: number | null
+          seo_text_limit?: number | null
+          topic_research_limit?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -39,7 +78,7 @@ export type Database = {
           current_period_end: string | null
           id: string
           is_active: boolean
-          plan_type: string
+          plan_type: Database["public"]["Enums"]["plan_type"]
           updated_at: string
           user_id: string
         }
@@ -48,7 +87,7 @@ export type Database = {
           current_period_end?: string | null
           id?: string
           is_active?: boolean
-          plan_type?: string
+          plan_type?: Database["public"]["Enums"]["plan_type"]
           updated_at?: string
           user_id: string
         }
@@ -57,7 +96,46 @@ export type Database = {
           current_period_end?: string | null
           id?: string
           is_active?: boolean
-          plan_type?: string
+          plan_type?: Database["public"]["Enums"]["plan_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_usage: {
+        Row: {
+          created_at: string
+          id: string
+          keyword_count: number
+          market_research_count: number
+          metadata_generation_count: number
+          search_funnel_count: number
+          seo_text_count: number
+          topic_research_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword_count?: number
+          market_research_count?: number
+          metadata_generation_count?: number
+          search_funnel_count?: number
+          seo_text_count?: number
+          topic_research_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword_count?: number
+          market_research_count?: number
+          metadata_generation_count?: number
+          search_funnel_count?: number
+          seo_text_count?: number
+          topic_research_count?: number
           updated_at?: string
           user_id?: string
         }
@@ -68,10 +146,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_user_usage: {
+        Args: { resource_type: string }
+        Returns: boolean
+      }
+      user_has_exceeded_limit: {
+        Args: { resource_type: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      plan_type: "solo" | "discovery" | "escala"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -186,6 +271,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      plan_type: ["solo", "discovery", "escala"],
+    },
   },
 } as const
