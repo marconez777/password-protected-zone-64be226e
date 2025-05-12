@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Check, ArrowRight, Loader2 } from "lucide-react";
+import { Check, ArrowRight, Loader2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
@@ -70,7 +70,7 @@ const Subscribe = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-50 py-12 px-4">
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-6xl">
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold mb-3 text-gray-800">Escolha seu plano</h1>
           <p className="text-gray-600 max-w-xl mx-auto">
@@ -79,36 +79,60 @@ const Subscribe = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {/* Plano Mensal */}
-          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* Plano Solo */}
+          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md bg-[#13121e] text-white">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold">Plano Mensal</CardTitle>
+              <CardTitle className="text-xl font-semibold">Solo</CardTitle>
+              <CardDescription className="text-gray-300">Plano para profissionais individuais</CardDescription>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-gray-800">R$29,90</span>
-                <span className="text-gray-500">/mês</span>
+                <span className="text-3xl font-bold text-white">R$97</span>
+                <span className="text-gray-300">/mês</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-gray-600">Acesso mensal ao sistema</p>
               <ul className="space-y-2">
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Acesso completo a todas as funcionalidades</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>5 Pesquisas de Mercado</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Suporte prioritário</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>5 Funis de Busca</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Cancelamento a qualquer momento</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>20 Pesquisas de Palavras Chave</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>15 Textos Otimizados SEO</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>5 Pesquisas de Pautas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>50 Gerações de Meta Dados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Treinamentos Gravados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Aulas Ao Vivo</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Mentoria em grupo (1 por mês)</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                className="w-full bg-purple-600 hover:bg-purple-700"
                 onClick={() => handleSubscribe("solo")}
                 disabled={isLoading["solo"]}
               >
@@ -119,7 +143,7 @@ const Subscribe = () => {
                   </>
                 ) : (
                   <>
-                    <span>Assinar agora</span>
+                    <span>Começar Agora</span>
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}
@@ -127,42 +151,62 @@ const Subscribe = () => {
             </CardFooter>
           </Card>
 
-          {/* Plano Anual */}
-          <Card className="border-2 border-mkranker-purple shadow-sm transition-all hover:shadow-md">
+          {/* Plano Discovery */}
+          <Card className="border-2 border-purple-500 shadow-md transition-all hover:shadow-lg bg-[#13121e] text-white">
             <CardHeader>
-              <div className="bg-mkranker-purple text-white text-xs font-semibold py-1 px-3 rounded-full w-fit mb-2">
-                MAIS POPULAR
+              <div className="bg-purple-600 text-white text-xs font-semibold py-1 px-3 rounded-full w-fit mb-2">
+                Mais Popular
               </div>
-              <CardTitle className="text-xl font-semibold">Plano Anual</CardTitle>
+              <CardTitle className="text-xl font-semibold">Discovery</CardTitle>
+              <CardDescription className="text-gray-300">Plano para pequenas empresas</CardDescription>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-gray-800">R$299,90</span>
-                <span className="text-gray-500">/ano</span>
+                <span className="text-3xl font-bold text-white">R$297</span>
+                <span className="text-gray-300">/mês</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-gray-600">Economize 16% em comparação ao plano mensal</p>
               <ul className="space-y-2">
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Acesso completo a todas as funcionalidades</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>15 Pesquisas de Mercado</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Suporte prioritário</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>15 Funis de Busca</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>Cancelamento a qualquer momento</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>60 Pesquisas de Palavras Chave</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-500" />
-                  <span>2 meses grátis</span>
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>60 Textos Otimizados SEO</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>15 Pesquisas de Pautas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>100 Gerações de Meta Dados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Treinamentos Gravados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Aulas Ao Vivo</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Mentoria Individual (1 por mês)</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                className="w-full bg-purple-600 hover:bg-purple-700"
                 onClick={() => handleSubscribe("discovery")}
                 disabled={isLoading["discovery"]}
               >
@@ -173,7 +217,82 @@ const Subscribe = () => {
                   </>
                 ) : (
                   <>
-                    <span>Assinar agora</span>
+                    <span>Começar Agora</span>
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Plano Escala */}
+          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md bg-[#13121e] text-white">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">Escala</CardTitle>
+              <CardDescription className="text-gray-300">Plano para empresas em crescimento</CardDescription>
+              <div className="mt-2">
+                <span className="text-3xl font-bold text-white">R$997</span>
+                <span className="text-gray-300">/mês</span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center mb-3 text-purple-400">
+                <Crown className="h-5 w-5 mr-2" />
+                <span className="text-sm font-medium">Todas as ferramentas ilimitadas:</span>
+              </div>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Pesquisas de Mercado Ilimitadas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Funis de Busca Ilimitados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Palavras Chave Ilimitadas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Textos Otimizados SEO Ilimitados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Pesquisas de Pautas Ilimitadas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Gerações de Meta Dados Ilimitadas</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Treinamentos Gravados</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <span>Aulas Ao Vivo</span>
+                </li>
+                <li className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <span>Mentoria Individual (2 por mês)</span>
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter>
+              <Button 
+                className="w-full bg-purple-600 hover:bg-purple-700"
+                onClick={() => handleSubscribe("escala")}
+                disabled={isLoading["escala"]}
+              >
+                {isLoading["escala"] ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processando
+                  </>
+                ) : (
+                  <>
+                    <span>Começar Agora</span>
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}
