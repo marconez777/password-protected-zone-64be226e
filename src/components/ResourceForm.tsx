@@ -4,19 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useResourceLimits, ResourceType } from '@/hooks/useResourceLimits';
 import { Loader2 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-interface ResourceFormProps {
-  resourceType: ResourceType;
-  title: string;
-  description: string;
-  webhookUrl?: string;
-  onSubmit: () => Promise<void>;
-  children: React.ReactNode;
-  resultComponent?: React.ReactNode;
-}
+import { ResourceFormProps } from '@/types/resource';
+import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
 
 /**
  * A reusable component that wraps forms for resources that have usage limits
@@ -32,8 +22,6 @@ export function ResourceForm({
 }: ResourceFormProps) {
   const { checkAndIncrementResource, isChecking } = useResourceLimits();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [webhookResult, setWebhookResult] = useState<any>(null);
-  const { user } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,31 +74,6 @@ export function ResourceForm({
     }
   };
 
-  const saveResultToDatabase = async (tipoRecurso: string, inputOriginal: any, outputGerado: any) => {
-    if (!user) return;
-    
-    try {
-      const { error } = await supabase.from('user_results').insert({
-        user_id: user.id,
-        tipo_recurso: tipoRecurso,
-        input_original: inputOriginal,
-        output_gerado: outputGerado
-      });
-      
-      if (error) {
-        throw error;
-      }
-      
-    } catch (error) {
-      console.error('Error saving result to database:', error);
-      toast({
-        title: "Erro ao salvar resultado",
-        description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
-        variant: "destructive", // Changed from "warning" to "destructive"
-      });
-    }
-  };
-
   const loading = isChecking || isSubmitting;
 
   return (
@@ -141,94 +104,5 @@ export function ResourceForm({
   );
 }
 
-// Export the hook for webhooks to be used in individual form components
-export function useWebhookSubmission(
-  resourceType: ResourceType, 
-  webhookUrl: string
-) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
-  const { user } = useAuth();
-  const { toast } = useToast();
-
-  const submitToWebhook = async (formData: any) => {
-    if (!user) {
-      toast({
-        title: "Erro de autenticação",
-        description: "Você precisa estar logado para usar esta funcionalidade.",
-        variant: "destructive",
-      });
-      return null;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const resultData = await response.json();
-      setResult(resultData);
-      
-      // Save to database
-      await saveResultToDatabase(resourceType, formData, resultData);
-      
-      toast({
-        title: "Sucesso!",
-        description: "Seu conteúdo foi gerado com sucesso.",
-      });
-      
-      return resultData;
-    } catch (error) {
-      console.error('Error in webhook submission:', error);
-      toast({
-        title: "Erro na integração",
-        description: "Não foi possível conectar ao serviço de IA.",
-        variant: "destructive",
-      });
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveResultToDatabase = async (tipoRecurso: string, inputOriginal: any, outputGerado: any) => {
-    if (!user) return;
-    
-    try {
-      const { error } = await supabase.from('user_results').insert({
-        user_id: user.id,
-        tipo_recurso: tipoRecurso,
-        input_original: inputOriginal,
-        output_gerado: outputGerado
-      });
-      
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      console.error('Error saving result to database:', error);
-      toast({
-        title: "Erro ao salvar resultado",
-        description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
-        variant: "destructive", // Changed from "warning" to "destructive"
-      });
-    }
-  };
-
-  return {
-    submitToWebhook,
-    isLoading,
-    result,
-    setResult
-  };
-}
+// Re-export the webhook hook for convenience
+export { useWebhookSubmission };

@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ResourceForm, useWebhookSubmission } from '@/components/ResourceForm';
+import { ResourceForm } from '@/components/ResourceForm';
+import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
