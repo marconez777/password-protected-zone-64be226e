@@ -1,9 +1,8 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSupabaseClient } from "@/hooks/useSupabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { SupabaseWarning } from "@/components/SupabaseWarning";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,11 +10,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const supabase = useSupabaseClient();
   const { toast } = useToast();
-  
-  // Check if Supabase is properly configured
-  const isSupabaseConfigured = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +56,6 @@ const Login = () => {
   return (
     <div>
       <h1>Login</h1>
-      {!isSupabaseConfigured && <SupabaseWarning />}
       <form onSubmit={handleLogin}>
         {error && <div style={{ color: "red" }}>{error}</div>}
         
@@ -87,7 +81,7 @@ const Login = () => {
           />
         </div>
         
-        <button type="submit" disabled={isLoading || !isSupabaseConfigured}>
+        <button type="submit" disabled={isLoading}>
           {isLoading ? "Entrando..." : "Entrar"}
         </button>
         

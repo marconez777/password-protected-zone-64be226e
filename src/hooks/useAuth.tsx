@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from './useSupabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 
 type AuthContextType = {
   session: Session | null;
@@ -21,12 +21,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Only attempt to fetch session if supabase client exists
-    if (!supabase) {
-      setIsLoading(false);
-      return;
-    }
-
     const setData = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
