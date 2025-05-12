@@ -81,58 +81,58 @@ const Subscribe = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Plano Solo */}
-          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md bg-[#13121e] text-white">
+          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md">
             <CardHeader>
               <CardTitle className="text-xl font-semibold">Solo</CardTitle>
-              <CardDescription className="text-gray-300">Plano para profissionais individuais</CardDescription>
+              <CardDescription>Plano para profissionais individuais</CardDescription>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-white">R$97</span>
-                <span className="text-gray-300">/mês</span>
+                <span className="text-3xl font-bold">R$97</span>
+                <span className="text-gray-500">/mês</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-2">
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>5 Pesquisas de Mercado</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>5 Funis de Busca</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>20 Pesquisas de Palavras Chave</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>15 Textos Otimizados SEO</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>5 Pesquisas de Pautas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>50 Gerações de Meta Dados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Treinamentos Gravados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Aulas Ao Vivo</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Mentoria em grupo (1 por mês)</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700"
+                className="w-full"
                 onClick={() => handleSubscribe("solo")}
                 disabled={isLoading["solo"]}
               >
@@ -152,61 +152,61 @@ const Subscribe = () => {
           </Card>
 
           {/* Plano Discovery */}
-          <Card className="border-2 border-purple-500 shadow-md transition-all hover:shadow-lg bg-[#13121e] text-white">
+          <Card className="border-2 border-primary shadow-md transition-all hover:shadow-lg">
             <CardHeader>
-              <div className="bg-purple-600 text-white text-xs font-semibold py-1 px-3 rounded-full w-fit mb-2">
+              <div className="bg-primary text-primary-foreground text-xs font-semibold py-1 px-3 rounded-full w-fit mb-2">
                 Mais Popular
               </div>
               <CardTitle className="text-xl font-semibold">Discovery</CardTitle>
-              <CardDescription className="text-gray-300">Plano para pequenas empresas</CardDescription>
+              <CardDescription>Plano para pequenas empresas</CardDescription>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-white">R$297</span>
-                <span className="text-gray-300">/mês</span>
+                <span className="text-3xl font-bold">R$297</span>
+                <span className="text-gray-500">/mês</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="space-y-2">
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>15 Pesquisas de Mercado</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>15 Funis de Busca</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>60 Pesquisas de Palavras Chave</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>60 Textos Otimizados SEO</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>15 Pesquisas de Pautas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>100 Gerações de Meta Dados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Treinamentos Gravados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Aulas Ao Vivo</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Mentoria Individual (1 por mês)</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700"
+                className="w-full"
                 onClick={() => handleSubscribe("discovery")}
                 disabled={isLoading["discovery"]}
               >
@@ -226,62 +226,62 @@ const Subscribe = () => {
           </Card>
 
           {/* Plano Escala */}
-          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md bg-[#13121e] text-white">
+          <Card className="border border-gray-200 shadow-sm transition-all hover:shadow-md">
             <CardHeader>
               <CardTitle className="text-xl font-semibold">Escala</CardTitle>
-              <CardDescription className="text-gray-300">Plano para empresas em crescimento</CardDescription>
+              <CardDescription>Plano para empresas em crescimento</CardDescription>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-white">R$997</span>
-                <span className="text-gray-300">/mês</span>
+                <span className="text-3xl font-bold">R$997</span>
+                <span className="text-gray-500">/mês</span>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center mb-3 text-purple-400">
+              <div className="flex items-center mb-3 text-primary">
                 <Crown className="h-5 w-5 mr-2" />
                 <span className="text-sm font-medium">Todas as ferramentas ilimitadas:</span>
               </div>
               <ul className="space-y-2">
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Pesquisas de Mercado Ilimitadas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Funis de Busca Ilimitados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Palavras Chave Ilimitadas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Textos Otimizados SEO Ilimitados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Pesquisas de Pautas Ilimitadas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Gerações de Meta Dados Ilimitadas</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Treinamentos Gravados</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-green-400" />
+                  <Check className="h-5 w-5 mr-2 text-green-500" />
                   <span>Aulas Ao Vivo</span>
                 </li>
                 <li className="flex items-center">
-                  <Check className="h-5 w-5 mr-2 text-purple-400" />
+                  <Check className="h-5 w-5 mr-2 text-primary" />
                   <span>Mentoria Individual (2 por mês)</span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
               <Button 
-                className="w-full bg-purple-600 hover:bg-purple-700"
+                className="w-full"
                 onClick={() => handleSubscribe("escala")}
                 disabled={isLoading["escala"]}
               >
