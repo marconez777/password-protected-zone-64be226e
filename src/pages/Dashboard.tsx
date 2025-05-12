@@ -1,9 +1,8 @@
-
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { format, addDays, isPast, differenceInDays } from "date-fns";
+import { useUsageData } from "@/hooks/useUsageData";
+import { format, isPast, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { 
   BarChart3, 
@@ -86,11 +85,12 @@ const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [usage, setUsage] = useState<Usage | null>(null);
-  const [planLimits, setPlanLimits] = useState<PlanLimit | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { 
+    subscription, 
+    usage, 
+    planLimits, 
+    loading 
+  } = useUsageData();
 
   // Determinar o status da assinatura
   const getSubscriptionStatus = () => {
@@ -141,91 +141,7 @@ const Dashboard = () => {
       navigate("/login");
       return;
     }
-
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        // Carregar dados da assinatura
-        const { data: subscriptionData, error: subscriptionError } = await supabase
-          .from("subscriptions")
-          .select("*")
-          .eq("user_id", user?.id)
-          .single();
-
-        if (subscriptionError) {
-          console.error("Erro ao carregar assinatura:", subscriptionError);
-          toast({
-            title: "Erro ao carregar dados",
-            description: "Não foi possível carregar os dados da sua assinatura.",
-            variant: "destructive",
-          });
-          navigate("/subscribe");
-          return;
-        }
-
-        // Se não tiver assinatura, redirecionar para página de planos
-        if (!subscriptionData) {
-          navigate("/subscribe");
-          return;
-        }
-
-        setSubscription(subscriptionData);
-
-        // Carregar dados de uso
-        const { data: usageData, error: usageError } = await supabase
-          .from("user_usage")
-          .select("*")
-          .eq("user_id", user?.id)
-          .single();
-
-        if (usageError && usageError.code !== 'PGRST116') { // PGRST116 = No rows found
-          console.error("Erro ao carregar dados de uso:", usageError);
-        }
-
-        // Se não tiver dados de uso, criar um registro vazio
-        if (!usageData) {
-          const { data: newUsageData, error: newUsageError } = await supabase
-            .from("user_usage")
-            .insert([{ user_id: user?.id }])
-            .select()
-            .single();
-
-          if (newUsageError) {
-            console.error("Erro ao criar registro de uso:", newUsageError);
-          } else {
-            setUsage(newUsageData);
-          }
-        } else {
-          setUsage(usageData);
-        }
-
-        // Carregar limites do plano
-        const { data: planLimitsData, error: planLimitsError } = await supabase
-          .from("plan_limits")
-          .select("*")
-          .eq("plan_type", subscriptionData.plan_type)
-          .single();
-
-        if (planLimitsError) {
-          console.error("Erro ao carregar limites do plano:", planLimitsError);
-        } else {
-          setPlanLimits(planLimitsData);
-        }
-
-      } catch (err) {
-        console.error("Erro:", err);
-        toast({
-          title: "Erro ao carregar dados",
-          description: "Ocorreu um erro ao carregar os dados do seu painel.",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [session, user, navigate, toast]);
+  }, [session, navigate]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
