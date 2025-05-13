@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, FileText } from 'lucide-react';
+import { ResourceHistoryDisplay } from '@/components/shared/ResourceHistoryDisplay';
 
 interface HistoryItem {
   id: string;
@@ -25,6 +26,7 @@ interface MetaDadosHistoryProps {
 export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHistoryProps) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
   const supabase = useSupabaseClient();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -68,11 +70,42 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
     loadHistory();
   }, [user, supabase, toast]);
 
+  const handleViewItem = (item: HistoryItem) => {
+    console.log("Visualizando item do histórico:", item);
+    setSelectedItem(item);
+  };
+
+  const handleBackToHistory = () => {
+    setSelectedItem(null);
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_results')
+        .delete()
+        .match({ id });
+
+      if (error) throw error;
+
+      setHistory((prev) => prev.filter((item) => item.id !== id));
+      toast({
+        title: "Excluído",
+        description: "O resultado foi excluído com sucesso."
+      });
+    } catch (error) {
+      console.error('Erro ao excluir item:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível excluir o resultado.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleLoadResult = (item: HistoryItem) => {
-    // Garantir que o resultado tenha o formato esperado
-    const formattedOutput = item.output_gerado || { message: "Não foi possível carregar este resultado." };
-    
-    setFormResult(formattedOutput);
+    console.log("Carregando resultado do histórico:", item.output_gerado);
+    setFormResult(item.output_gerado);
     setActiveTab('formulario');
     
     toast({
@@ -81,61 +114,49 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
     });
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-      </div>
-    );
-  }
-
-  if (history.length === 0) {
-    return (
-      <div className="text-center p-8 text-gray-500">
-        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-        <h3 className="text-lg font-medium">Nenhum resultado encontrado</h3>
-        <p className="mt-2">Você ainda não gerou nenhum meta dado.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-4">
-      {history.map((item) => (
-        <Card key={item.id} className="p-4">
-          <div className="flex flex-col gap-2">
-            <div>
-              <span className="font-medium">Nome da Empresa:</span> 
-              <span className="ml-2">{item.input_original?.nomeEmpresa || 'N/A'}</span>
-            </div>
-            
-            <div>
-              <span className="font-medium">Palavra-chave:</span> 
-              <span className="ml-2">{item.input_original?.palavraChave || 'N/A'}</span>
-            </div>
-            
-            <div>
-              <span className="font-medium">Tipo de Página:</span> 
-              <span className="ml-2">{item.input_original?.tipoPagina || 'N/A'}</span>
-            </div>
-            
-            <div>
-              <span className="font-medium">Data:</span> 
-              <span className="ml-2">
-                {new Date(item.created_at).toLocaleDateString('pt-BR')} às{' '}
-                {new Date(item.created_at).toLocaleTimeString('pt-BR')}
-              </span>
-            </div>
-            
-            <div className="mt-2">
-              <Button onClick={() => handleLoadResult(item)} size="sm" variant="outline">
-                <FileText className="mr-2 h-4 w-4" />
-                Visualizar resultado
-              </Button>
+    <ResourceHistoryDisplay
+      loading={loading}
+      history={history}
+      selectedItem={selectedItem}
+      onViewItem={handleViewItem}
+      onDeleteItem={handleDeleteItem}
+      onBackToHistory={handleBackToHistory}
+      noHistoryMessage="Você ainda não gerou nenhum meta dado."
+      renderItemPreview={(item) => (
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Dados do Formulário</h3>
+            <div className="space-y-2 bg-gray-50 p-4 rounded-md">
+              <p><span className="font-medium">Nome da Empresa:</span> {item.input_original?.nomeEmpresa || 'N/A'}</p>
+              <p><span className="font-medium">Palavra-chave:</span> {item.input_original?.palavraChave || 'N/A'}</p>
+              <p><span className="font-medium">Palavra Relacionada:</span> {item.input_original?.palavraRelacionada || 'N/A'}</p>
+              <p><span className="font-medium">Tipo de Página:</span> {item.input_original?.tipoPagina || 'N/A'}</p>
             </div>
           </div>
-        </Card>
-      ))}
-    </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Meta Dados Gerados</h3>
+            <MetaDadosResult result={item.output_gerado} />
+          </div>
+
+          <div className="pt-4 flex justify-center">
+            <Button onClick={() => handleLoadResult(item)}>
+              Usar Este Resultado
+            </Button>
+          </div>
+        </div>
+      )}
+      renderItemSummary={(item) => (
+        <>
+          <p className="font-medium">Nome da Empresa: {item.input_original?.nomeEmpresa || 'N/A'}</p>
+          <p className="font-medium">Palavra-chave: {item.input_original?.palavraChave || 'N/A'}</p>
+          <p className="text-sm text-gray-500">
+            {new Date(item.data_criacao || item.created_at || '').toLocaleDateString('pt-BR')} às{' '}
+            {new Date(item.data_criacao || item.created_at || '').toLocaleTimeString('pt-BR')}
+          </p>
+        </>
+      )}
+    />
   );
 }

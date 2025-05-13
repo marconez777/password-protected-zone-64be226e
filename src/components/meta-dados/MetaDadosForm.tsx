@@ -31,6 +31,7 @@ export function MetaDadosForm() {
     
     if (methods.formState.isValid) {
       const values = methods.getValues();
+      console.log("Enviando dados para webhook:", values);
       
       if (!WEBHOOK_URL) {
         console.log("Webhook URL não configurada ainda", values);
@@ -39,6 +40,7 @@ export function MetaDadosForm() {
       }
       
       const response = await submitToWebhook(values);
+      console.log("Resposta do webhook:", response);
       if (response) {
         methods.reset();
         return true;
