@@ -1,22 +1,19 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
 import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
 import { formatMarkdownContent } from "@/lib/utils";
 
 type SEOResult = {
   titulo?: string;
+  texto?: string;
   h1?: string;
   h2s?: string[];
   meta_description?: string;
   message?: string;
+  output?: string; // Added to handle n8n webhook output format
   input_original?: {
     tema?: string;
     palavraChave?: string;
   };
-  output?: string;
-  texto?: string;
 }
 
 export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
@@ -49,44 +46,21 @@ export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
 
   return (
     <ResourceResultDisplay title={pageTitle}>
-      <div>
+      <div className="bg-white rounded-lg p-4">
         {result.titulo && (
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">{result.titulo}</h1>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">{result.titulo}</h2>
         )}
+        
         {texto && (
           <div className="text-gray-700">
             {formatMarkdownContent(texto)}
           </div>
         )}
         
-        {(result.h1 || result.h2s || result.meta_description) && (
-          <div className="mt-6 space-y-4">
-            <h2 className="text-xl font-semibold text-gray-700 border-b pb-2">Estrutura SEO</h2>
-            
-            {result.h1 && (
-              <div>
-                <p className="font-medium text-gray-500">H1:</p>
-                <p className="pl-4 font-semibold">{result.h1}</p>
-              </div>
-            )}
-            
-            {result.h2s && result.h2s.length > 0 && (
-              <div>
-                <p className="font-medium text-gray-500">H2:</p>
-                <ul className="list-disc pl-8">
-                  {result.h2s.map((h2, index) => (
-                    <li key={index} className="font-semibold">{h2}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {result.meta_description && (
-              <div>
-                <p className="font-medium text-gray-500">Meta Description:</p>
-                <p className="pl-4">{result.meta_description}</p>
-              </div>
-            )}
+        {result.meta_description && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="font-medium text-gray-700 mb-2">Meta Description:</h3>
+            <p className="pl-4 text-gray-600 italic">{result.meta_description}</p>
           </div>
         )}
       </div>

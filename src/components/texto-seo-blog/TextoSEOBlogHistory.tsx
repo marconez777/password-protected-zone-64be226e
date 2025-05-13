@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@/hooks/useSupabaseClient';
 import { useAuth } from '@/hooks/useAuth';
@@ -103,16 +102,6 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
     setSelectedItem(null);
   };
 
-  const handleLoadResult = (item: HistoryItem) => {
-    setFormResult(item.output_gerado);
-    setActiveTab('formulario');
-    
-    toast({
-      title: "Resultado carregado",
-      description: "O resultado foi carregado com sucesso."
-    });
-  };
-
   return (
     <ResourceHistoryDisplay
       loading={loading}
@@ -122,35 +111,7 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
       onDeleteItem={handleDeleteItem}
       onBackToHistory={handleBackToHistory}
       renderItemPreview={(item) => (
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Informações Originais:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-gray-500">Tema:</p>
-                <p>{item.input_original.tema}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">Palavra-chave:</p>
-                <p>{item.input_original.palavraChave}</p>
-              </div>
-              {item.input_original.palavrasRelacionadas && (
-                <div className="col-span-1 md:col-span-2">
-                  <p className="text-sm font-medium text-gray-500">Palavras Relacionadas:</p>
-                  <p>{item.input_original.palavrasRelacionadas}</p>
-                </div>
-              )}
-              {item.input_original.observacoes && (
-                <div className="col-span-1 md:col-span-2">
-                  <p className="text-sm font-medium text-gray-500">Observações:</p>
-                  <p>{item.input_original.observacoes}</p>
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <TextoSEOBlogResult result={item.output_gerado} />
-        </div>
+        <TextoSEOBlogResult result={item.output_gerado} />
       )}
       renderItemSummary={(item) => (
         <>
