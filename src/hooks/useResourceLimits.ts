@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -12,7 +13,8 @@ export type ResourceType =
   | 'topic_research'
   | 'metadata_generation'
   | 'texto_seo_lp' 
-  | 'texto_seo_produto'; // Added this new resource type
+  | 'texto_seo_produto'
+  | 'texto_seo_blog'; // Added this new resource type
 
 interface UseResourceLimitsReturn {
   checkAndIncrementResource: (resourceType: ResourceType) => Promise<boolean>;
