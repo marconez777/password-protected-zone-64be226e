@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { ResourceUsageTable } from "./ResourceUsageTable";
-import { Usage, PlanLimit } from "@/hooks/useUsageData";
+import { Usage, PlanLimit } from "@/types/usage";
 
 interface ResourceUsageCardProps {
   usage: Usage | null;

@@ -1,7 +1,7 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ResourceUsageRow } from "./ResourceUsageRow";
-import { Usage, PlanLimit } from "@/hooks/useUsageData";
+import { Usage, PlanLimit } from "@/types/usage";
 
 interface ResourceUsageTableProps {
   usage: Usage | null;

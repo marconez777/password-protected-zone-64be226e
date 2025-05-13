@@ -1,44 +1,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-
-// Types for usage data
-export interface Usage {
-  id: string;
-  user_id: string;
-  keyword_count: number;
-  market_research_count: number;
-  search_funnel_count: number;
-  seo_text_count: number;
-  topic_research_count: number;
-  metadata_generation_count: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface PlanLimit {
-  id: string;
-  plan_type: 'solo' | 'discovery' | 'escala';
-  keyword_limit: number | null;
-  market_research_limit: number | null;
-  search_funnel_limit: number | null;
-  seo_text_limit: number | null;
-  topic_research_limit: number | null;
-  metadata_generation_limit: number | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Subscription {
-  id: string;
-  user_id: string;
-  is_active: boolean;
-  plan_type: 'solo' | 'discovery' | 'escala';
-  current_period_end: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { Usage, PlanLimit, Subscription } from '@/types/usage';
+import { fetchSubscriptionData } from '@/utils/fetchSubscriptionData';
+import { fetchUsageData } from '@/utils/fetchUsageData';
+import { fetchPlanLimits } from '@/utils/fetchPlanLimits';
 
 /**
  * Hook to fetch and manage user subscription and usage data
@@ -57,43 +23,20 @@ export function useUsageData() {
     setLoading(true);
     try {
       // Load subscription data
-      const { data: subscriptionData, error: subscriptionError } = await supabase
-        .from("subscriptions")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (subscriptionError && subscriptionError.code !== 'PGRST116') {
-        console.error("Erro ao carregar assinatura:", subscriptionError);
-        return;
-      }
-
+      const subscriptionData = await fetchSubscriptionData(user.id);
+      
       if (subscriptionData) {
         setSubscription(subscriptionData);
 
         // Load usage data
-        const { data: usageData, error: usageError } = await supabase
-          .from("user_usage")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
-
-        if (usageError && usageError.code !== 'PGRST116') {
-          console.error("Erro ao carregar dados de uso:", usageError);
-        } else if (usageData) {
+        const usageData = await fetchUsageData(user.id);
+        if (usageData) {
           setUsage(usageData);
         }
 
         // Load plan limits
-        const { data: planLimitsData, error: planLimitsError } = await supabase
-          .from("plan_limits")
-          .select("*")
-          .eq("plan_type", subscriptionData.plan_type)
-          .single();
-
-        if (planLimitsError) {
-          console.error("Erro ao carregar limites do plano:", planLimitsError);
-        } else {
+        const planLimitsData = await fetchPlanLimits(subscriptionData.plan_type);
+        if (planLimitsData) {
           setPlanLimits(planLimitsData);
         }
       }
@@ -119,3 +62,6 @@ export function useUsageData() {
     reload: loadData
   };
 }
+
+// Re-export the type definitions for backward compatibility
+export type { Usage, PlanLimit, Subscription } from '@/types/usage';
