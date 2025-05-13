@@ -17,6 +17,7 @@ type SEOResult = {
     palavraChave?: string;
   };
   output?: string; // Add this field to handle the n8n response format
+  texto?: string; // Add this field to match the reference on line 42
 }
 
 export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
