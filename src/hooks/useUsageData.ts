@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Usage, PlanLimit, Subscription } from '@/types/usage';
 import { fetchSubscriptionData } from '@/utils/fetchSubscriptionData';
@@ -28,51 +28,29 @@ export function useUsageData() {
       // Load subscription data
       const subscriptionData = await fetchSubscriptionData(user.id);
       
-      // Determine plan type based on subscription or default to 'solo'
-      const planType = subscriptionData?.is_active ? subscriptionData.plan_type : 'solo';
-      
       if (subscriptionData) {
         setSubscription(subscriptionData);
-      } else {
-        // If no subscription, set default subscription data
-        setSubscription({
-          id: '',
-          user_id: user.id,
-          is_active: false,
-          plan_type: 'solo',
-          current_period_end: null,
-          created_at: '',
-          updated_at: ''
-        });
-      }
 
-      // Always load usage data, even without active subscription
-      const usageData = await fetchUsageData(user.id);
-      if (usageData) {
-        setUsage(usageData);
-      } else {
-        // If no usage data, set default empty usage
-        setUsage({
-          id: '',
-          user_id: user.id,
-          keyword_count: 0,
-          market_research_count: 0,
-          search_funnel_count: 0,
-          seo_text_count: 0,
-          topic_research_count: 0,
-          metadata_generation_count: 0,
-          created_at: '',
-          updated_at: ''
-        });
-      }
+        // Load usage data
+        const usageData = await fetchUsageData(user.id);
+        if (usageData) {
+          setUsage(usageData);
+        }
 
-      // Load plan limits based on determined plan type
-      const planLimitsData = await fetchPlanLimits(planType);
-      if (planLimitsData) {
-        setPlanLimits(planLimitsData);
+        // Load plan limits
+        const planLimitsData = await fetchPlanLimits(subscriptionData.plan_type);
+        if (planLimitsData) {
+          setPlanLimits(planLimitsData);
+        } else {
+          console.error("Erro: Não foi possível carregar os limites do plano");
+          setError("Não foi possível carregar os limites do plano");
+        }
       } else {
-        console.error(`Erro: Não foi possível carregar os limites do plano ${planType}`);
-        setError("Não foi possível carregar os limites do plano");
+        // Se não tem assinatura, considerar plano "solo" como padrão
+        const defaultPlanLimits = await fetchPlanLimits('solo');
+        if (defaultPlanLimits) {
+          setPlanLimits(defaultPlanLimits);
+        }
       }
     } catch (err) {
       console.error("Erro ao carregar dados:", err);
@@ -81,6 +59,13 @@ export function useUsageData() {
       setLoading(false);
     }
   }, [user]);
+
+  // Load data on component mount and when user changes
+  useEffect(() => {
+    if (user) {
+      loadData();
+    }
+  }, [user, loadData]);
 
   return {
     subscription,

@@ -1,9 +1,8 @@
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUsageData } from "@/hooks/useUsageData";
-import { useToast } from "@/hooks/use-toast";
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SubscriptionCard } from "@/components/dashboard/SubscriptionCard";
@@ -15,39 +14,14 @@ import { RefreshCw } from "lucide-react";
 const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  
   const { 
     subscription, 
     usage, 
     planLimits, 
-    loading: dataLoading,
+    loading,
     reload,
     error
   } = useUsageData();
-
-  // Combined loading state for better UX
-  const loading = dataLoading || isRefreshing;
-
-  const handleManualRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      await reload();
-      toast({
-        title: "Dados atualizados",
-        description: "Os dados de uso foram atualizados com sucesso.",
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao atualizar",
-        description: "Não foi possível atualizar os dados de uso.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
 
   useEffect(() => {
     // Se não autenticado, redirecionar para login
@@ -59,15 +33,15 @@ const Dashboard = () => {
     // Recarregar dados quando a página do dashboard é mostrada
     reload();
     
-    // Configurar recarregamento periódico dos dados de uso (a cada 15 segundos)
+    // Configurar recarregamento periódico dos dados de uso (a cada 30 segundos)
     const intervalId = setInterval(() => {
       reload();
-    }, 15000);
+    }, 30000);
     
     return () => clearInterval(intervalId);
   }, [session, navigate, reload]);
 
-  if (!user) {
+  if (!user || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -84,12 +58,11 @@ const Dashboard = () => {
         <Button 
           variant="outline" 
           size="sm"
-          onClick={handleManualRefresh}
-          disabled={loading}
+          onClick={() => reload()}
           className="flex items-center gap-2"
         >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          {loading ? 'Atualizando...' : 'Atualizar dados'}
+          <RefreshCw className="h-4 w-4" />
+          Atualizar dados
         </Button>
       </div>
       
@@ -100,8 +73,7 @@ const Dashboard = () => {
       
       <ResourceUsageCard 
         usage={usage} 
-        planLimits={planLimits}
-        loading={loading}
+        planLimits={planLimits} 
       />
       
       <FeatureCards />

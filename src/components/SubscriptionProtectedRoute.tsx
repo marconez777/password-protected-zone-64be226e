@@ -3,7 +3,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUsageData } from "@/hooks/useUsageData";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect, useState } from "react";
 
 interface SubscriptionProtectedRouteProps {
   redirectTo?: string;
@@ -13,23 +12,6 @@ export const SubscriptionProtectedRoute = ({ redirectTo = "/subscribe" }: Subscr
   const { user, isLoading: authLoading } = useAuth();
   const { subscription, loading: subscriptionLoading } = useUsageData();
   const { toast } = useToast();
-  const [shouldRedirect, setShouldRedirect] = useState(false);
-  
-  // Use useEffect to handle the toast and redirect logic
-  useEffect(() => {
-    // Only check and potentially show toast when both auth and subscription data are loaded
-    if (!authLoading && !subscriptionLoading) {
-      // If user is logged in but doesn't have an active subscription
-      if (user && !subscription?.is_active) {
-        toast({
-          title: "Assinatura necessária",
-          description: "Você precisa ter uma assinatura ativa para acessar esta funcionalidade.",
-          variant: "destructive",
-        });
-        setShouldRedirect(true);
-      }
-    }
-  }, [user, subscription, authLoading, subscriptionLoading, toast]);
   
   // Show loading state while checking auth and subscription
   if (authLoading || subscriptionLoading) {
@@ -45,8 +27,13 @@ export const SubscriptionProtectedRoute = ({ redirectTo = "/subscribe" }: Subscr
     return <Navigate to="/login" replace />;
   }
   
-  // If we determined earlier that we need to redirect
-  if (shouldRedirect) {
+  // If user doesn't have an active subscription, redirect to subscription page
+  if (!subscription?.is_active) {
+    toast({
+      title: "Assinatura necessária",
+      description: "Você precisa ter uma assinatura ativa para acessar esta funcionalidade.",
+      variant: "destructive",
+    });
     return <Navigate to={redirectTo} replace />;
   }
 
