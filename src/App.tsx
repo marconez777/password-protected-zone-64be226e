@@ -17,6 +17,7 @@ import SearchFunnel from "./pages/SearchFunnel";
 import Keywords from "./pages/Keywords";
 import MarketAndTarget from "./pages/MarketAndTarget";
 import TextoSEOLP from "./pages/TextoSEOLP";
+import TextoSEOProduto from "./pages/TextoSEOProduto";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/palavras-chave" element={<Keywords />} />
               <Route path="/mercado-publico-alvo" element={<MarketAndTarget />} />
               <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
+              <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
             </Route>
             
             {/* Rota de fallback */}
