@@ -20,6 +20,7 @@ import TextoSEOLP from "./pages/TextoSEOLP";
 import TextoSEOProduto from "./pages/TextoSEOProduto";
 import TextoSEOBlog from "./pages/TextoSEOBlog";
 import PautasBlog from "./pages/PautasBlog";
+import MetaDados from "./pages/MetaDados";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
               <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
               <Route path="/pautas-blog" element={<PautasBlog />} />
+              <Route path="/meta-dados" element={<MetaDados />} />
             </Route>
             
             {/* Rota de fallback */}

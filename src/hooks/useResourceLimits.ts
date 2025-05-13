@@ -14,7 +14,7 @@ export type ResourceType =
   | 'texto_seo_lp' 
   | 'texto_seo_produto'
   | 'texto_seo_blog'
-  | 'pautas_blog'; // Added this new resource type
+  | 'pautas_blog';
 
 interface UseResourceLimitsReturn {
   checkAndIncrementResource: (resourceType: ResourceType) => Promise<boolean>;
