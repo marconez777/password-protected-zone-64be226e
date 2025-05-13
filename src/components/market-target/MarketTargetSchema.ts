@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 // URL do webhook (será configurada posteriormente)
-export const WEBHOOK_URL = process.env.REACT_APP_MARKET_TARGET_WEBHOOK_URL || '';
+export const WEBHOOK_URL = import.meta.env.VITE_MARKET_TARGET_WEBHOOK_URL || '';
 
 // Esquema de validação do formulário com Zod
 export const MarketTargetFormSchema = z.object({
