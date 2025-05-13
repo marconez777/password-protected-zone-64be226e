@@ -8,7 +8,7 @@ import { Check } from 'lucide-react';
 const Feature = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex items-center space-x-2 text-sm">
-      <Check className="h-4 w-4 text-primary" /> {/* Use primary color consistently */}
+      <Check className="h-4 w-4 text-primary" />
       <span>{children}</span>
     </div>
   );
@@ -20,7 +20,7 @@ const PlanCard = ({
   price,
   features,
   isPopular,
-  buttonText = "Assinar"
+  buttonText = "Começar Agora"
 }: {
   name: string;
   description: string;
@@ -59,53 +59,63 @@ export default function Subscribe() {
   return (
     <div className="container py-10">
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold tracking-tight">Planos de Assinatura</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Escolha o Plano Ideal para Você</h1>
         <p className="text-muted-foreground mt-2">
-          Escolha o plano que melhor se adapta às suas necessidades
+          Escale seu marketing digital com nossos planos completos. Todos incluem acesso às melhores ferramentas de SEO com IA.
         </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 mt-8">
         <PlanCard
           name="Solo"
-          description="Para profissionais iniciantes e freelancers"
-          price="R$197"
+          description="Plano para profissionais individuais"
+          price="R$ 47"
           features={[
-            "3 pesquisas de palavra-chave",
-            "1 análise de mercado",
-            "1 funil de busca",
-            "5 textos SEO",
-            "3 ideias de conteúdo",
-            "10 metadados"
+            "5 Pesquisas de Mercado",
+            "3 Funis de Busca",
+            "20 Pesquisas de Palavras Chave",
+            "15 Textos Otimizados SEO",
+            "5 Pesquisas de Pautas",
+            "50 Gerações de Meta Dados",
+            "Treinamentos Gravados",
+            "Aulas Ao Vivo",
+            "Mentoria em grupo (1 por mês)"
           ]}
         />
         
         <PlanCard
           name="Discovery"
-          description="Para pequenas empresas e agências"
-          price="R$397"
+          description="Plano para pequenas empresas"
+          price="R$ 97"
           features={[
-            "15 pesquisas de palavra-chave",
-            "5 análises de mercado",
-            "5 funís de busca",
-            "20 textos SEO",
-            "10 ideias de conteúdo",
-            "50 metadados"
+            "15 Pesquisas de Mercado",
+            "15 Funis de Busca",
+            "60 Pesquisas de Palavras Chave",
+            "60 Textos Otimizados SEO",
+            "15 Pesquisas de Pautas",
+            "100 Gerações de Meta Dados",
+            "Treinamentos Gravados",
+            "Aulas Ao Vivo",
+            "Mentoria individual (1 por mês)"
           ]}
           isPopular={true}
         />
         
         <PlanCard
           name="Escala"
-          description="Para empresas em crescimento e marcas estabelecidas"
-          price="R$997"
+          description="Plano para empresas em crescimento"
+          price="R$ 197"
           features={[
-            "Pesquisas ilimitadas de palavra-chave",
-            "Análises ilimitadas de mercado",
-            "Funís de busca ilimitados",
-            "Textos SEO ilimitados",
-            "Ideias de conteúdo ilimitadas",
-            "Metadados ilimitados"
+            "Todas as ferramentas ilimitadas:",
+            "Pesquisas de Mercado ilimitadas",
+            "Funis de Busca ilimitados",
+            "Palavras Chave ilimitadas",
+            "Textos Otimizados SEO ilimitados",
+            "Pesquisas de Pautas ilimitadas",
+            "Gerações de Meta Dados ilimitadas",
+            "Treinamentos Gravados",
+            "Aulas Ao Vivo",
+            "Mentoria individual (2 por mês)"
           ]}
         />
       </div>

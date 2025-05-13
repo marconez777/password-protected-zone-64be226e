@@ -15,12 +15,15 @@ export function useUsageData() {
   const [usage, setUsage] = useState<Usage | null>(null);
   const [planLimits, setPlanLimits] = useState<PlanLimit | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Function to load all usage data
   const loadData = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
+    setError(null);
+    
     try {
       // Load subscription data
       const subscriptionData = await fetchSubscriptionData(user.id);
@@ -38,10 +41,20 @@ export function useUsageData() {
         const planLimitsData = await fetchPlanLimits(subscriptionData.plan_type);
         if (planLimitsData) {
           setPlanLimits(planLimitsData);
+        } else {
+          console.error("Erro: Não foi possível carregar os limites do plano");
+          setError("Não foi possível carregar os limites do plano");
+        }
+      } else {
+        // Se não tem assinatura, considerar plano "solo" como padrão
+        const defaultPlanLimits = await fetchPlanLimits('solo');
+        if (defaultPlanLimits) {
+          setPlanLimits(defaultPlanLimits);
         }
       }
     } catch (err) {
       console.error("Erro ao carregar dados:", err);
+      setError("Erro ao carregar dados de uso e assinatura");
     } finally {
       setLoading(false);
     }
@@ -59,6 +72,7 @@ export function useUsageData() {
     usage,
     planLimits,
     loading,
+    error,
     reload: loadData
   };
 }

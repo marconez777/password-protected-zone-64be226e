@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -16,17 +15,23 @@ const corsHeaders = {
 // Configurações dos planos
 const PLAN_CONFIG = {
   solo: {
-    name: 'Plano Mensal',
-    description: 'Acesso mensal ao sistema',
-    unit_price: 29.9,
+    name: 'Plano Solo',
+    description: 'Plano para profissionais individuais',
+    unit_price: 47.0,
     duration: '1 month',
   },
   discovery: {
-    name: 'Plano Anual',
-    description: 'Acesso anual ao sistema com 16% de desconto',
-    unit_price: 299.9,
-    duration: '1 year',
+    name: 'Plano Discovery',
+    description: 'Plano para pequenas empresas',
+    unit_price: 97.0,
+    duration: '1 month',
   },
+  escala: {
+    name: 'Plano Escala',
+    description: 'Plano para empresas em crescimento',
+    unit_price: 197.0,
+    duration: '1 month',
+  }
 };
 
 async function createMercadoPagoPreference(planType: string, userId: string, successUrl: string, failureUrl: string) {
