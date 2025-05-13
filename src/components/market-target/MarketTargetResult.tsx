@@ -44,6 +44,37 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
         // Se é um item de lista
         inList = true;
         listItems.push(line.trim().substring(2));
+      } else if (line.trim().startsWith('#')) {
+        // Tratar cabeçalhos
+        if (inList) {
+          result.push(
+            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
+              {listItems.map((item, i) => (
+                <li key={i} className="mb-1">{formatBoldText(item)}</li>
+              ))}
+            </ul>
+          );
+          inList = false;
+          listItems = [];
+        }
+        
+        // Determinar nível do cabeçalho
+        const level = line.trim().match(/^#+/)[0].length;
+        const text = line.trim().replace(/^#+\s*/, '');
+        
+        switch(level) {
+          case 1:
+            result.push(<h1 key={index} className="text-2xl font-bold text-mkranker-purple mt-4 mb-3">{text}</h1>);
+            break;
+          case 2:
+            result.push(<h2 key={index} className="text-xl font-bold text-mkranker-purple mt-3 mb-2">{text}</h2>);
+            break;
+          case 3:
+            result.push(<h3 key={index} className="text-lg font-bold text-mkranker-purple mt-2 mb-1">{text}</h3>);
+            break;
+          default:
+            result.push(<h4 key={index} className="text-base font-bold text-mkranker-purple mt-2 mb-1">{text}</h4>);
+        }
       } else {
         // Se não é item de lista, mas tinha uma lista antes
         if (inList) {
@@ -89,7 +120,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
         {result.message ? (
           <p className="text-gray-700">{result.message}</p>
         ) : hasMarkdownOutput ? (
-          <ScrollArea className="max-h-[600px]">
+          <ScrollArea className="max-h-[70vh]">
             <div className="prose max-w-none">
               <div className="whitespace-pre-wrap">
                 {formatList(result.output)}
@@ -105,7 +136,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsList>
             
             <TabsContent value="completo">
-              <ScrollArea className="max-h-[600px]">
+              <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-6">
                   {result.mercado && (
                     <div className="bg-accent rounded-lg p-4">
@@ -138,7 +169,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsContent>
             
             <TabsContent value="mercado">
-              <ScrollArea className="max-h-[600px]">
+              <ScrollArea className="max-h-[70vh]">
                 {result.mercado ? (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
@@ -153,7 +184,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsContent>
             
             <TabsContent value="publico">
-              <ScrollArea className="max-h-[600px]">
+              <ScrollArea className="max-h-[70vh]">
                 {result.publico ? (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
