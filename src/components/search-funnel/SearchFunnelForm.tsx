@@ -12,10 +12,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { SearchFunnelFormValues } from './SearchFunnelSchema';
+import { useToast } from '@/hooks/use-toast';
 
 export function SearchFunnelForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
   const { submitToWebhook, result, setResult, isLoading } = useWebhookSubmission('search_funnel', WEBHOOK_URL);
+  const { toast } = useToast();
   
   const methods = useForm<SearchFunnelFormValues>({
     resolver: zodResolver(searchFunnelSchema),
@@ -32,11 +34,29 @@ export function SearchFunnelForm() {
     if (methods.formState.isValid) {
       const values = methods.getValues();
       
-      const response = await submitToWebhook(values);
-      if (response) {
-        // Reset the form after successful submission
-        methods.reset();
-        return true;
+      try {
+        const response = await submitToWebhook(values);
+        if (response) {
+          // Show success notification
+          toast({
+            title: "Sucesso",
+            description: "Funil de busca gerado com sucesso!",
+          });
+          
+          // Display the result
+          console.log('Resposta do webhook:', response);
+          
+          // Reset the form after successful submission
+          methods.reset();
+          return true;
+        }
+      } catch (error) {
+        console.error('Erro ao enviar formulário:', error);
+        toast({
+          title: "Erro",
+          description: "Houve um erro ao gerar o funil de busca.",
+          variant: "destructive",
+        });
       }
     } else {
       // Trigger validation
