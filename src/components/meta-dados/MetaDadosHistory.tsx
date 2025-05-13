@@ -14,6 +14,7 @@ interface HistoryItem {
   input_original: any;
   output_gerado: any;
   created_at: string;
+  data_criacao?: string;
 }
 
 interface MetaDadosHistoryProps {
@@ -48,7 +49,7 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
         if (data) {
           const formattedData = data.map((item) => ({
             ...item,
-            created_at: item.data_criacao
+            created_at: item.data_criacao || new Date().toISOString()
           }));
           setHistory(formattedData as HistoryItem[]);
         }
@@ -68,7 +69,10 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
   }, [user, supabase, toast]);
 
   const handleLoadResult = (item: HistoryItem) => {
-    setFormResult(item.output_gerado);
+    // Garantir que o resultado tenha o formato esperado
+    const formattedOutput = item.output_gerado || { message: "Não foi possível carregar este resultado." };
+    
+    setFormResult(formattedOutput);
     setActiveTab('formulario');
     
     toast({
@@ -102,17 +106,17 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
           <div className="flex flex-col gap-2">
             <div>
               <span className="font-medium">Nome da Empresa:</span> 
-              <span className="ml-2">{item.input_original.nomeEmpresa || 'N/A'}</span>
+              <span className="ml-2">{item.input_original?.nomeEmpresa || 'N/A'}</span>
             </div>
             
             <div>
               <span className="font-medium">Palavra-chave:</span> 
-              <span className="ml-2">{item.input_original.palavraChave || 'N/A'}</span>
+              <span className="ml-2">{item.input_original?.palavraChave || 'N/A'}</span>
             </div>
             
             <div>
               <span className="font-medium">Tipo de Página:</span> 
-              <span className="ml-2">{item.input_original.tipoPagina || 'N/A'}</span>
+              <span className="ml-2">{item.input_original?.tipoPagina || 'N/A'}</span>
             </div>
             
             <div>

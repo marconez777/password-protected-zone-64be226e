@@ -17,6 +17,7 @@ type MetaDataResult = {
 };
 
 export function MetaDadosResult({ result }: MetaDadosResultProps) {
+  // Se o resultado for null ou undefined, não renderize nada
   if (!result) {
     return null;
   }
@@ -34,43 +35,53 @@ export function MetaDadosResult({ result }: MetaDadosResultProps) {
     );
   }
 
+  // Garantir que o título e meta_description sejam strings
+  const titulo = typeof result.titulo === 'string' ? result.titulo : '';
+  const metaDescription = typeof result.meta_description === 'string' ? result.meta_description : '';
+  
+  // Garantir que o h1 seja string
+  const h1 = result.heading_tags?.h1 || '';
+  
+  // Garantir que h2 seja um array de strings
+  const h2Array = Array.isArray(result.heading_tags?.h2) ? result.heading_tags?.h2 : [];
+
   return (
     <Card>
       <CardContent className="p-4">
         <ScrollArea className="max-h-[400px]">
           <div className="space-y-6">
-            {result.titulo && (
+            {titulo && (
               <div>
                 <h3 className="text-lg font-medium mb-2">Título da Página</h3>
                 <div className="bg-gray-50 p-3 rounded border">
-                  {result.titulo}
+                  {titulo}
                 </div>
               </div>
             )}
             
-            {result.meta_description && (
+            {metaDescription && (
               <div>
                 <h3 className="text-lg font-medium mb-2">Meta Description</h3>
                 <div className="bg-gray-50 p-3 rounded border">
-                  {result.meta_description}
+                  {metaDescription}
                 </div>
               </div>
             )}
             
-            {result.heading_tags?.h1 && (
+            {h1 && (
               <div>
                 <h3 className="text-lg font-medium mb-2">H1</h3>
                 <div className="bg-gray-50 p-3 rounded border">
-                  {result.heading_tags.h1}
+                  {h1}
                 </div>
               </div>
             )}
             
-            {result.heading_tags?.h2 && result.heading_tags.h2.length > 0 && (
+            {h2Array.length > 0 && (
               <div>
                 <h3 className="text-lg font-medium mb-2">H2</h3>
                 <ul className="list-disc pl-5 space-y-2">
-                  {result.heading_tags.h2.map((heading, index) => (
+                  {h2Array.map((heading, index) => (
                     <li key={index} className="bg-gray-50 p-3 rounded border">
                       {heading}
                     </li>
