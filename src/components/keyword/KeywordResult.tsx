@@ -73,8 +73,8 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
 
   return (
     <ResourceResultDisplay title="Palavras-chave Relacionadas">
-      <div className="bg-accent rounded-lg p-4">
-        <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+      <div className="bg-white rounded-lg p-4 border border-gray-200">
+        <h4 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1">
           Palavras-chave Sugeridas
         </h4>
         <ul className="list-disc pl-5 space-y-2">
