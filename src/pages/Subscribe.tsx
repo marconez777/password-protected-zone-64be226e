@@ -69,7 +69,7 @@ export default function Subscribe() {
         <PlanCard
           name="Solo"
           description="Plano para profissionais individuais"
-          price="R$ 47"
+          price="R$ 97"
           features={[
             "5 Pesquisas de Mercado",
             "3 Funis de Busca",
@@ -86,7 +86,7 @@ export default function Subscribe() {
         <PlanCard
           name="Discovery"
           description="Plano para pequenas empresas"
-          price="R$ 97"
+          price="R$ 297"
           features={[
             "15 Pesquisas de Mercado",
             "15 Funis de Busca",
@@ -104,7 +104,7 @@ export default function Subscribe() {
         <PlanCard
           name="Escala"
           description="Plano para empresas em crescimento"
-          price="R$ 197"
+          price="R$ 497"
           features={[
             "Todas as ferramentas ilimitadas:",
             "Pesquisas de Mercado ilimitadas",
