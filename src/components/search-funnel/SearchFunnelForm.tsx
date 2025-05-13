@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SearchFunnelFormValues, searchFunnelSchema } from './SearchFunnelSchema';
+import { SearchFunnelFormData, SearchFunnelFormSchema, WEBHOOK_URL } from './SearchFunnelSchema';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SearchFunnelFormInputs } from './SearchFunnelFormInputs';
 import { SearchFunnelResult } from './SearchFunnelResult';
@@ -21,8 +21,8 @@ export function SearchFunnelForm() {
   const { toast } = useToast();
   const { user } = useAuth();
   
-  const methods = useForm<SearchFunnelFormValues>({
-    resolver: zodResolver(searchFunnelSchema),
+  const methods = useForm<SearchFunnelFormData>({
+    resolver: zodResolver(SearchFunnelFormSchema),
     defaultValues: {
       microNicho: '',
       publicoAlvo: '',
@@ -52,11 +52,9 @@ export function SearchFunnelForm() {
     try {
       const values = methods.getValues();
       
-      const webhookUrl = 'https://mkseo77.app.n8n.cloud/webhook/funil';
+      console.log("Enviando dados para o webhook:", WEBHOOK_URL, values);
       
-      console.log("Enviando dados para o webhook:", webhookUrl, values);
-      
-      const response = await fetch(webhookUrl, {
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

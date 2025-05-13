@@ -1,11 +1,11 @@
 
-import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
-import { SearchFunnelFormValues } from './SearchFunnelSchema';
+import { SearchFunnelFormData } from './SearchFunnelSchema';
 
 export function SearchFunnelFormInputs() {
-  const { control } = useFormContext<SearchFunnelFormValues>();
+  const { control } = useFormContext<SearchFunnelFormData>();
 
   return (
     <div className="space-y-6">
@@ -26,6 +26,7 @@ export function SearchFunnelFormInputs() {
                 className="mt-1"
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -47,6 +48,7 @@ export function SearchFunnelFormInputs() {
                 className="mt-1"
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -68,6 +70,7 @@ export function SearchFunnelFormInputs() {
                 className="mt-1"
               />
             </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
