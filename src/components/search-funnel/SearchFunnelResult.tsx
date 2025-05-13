@@ -31,6 +31,7 @@ export function SearchFunnelResult({ result }: SearchFunnelResultProps) {
       </Card>
     );
   } catch (error) {
-    return <div className="text-destructive">Erro ao exibir resultado.</div>;
+    console.error('Erro ao exibir resultado:', error);
+    return <div className="text-destructive">Erro ao exibir resultado: {String(error)}</div>;
   }
 }

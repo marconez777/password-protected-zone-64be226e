@@ -46,6 +46,9 @@ export function SearchFunnelForm() {
           // Display the result
           console.log('Resposta do webhook:', response);
           
+          // Garantir que o resultado seja exibido
+          setResult(response);
+          
           // Reset the form after successful submission
           methods.reset();
           return true;
