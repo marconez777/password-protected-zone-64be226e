@@ -15,7 +15,7 @@ export function MarketTargetFormInputs() {
         name="nicho"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">
+            <FormLabel className="text-base font-medium">
               Qual o seu Nicho: <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
@@ -24,6 +24,7 @@ export function MarketTargetFormInputs() {
                 placeholder="Ex: Marketing digital"
                 required
                 {...field}
+                className="mt-1"
               />
             </FormControl>
           </FormItem>
@@ -35,7 +36,7 @@ export function MarketTargetFormInputs() {
         name="servico"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">
+            <FormLabel className="text-base font-medium">
               Qual o Serviço em Foco: <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
@@ -44,6 +45,7 @@ export function MarketTargetFormInputs() {
                 placeholder="Ex: Tráfego pago"
                 required
                 {...field}
+                className="mt-1"
               />
             </FormControl>
           </FormItem>
@@ -55,7 +57,7 @@ export function MarketTargetFormInputs() {
         name="segmentos"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">
+            <FormLabel className="text-base font-medium">
               Quais são seus segmentos: <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
@@ -64,6 +66,7 @@ export function MarketTargetFormInputs() {
                 placeholder="Ex: Agência, Freelancer, Empresa..."
                 required
                 {...field}
+                className="mt-1"
               />
             </FormControl>
           </FormItem>
@@ -75,7 +78,7 @@ export function MarketTargetFormInputs() {
         name="problema"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">
+            <FormLabel className="text-base font-medium">
               Problema ou Necessidade: <span className="text-red-500">*</span>
             </FormLabel>
             <FormControl>
@@ -85,6 +88,7 @@ export function MarketTargetFormInputs() {
                 rows={5}
                 required
                 {...field}
+                className="mt-1"
               />
             </FormControl>
           </FormItem>

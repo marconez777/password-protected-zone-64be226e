@@ -1,4 +1,3 @@
-
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { FormattedMarkdownContent } from './FormattedMarkdownContent';
 import { AnalysisSection } from './AnalysisSection';
 
-interface MarketTargetHistoryProps {
+export interface MarketTargetHistoryProps {
   setActiveTab: Dispatch<SetStateAction<string>>;
   setFormResult: Dispatch<SetStateAction<any>>;
 }
