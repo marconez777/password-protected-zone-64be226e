@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
@@ -23,7 +22,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 // URL do webhook específico para Palavras-chave
-const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/palavras-chave';
+const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/palavra-chave';
 
 export const KeywordForm = () => {
   const [activeTab, setActiveTab] = useState("formulario");
