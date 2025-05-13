@@ -1,8 +1,6 @@
 
-import LandingLayout from "@/components/landing/LandingLayout";
-import LandingHero from "@/components/landing/LandingHero";
-import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { LogIn, UserPlus, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,16 +8,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 const Index = () => {
   const { user, isLoading } = useAuth();
 
-  // If user is not logged in, show the landing page
-  if (!user && !isLoading) {
-    return (
-      <LandingLayout>
-        <LandingHero />
-      </LandingLayout>
-    );
-  }
-
-  // If loading, show loading spinner
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -28,7 +16,6 @@ const Index = () => {
     );
   }
 
-  // If user is logged in, show the original login/dashboard options
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-5xl mx-auto text-center">
