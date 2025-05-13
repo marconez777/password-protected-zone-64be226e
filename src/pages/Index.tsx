@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { LogIn, UserPlus, ArrowRight, CheckCircle, ChevronRight, Star, ChevronLeft, Users, FileText, Database, Code, Search, Shield, Zap } from "lucide-react";
@@ -156,9 +155,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-[#0f0f13] text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800">
+      <header className="sticky top-0 z-50 bg-[#0f0f13]/80 backdrop-blur-lg border-b border-gray-800">
         <div className="container mx-auto flex items-center justify-between py-4">
           <div className="flex items-center">
             <div className="mr-8">
@@ -173,13 +172,13 @@ const Index = () => {
                   <span>Recursos</span>
                   <ChevronRight className="h-4 w-4 transform group-hover:rotate-90 transition-transform" />
                 </button>
-                <div className="absolute left-0 mt-2 w-72 bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-gray-700 z-50">
+                <div className="absolute left-0 mt-2 w-72 bg-[#1a1a2e] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-[#2a2a3e] z-50">
                   <div className="p-4 grid gap-2">
                     {featuresData.slice(0, 6).map((feature) => (
                       <Link 
                         key={feature.id}
                         to={`/${feature.id}`} 
-                        className="flex items-start p-3 rounded-md hover:bg-gray-700 transition"
+                        className="flex items-start p-3 rounded-md hover:bg-[#2a2a3e] transition"
                       >
                         <div className="shrink-0 text-mkranker-purple mr-3">
                           {feature.icon}
@@ -228,27 +227,27 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80"></div>
+      <section className="relative py-24 overflow-hidden animated-bg">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0f0f13] via-[#1a1a2e] to-[#0f0f13] opacity-80"></div>
         <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-mkranker-purple/20 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-mkranker-light-purple/10 rounded-full filter blur-3xl"></div>
         
         <div className="container mx-auto relative z-10 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
               Potencialize seu SEO com <span className="text-mkranker-purple">Inteligência Artificial</span>
             </h1>
-            <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto animate-fade-in" style={{animationDelay: "0.2s"}}>
               MKRanker conecta seu negócio com as mais avançadas tecnologias de IA (Gemini e Chat GPT) para gerar análises de mercado, conteúdo otimizado e estratégias de SEO que realmente funcionam.
             </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-mkranker-purple hover:bg-mkranker-dark-purple text-white px-8 py-6 text-lg">
+            <div className="flex flex-col md:flex-row gap-4 justify-center animate-fade-in" style={{animationDelay: "0.4s"}}>
+              <Button asChild size="lg" className="bg-mkranker-purple hover:bg-mkranker-dark-purple text-white px-8 py-6 text-lg hover-lift">
                 <Link to="/register">
                   Começar Agora
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg">
+              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg hover-lift">
                 <Link to="/demo">
                   Ver Demo
                 </Link>
@@ -259,22 +258,22 @@ const Index = () => {
       </section>
 
       {/* Social Proof */}
-      <section className="py-12 bg-gray-800/50">
+      <section className="py-12 bg-[#1a1a2e]/50">
         <div className="container mx-auto px-4">
           <h2 className="text-center text-lg text-gray-400 mb-8">Empresas que Confiam no MKRanker</h2>
           <div className="flex justify-center items-center flex-wrap gap-12 opacity-70">
             {/* Client logos would go here */}
-            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center">Logo Cliente</div>
-            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center">Logo Cliente</div>
-            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center">Logo Cliente</div>
-            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center">Logo Cliente</div>
-            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center">Logo Cliente</div>
+            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center glass-panel">Logo Cliente</div>
+            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center glass-panel">Logo Cliente</div>
+            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center glass-panel">Logo Cliente</div>
+            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center glass-panel">Logo Cliente</div>
+            <div className="h-12 w-24 bg-white/10 rounded flex items-center justify-center glass-panel">Logo Cliente</div>
           </div>
         </div>
       </section>
 
       {/* Features Tabs Section */}
-      <section className="py-24 bg-gray-900">
+      <section className="py-24 bg-[#0f0f13]">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Tudo que você precisa para automatizar o seu SEO</h2>
@@ -343,7 +342,7 @@ const Index = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24 bg-gray-800/30">
+      <section className="py-24 bg-[#1a1a2e]/30">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Por que escolher o MKRanker?</h2>
@@ -377,7 +376,7 @@ const Index = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24 bg-gray-900">
+      <section className="py-24 bg-[#0f0f13]">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Comece a Ranquear em Poucos Passos</h2>
@@ -422,7 +421,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-gray-800/30">
+      <section className="py-24 bg-[#1a1a2e]/30">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Resultados Incríveis que Inspiram</h2>
@@ -464,7 +463,7 @@ const Index = () => {
       </section>
 
       {/* AI Integration Section */}
-      <section className="py-24 bg-gray-900">
+      <section className="py-24 bg-[#0f0f13]">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Integração com IA Avançada</h2>
@@ -500,7 +499,7 @@ const Index = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-gray-800/30">
+      <section id="pricing" className="py-24 bg-[#1a1a2e]/30">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Escolha o Plano Ideal para Você</h2>
@@ -550,7 +549,7 @@ const Index = () => {
       </section>
 
       {/* Guarantees Section */}
-      <section className="py-24 bg-gray-900">
+      <section className="py-24 bg-[#0f0f13]">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Sua Tranquilidade é Nossa Prioridade</h2>
@@ -598,12 +597,12 @@ const Index = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-gradient-to-br from-mkranker-dark-purple to-mkranker-purple">
+      <section className="py-24 bg-gradient-purple">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Pronto para transformar seu marketing?</h2>
             <p className="text-xl mb-8">Junte-se a milhares de empresas que já estão usando MKRanker para otimizar suas estratégias de marketing.</p>
-            <Button asChild size="lg" className="bg-white text-mkranker-purple hover:bg-gray-200 px-8 py-6 text-lg">
+            <Button asChild size="lg" className="bg-white text-mkranker-purple hover:bg-gray-200 px-8 py-6 text-lg hover-lift">
               <Link to="/register">
                 Fazer SEO com I.A.
               </Link>
@@ -613,7 +612,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 pt-16 pb-8">
+      <footer className="bg-[#0f0f13] pt-16 pb-8">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>

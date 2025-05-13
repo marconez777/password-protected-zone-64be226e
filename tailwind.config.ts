@@ -67,9 +67,13 @@ export default {
 					purple: '#8260d0',
 					'light-purple': '#9b87f5',
 					'dark-purple': '#7046be',
-					'sidebar-bg': '#f9f9f9',
-					'sidebar-text': '#5a5a5a',
-					'sidebar-active': '#8260d0'
+					'sidebar-bg': '#0f0f13', // Darker sidebar background
+					'sidebar-text': '#f9f9f9', // Lighter text for contrast
+					'sidebar-active': '#8260d0',
+					'card-bg': '#1a1a2e',
+					'card-border': '#2a2a3e',
+					'input-bg': '#1a1a2e',
+					'input-border': '#2a2a3e',
 				}
 			},
 			borderRadius: {
@@ -93,11 +97,25 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				fadeIn: {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				slideIn: {
+					'0%': { transform: 'translateX(-20px)', opacity: '0' },
+					'100%': { transform: 'translateX(0)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fadeIn 0.5s ease-out forwards',
+				'slide-in': 'slideIn 0.4s ease-out forwards'
+			},
+			backgroundImage: {
+				'gradient-purple': 'linear-gradient(45deg, #8260d0, #9b87f5)',
+				'gradient-dark': 'linear-gradient(45deg, #0f0f13, #1a1a2e)'
 			}
 		}
 	},

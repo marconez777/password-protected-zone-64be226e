@@ -11,7 +11,9 @@ const MetaDados = () => {
       title="Meta Dados" 
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
-      <MetaDadosForm />
+      <div className="max-w-4xl mx-auto">
+        <MetaDadosForm />
+      </div>
     </DashboardLayout>
   );
 };
