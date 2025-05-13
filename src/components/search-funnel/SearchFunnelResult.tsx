@@ -22,11 +22,11 @@ export function SearchFunnelResult({ result }: SearchFunnelResultProps) {
           <div className="h-full overflow-visible">
             <ScrollArea className="h-[calc(100vh-300px)] pr-4">
               {result.output ? (
-                <div className="whitespace-pre-wrap bg-accent rounded-lg p-4">
+                <div className="whitespace-pre-wrap bg-white rounded-lg p-4">
                   <MarkdownOutput output={result.output} />
                 </div>
               ) : (
-                <div className="bg-accent rounded-lg p-4">
+                <div className="bg-white rounded-lg p-4">
                   <pre className="break-words whitespace-pre-wrap">
                     {typeof result === 'string' ? result : JSON.stringify(result, null, 2)}
                   </pre>

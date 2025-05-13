@@ -48,11 +48,11 @@ export function SearchFunnelHistoryItemView({
           <ScrollArea className="h-full overflow-auto max-h-[calc(100vh-300px)] pr-4">
             <div className="space-y-6 pb-6">
               {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' ? (
-                <div className="bg-accent rounded-lg p-4">
+                <div className="bg-white rounded-lg p-4">
                   <MarkdownOutput output={selectedItem.output_gerado.output} />
                 </div>
               ) : (
-                <div className="bg-muted rounded-md p-4">
+                <div className="bg-white rounded-md p-4">
                   <pre className="whitespace-pre-wrap break-words font-mono text-sm">
                     {JSON.stringify(selectedItem.output_gerado, null, 2)}
                   </pre>
