@@ -14,6 +14,7 @@ import UpdatePassword from "./pages/UpdatePassword";
 import Subscribe from "./pages/Subscribe";
 import Dashboard from "./pages/Dashboard";
 import SearchFunnel from "./pages/SearchFunnel";
+import Keywords from "./pages/Keywords";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/funil-de-busca" element={<SearchFunnel />} />
+              <Route path="/palavras-chave" element={<Keywords />} />
             </Route>
             
             {/* Rota de fallback */}

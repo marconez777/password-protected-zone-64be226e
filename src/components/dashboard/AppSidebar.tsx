@@ -6,7 +6,9 @@ import {
   Home, 
   LogOut, 
   Search,
-  Users 
+  Users,
+  Key,
+  BookText
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -23,6 +25,7 @@ import {
 
 export const AppSidebar = () => {
   const navigate = useNavigate();
+  const currentPath = window.location.pathname;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -46,7 +49,7 @@ export const AppSidebar = () => {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton 
-                isActive={window.location.pathname === '/dashboard'} 
+                isActive={currentPath === '/dashboard'} 
                 className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active data-[active=true]:bg-mkranker-purple/10"
                 onClick={() => navigate('/dashboard')}
               >
@@ -58,11 +61,21 @@ export const AppSidebar = () => {
         </SidebarGroup>
         
         <SidebarGroup>
-          <SidebarGroupLabel className="text-mkranker-sidebar-text">FERRAMENTAS</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-mkranker-sidebar-text">APPS</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton 
-                isActive={window.location.pathname === '/funil-de-busca'}
+                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/mercado-publico-alvo')}
+                isActive={currentPath === '/mercado-publico-alvo'}
+              >
+                <Users className="text-mkranker-sidebar-text" />
+                <span>Mercado e Público Alvo</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                isActive={currentPath === '/funil-de-busca'}
                 className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
                 onClick={() => navigate('/funil-de-busca')}
               >
@@ -72,26 +85,62 @@ export const AppSidebar = () => {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton 
+                isActive={currentPath === '/palavras-chave'}
                 className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/palavras-chave')}
               >
-                <Users className="text-mkranker-sidebar-text" />
-                <span>Mercado e Público Alvo</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-              >
-                <BarChart3 className="text-mkranker-sidebar-text" />
+                <Key className="text-mkranker-sidebar-text" />
                 <span>Palavras Chaves</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton 
                 className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/texto-seo-lp')}
+                isActive={currentPath === '/texto-seo-lp'}
               >
                 <FileText className="text-mkranker-sidebar-text" />
                 <span>Texto SEO para LP</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/texto-seo-produto')}
+                isActive={currentPath === '/texto-seo-produto'}
+              >
+                <FileText className="text-mkranker-sidebar-text" />
+                <span>Texto SEO para Produto</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/texto-seo-blog')}
+                isActive={currentPath === '/texto-seo-blog'}
+              >
+                <FileText className="text-mkranker-sidebar-text" />
+                <span>Texto SEO para Blog</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/pautas-blog')}
+                isActive={currentPath === '/pautas-blog'}
+              >
+                <BookText className="text-mkranker-sidebar-text" />
+                <span>Pautas para Blog</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
+                onClick={() => navigate('/meta-dados')}
+                isActive={currentPath === '/meta-dados'}
+              >
+                <BarChart3 className="text-mkranker-sidebar-text" />
+                <span>Meta Dados</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -110,3 +159,4 @@ export const AppSidebar = () => {
     </Sidebar>
   );
 };
+
