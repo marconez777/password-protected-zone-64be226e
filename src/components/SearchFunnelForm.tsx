@@ -23,8 +23,11 @@ export function SearchFunnelForm() {
       segmento: (values.namedItem('segmento') as HTMLInputElement)?.value || '',
     };
     
+    console.log("Sending data to test webhook:", WEBHOOK_URL, formData);
+    
     const response = await submitToWebhook(formData);
     if (response) {
+      console.log("Response received from test webhook:", response);
       // Reset the form after successful submission
       (document.querySelector('form') as HTMLFormElement)?.reset();
       return true;
