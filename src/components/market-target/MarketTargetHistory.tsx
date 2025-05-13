@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, Loader2, Trash2 } from "lucide-react";
+import { Eye, Loader2, Trash2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -103,10 +103,10 @@ export function MarketTargetHistory() {
             onClick={() => setSelectedItem(null)}
             className="mb-4"
           >
-            ← Voltar para o histórico
+            <ArrowLeft className="h-4 w-4 mr-1" /> Voltar para o histórico
           </Button>
           
-          <Card className="shadow-lg w-full">
+          <Card className="shadow-lg w-full bg-white">
             <CardContent className="pt-6">
               <div className="mb-6">
                 <h3 className="text-lg font-medium">Consulta de {new Date(selectedItem.data_criacao).toLocaleString()}</h3>
@@ -130,7 +130,7 @@ export function MarketTargetHistory() {
                 </div>
               </div>
               
-              <ScrollArea className="h-full overflow-visible max-h-[calc(100vh-300px)]">
+              <ScrollArea className="h-full overflow-auto max-h-[calc(100vh-300px)] pr-4">
                 <div className="space-y-6 pb-6">
                   {selectedItem.output_gerado?.mercado && (
                     <AnalysisSection title="Análise de Mercado" content={selectedItem.output_gerado.mercado} />
@@ -145,8 +145,8 @@ export function MarketTargetHistory() {
                   )}
 
                   {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <h4 className="text-lg font-bold text-gray-900 mb-3 border-b border-gray-200 pb-1">
                         Resultado Completo
                       </h4>
                       <FormattedMarkdownContent content={selectedItem.output_gerado.output} />
