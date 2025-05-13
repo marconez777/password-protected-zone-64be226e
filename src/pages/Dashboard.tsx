@@ -8,6 +8,8 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SubscriptionCard } from "@/components/dashboard/SubscriptionCard";
 import { ResourceUsageCard } from "@/components/dashboard/resource-usage/ResourceUsageCard";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 
 const Dashboard = () => {
   const { session, user } = useAuth();
@@ -17,7 +19,8 @@ const Dashboard = () => {
     usage, 
     planLimits, 
     loading,
-    reload 
+    reload,
+    error
   } = useUsageData();
 
   useEffect(() => {
@@ -29,6 +32,13 @@ const Dashboard = () => {
     
     // Recarregar dados quando a página do dashboard é mostrada
     reload();
+    
+    // Configurar recarregamento periódico dos dados de uso (a cada 30 segundos)
+    const intervalId = setInterval(() => {
+      reload();
+    }, 30000);
+    
+    return () => clearInterval(intervalId);
   }, [session, navigate, reload]);
 
   if (!user || loading) {
@@ -44,6 +54,18 @@ const Dashboard = () => {
       title="Dashboard" 
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
+      <div className="flex justify-end mb-4">
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={() => reload()}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Atualizar dados
+        </Button>
+      </div>
+      
       <SubscriptionCard 
         subscription={subscription}
         userName={user?.user_metadata?.full_name || "Usuário"} 
@@ -55,6 +77,13 @@ const Dashboard = () => {
       />
       
       <FeatureCards />
+      
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md">
+          <p className="font-medium">Erro ao carregar dados:</p>
+          <p>{error}</p>
+        </div>
+      )}
     </DashboardLayout>
   );
 };

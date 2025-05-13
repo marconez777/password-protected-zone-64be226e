@@ -1,10 +1,14 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
-// Use a consistent color for the check icons
+// Feature component for plan cards
 const Feature = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex items-center space-x-2 text-sm">
@@ -14,13 +18,17 @@ const Feature = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// Plan card component
 const PlanCard = ({
   name,
   description,
   price,
   features,
   isPopular,
-  buttonText = "Começar Agora"
+  buttonText = "Começar Agora",
+  onClick,
+  loading,
+  selectedPlan
 }: {
   name: string;
   description: string;
@@ -28,34 +36,103 @@ const PlanCard = ({
   features: string[];
   isPopular?: boolean;
   buttonText?: string;
-}) => (
-  <Card className={`flex flex-col justify-between ${isPopular ? 'border-primary' : ''}`}>
-    <div>
-      <CardHeader>
-        <CardTitle>{name}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-4">
-          <span className="text-3xl font-bold">{price}</span>
-          <span className="text-muted-foreground">/mês</span>
-        </div>
-        <div className="space-y-2">
-          {features.map((feature, i) => (
-            <Feature key={i}>{feature}</Feature>
-          ))}
-        </div>
-      </CardContent>
-    </div>
-    <CardFooter>
-      <Button className="w-full" variant={isPopular ? "default" : "outline"}>
-        {buttonText}
-      </Button>
-    </CardFooter>
-  </Card>
-);
+  onClick?: () => void;
+  loading?: boolean;
+  selectedPlan?: string;
+}) => {
+  const isSelected = selectedPlan === name.toLowerCase();
+  
+  return (
+    <Card className={`flex flex-col justify-between ${isPopular ? 'border-primary' : ''} ${isSelected ? 'ring-2 ring-primary' : ''}`}>
+      <div>
+        <CardHeader>
+          <CardTitle>{name}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4">
+            <span className="text-3xl font-bold">{price}</span>
+            <span className="text-muted-foreground">/mês</span>
+          </div>
+          <div className="space-y-2">
+            {features.map((feature, i) => (
+              <Feature key={i}>{feature}</Feature>
+            ))}
+          </div>
+        </CardContent>
+      </div>
+      <CardFooter>
+        <Button 
+          className="w-full" 
+          variant={isPopular || isSelected ? "default" : "outline"}
+          onClick={onClick}
+          disabled={loading}
+        >
+          {loading && isSelected ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processando...
+            </>
+          ) : (
+            buttonText
+          )}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+};
 
 export default function Subscribe() {
+  const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handlePlanSelect = async (planType: 'solo' | 'discovery' | 'escala') => {
+    if (!user) {
+      toast({
+        title: "Login necessário",
+        description: "Você precisa estar logado para adquirir um plano.",
+        variant: "destructive",
+      });
+      navigate("/login");
+      return;
+    }
+
+    setSelectedPlan(planType);
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('mercado-pago', {
+        body: {
+          planType,
+          userId: user.id,
+          successUrl: `${window.location.origin}/dashboard`,
+          failureUrl: `${window.location.origin}/subscribe?error=payment_failed`
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("Não foi possível criar a sessão de pagamento");
+      }
+    } catch (error) {
+      console.error("Erro ao processar pagamento:", error);
+      toast({
+        title: "Erro ao processar pagamento",
+        description: error instanceof Error ? error.message : "Ocorreu um erro ao processar seu pagamento.",
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container py-10">
       <div className="text-center mb-10">
@@ -81,6 +158,9 @@ export default function Subscribe() {
             "Aulas Ao Vivo",
             "Mentoria em grupo (1 por mês)"
           ]}
+          onClick={() => handlePlanSelect('solo')}
+          loading={loading}
+          selectedPlan={selectedPlan}
         />
         
         <PlanCard
@@ -99,6 +179,9 @@ export default function Subscribe() {
             "Mentoria individual (1 por mês)"
           ]}
           isPopular={true}
+          onClick={() => handlePlanSelect('discovery')}
+          loading={loading}
+          selectedPlan={selectedPlan}
         />
         
         <PlanCard
@@ -117,6 +200,9 @@ export default function Subscribe() {
             "Aulas Ao Vivo",
             "Mentoria individual (2 por mês)"
           ]}
+          onClick={() => handlePlanSelect('escala')}
+          loading={loading}
+          selectedPlan={selectedPlan}
         />
       </div>
 

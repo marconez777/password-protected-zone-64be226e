@@ -23,6 +23,7 @@ import PautasBlog from "./pages/PautasBlog";
 import MetaDados from "./pages/MetaDados";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { SubscriptionProtectedRoute } from "./components/SubscriptionProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -42,17 +43,21 @@ const App = () => (
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/subscribe" element={<Subscribe />} />
             
-            {/* Rotas protegidas */}
+            {/* Rotas protegidas por autenticação */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/funil-de-busca" element={<SearchFunnel />} />
-              <Route path="/palavras-chave" element={<Keywords />} />
-              <Route path="/mercado-publico-alvo" element={<MarketAndTarget />} />
-              <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
-              <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
-              <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
-              <Route path="/pautas-blog" element={<PautasBlog />} />
-              <Route path="/meta-dados" element={<MetaDados />} />
+              
+              {/* Rotas protegidas por assinatura */}
+              <Route element={<SubscriptionProtectedRoute />}>
+                <Route path="/funil-de-busca" element={<SearchFunnel />} />
+                <Route path="/palavras-chave" element={<Keywords />} />
+                <Route path="/mercado-publico-alvo" element={<MarketAndTarget />} />
+                <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
+                <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
+                <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
+                <Route path="/pautas-blog" element={<PautasBlog />} />
+                <Route path="/meta-dados" element={<MetaDados />} />
+              </Route>
             </Route>
             
             {/* Rota de fallback */}
