@@ -146,9 +146,9 @@ const Login = () => {
             </Link>
           </div>
           <div className="text-sm text-center text-gray-500">
-            Don't have an account?{" "}
+            Não tem uma conta?{" "}
             <Link to="/register" className="text-mkranker-purple hover:underline">
-              Sign up
+              Cadastre-se
             </Link>
           </div>
         </CardFooter>
