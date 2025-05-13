@@ -29,7 +29,6 @@ export const DashboardLayout = ({
             <div>
               <h1 className="text-2xl font-medium text-gray-800">{title}</h1>
               {subtitle && <p className="text-gray-500">{subtitle}</p>}
-              {!subtitle && userName && <p className="text-gray-500">Bem-vindo, {userName}</p>}
             </div>
             <SidebarTrigger className="block md:hidden" />
             <div className="hidden md:flex items-center gap-4">

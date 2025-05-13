@@ -9,6 +9,7 @@ const MarketAndTarget = () => {
   return (
     <DashboardLayout 
       title="Mercado e Público Alvo" 
+      subtitle="Gere análises de mercado para seu negócio"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
       <MarketTargetForm />
