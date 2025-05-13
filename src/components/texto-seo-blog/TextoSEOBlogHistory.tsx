@@ -13,7 +13,8 @@ interface HistoryItem {
   tipo_recurso: string;
   input_original: any;
   output_gerado: any;
-  created_at: string;
+  created_at?: string;
+  data_criacao: string;
 }
 
 interface TextoSEOBlogHistoryProps {
@@ -47,6 +48,7 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
         }
 
         if (data) {
+          // Make sure to handle the different date field format from the database
           setHistory(data as HistoryItem[]);
         }
       } catch (error) {
@@ -164,8 +166,8 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
             Palavra-chave: {item.input_original.palavraChave}
           </p>
           <p className="text-sm text-gray-500">
-            {new Date(item.created_at).toLocaleDateString('pt-BR')} às{' '}
-            {new Date(item.created_at).toLocaleTimeString('pt-BR')}
+            {new Date(item.data_criacao || item.created_at || '').toLocaleDateString('pt-BR')} às{' '}
+            {new Date(item.data_criacao || item.created_at || '').toLocaleTimeString('pt-BR')}
           </p>
         </>
       )}

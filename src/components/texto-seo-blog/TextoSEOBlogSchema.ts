@@ -1,7 +1,6 @@
-
 import { z } from "zod";
 
-export const WEBHOOK_URL = "https://mkseo77.app.n8n.cloud/webhook/texto-blog";
+export const WEBHOOK_URL = "https://mkseo77.app.n8n.cloud/webhook/post";
 
 export const TextoSEOBlogFormSchema = z.object({
   tema: z.string().min(1, "Por favor, informe o tema do blog"),
