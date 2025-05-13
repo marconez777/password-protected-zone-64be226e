@@ -11,18 +11,51 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
   const [keywords, setKeywords] = useState<string[]>([]);
   
   useEffect(() => {
-    if (result && result.palavras_relacionadas) {
-      // Certifique-se de que o resultado seja um array
-      const keywordArray = Array.isArray(result.palavras_relacionadas) 
-        ? result.palavras_relacionadas 
-        : Object.values(result.palavras_relacionadas);
+    if (result) {
+      console.log("Processing result:", result);
       
-      setKeywords(keywordArray as string[]);
+      if (result.message) {
+        // If there's an error message, don't process keywords
+        setKeywords([]);
+        return;
+      }
+      
+      // Check if result has output format from the webhook
+      if (result.output) {
+        // Split by new lines and filter empty lines
+        const lines = result.output
+          .split('\n')
+          .filter(line => line.trim().length > 0)
+          // Remove numbers and dots at the beginning (e.g., "1. ")
+          .map(line => line.replace(/^\d+\.\s*/, '').trim());
+          
+        console.log("Extracted keywords:", lines);
+        setKeywords(lines);
+      } else if (result.palavras_relacionadas) {
+        // Support for the previous format
+        const keywordArray = Array.isArray(result.palavras_relacionadas) 
+          ? result.palavras_relacionadas 
+          : Object.values(result.palavras_relacionadas);
+        
+        setKeywords(keywordArray as string[]);
+      } else {
+        console.error("Result doesn't contain expected data structure:", result);
+        setKeywords([]);
+      }
     }
   }, [result]);
 
   if (!result) {
     return null;
+  }
+
+  if (result.message) {
+    return (
+      <Alert className="mt-4">
+        <AlertTitle>Mensagem</AlertTitle>
+        <AlertDescription>{result.message}</AlertDescription>
+      </Alert>
+    );
   }
 
   if (keywords.length === 0) {
