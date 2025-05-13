@@ -17,35 +17,78 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
   // Check if the response has output format from webhook
   const hasMarkdownOutput = result.output && typeof result.output === 'string';
   
-  // Função para formatar texto com negrito
-  const formatBoldText = (text: string) => {
+  // Function to format Markdown headings to proper HTML elements
+  const formatHeadings = (text: string) => {
     if (!text) return null;
     
-    // Substitui **texto** por <strong>texto</strong>
-    return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={index} className="font-bold">{part.slice(2, -2)}</strong>;
-      }
-      return <span key={index}>{part}</span>;
+    // Replace # headings with proper HTML elements
+    return text.replace(/^(#{1,6})\s+(.+)$/gm, (match, hashes, content) => {
+      const level = hashes.length;
+      const className = level === 1 
+        ? "text-2xl font-bold text-mkranker-purple mt-4 mb-3" 
+        : level === 2 
+          ? "text-xl font-bold text-mkranker-purple mt-3 mb-2" 
+          : "text-lg font-bold text-mkranker-purple mt-2 mb-1";
+      
+      return `<h${level} class="${className}">${content}</h${level}>`;
     });
   };
   
-  // Função para converter texto em lista quando tem linhas com "- "
-  const formatList = (text: string) => {
+  // Function to format text with bold and create proper lists
+  const formatContent = (text: string) => {
     if (!text) return null;
     
-    const lines = text.split('\n');
+    // First format headings
+    let formattedText = formatHeadings(text);
+    
+    // Process the content line by line
+    const lines = formattedText.split('\n');
     const result: JSX.Element[] = [];
     let inList = false;
     let listItems: string[] = [];
+    let currentHTML = '';
     
     lines.forEach((line, index) => {
-      if (line.trim().startsWith('- ')) {
-        // Se é um item de lista
+      // If it's already an HTML heading (from formatHeadings), render it directly
+      if (line.startsWith('<h')) {
+        // First close any open list
+        if (inList) {
+          result.push(
+            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
+              {listItems.map((item, i) => (
+                <li key={i} className="mb-1">{formatBoldText(item)}</li>
+              ))}
+            </ul>
+          );
+          inList = false;
+          listItems = [];
+        }
+        
+        // Then render the heading
+        const element = document.createElement('div');
+        element.innerHTML = line;
+        const Tag = line.substring(1, 3) as keyof JSX.IntrinsicElements;
+        const className = element.firstChild?.getAttribute('class') || '';
+        const content = element.textContent || '';
+        
+        result.push(React.createElement(
+          Tag, 
+          { key: index, className }, 
+          formatBoldText(content)
+        ));
+      }
+      else if (line.trim().startsWith('- ')) {
+        // If it's a list item
         inList = true;
         listItems.push(line.trim().substring(2));
-      } else if (line.trim().startsWith('#')) {
-        // Tratar cabeçalhos
+      } 
+      else if (line.trim().startsWith('* ')) {
+        // Alternative list syntax
+        inList = true;
+        listItems.push(line.trim().substring(2));
+      }
+      else {
+        // If it's not a list item but we have an open list
         if (inList) {
           result.push(
             <ul key={`list-${index}`} className="list-disc pl-5 my-2">
@@ -58,38 +101,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
           listItems = [];
         }
         
-        // Determinar nível do cabeçalho
-        const level = line.trim().match(/^#+/)[0].length;
-        const text = line.trim().replace(/^#+\s*/, '');
-        
-        switch(level) {
-          case 1:
-            result.push(<h1 key={index} className="text-2xl font-bold text-mkranker-purple mt-4 mb-3">{text}</h1>);
-            break;
-          case 2:
-            result.push(<h2 key={index} className="text-xl font-bold text-mkranker-purple mt-3 mb-2">{text}</h2>);
-            break;
-          case 3:
-            result.push(<h3 key={index} className="text-lg font-bold text-mkranker-purple mt-2 mb-1">{text}</h3>);
-            break;
-          default:
-            result.push(<h4 key={index} className="text-base font-bold text-mkranker-purple mt-2 mb-1">{text}</h4>);
-        }
-      } else {
-        // Se não é item de lista, mas tinha uma lista antes
-        if (inList) {
-          result.push(
-            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
-              {listItems.map((item, i) => (
-                <li key={i} className="mb-1">{formatBoldText(item)}</li>
-              ))}
-            </ul>
-          );
-          inList = false;
-          listItems = [];
-        }
-        
-        // Adiciona linha normal
+        // If it's a regular paragraph
         if (line.trim()) {
           result.push(<p key={index} className="mb-2">{formatBoldText(line)}</p>);
         } else {
@@ -98,7 +110,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
       }
     });
     
-    // Se terminar com lista
+    // Close any open list at the end
     if (inList) {
       result.push(
         <ul key="final-list" className="list-disc pl-5 my-2">
@@ -112,6 +124,19 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
     return result;
   };
   
+  // Function to format bold text
+  const formatBoldText = (text: string) => {
+    if (!text) return null;
+    
+    // First handle **text** format (Markdown bold)
+    return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index} className="font-bold">{part.slice(2, -2)}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+  
   return (
     <Card className="shadow-lg">
       <CardContent className="pt-6">
@@ -120,13 +145,11 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
         {result.message ? (
           <p className="text-gray-700">{result.message}</p>
         ) : hasMarkdownOutput ? (
-          <ScrollArea className="max-h-[70vh]">
-            <div className="prose max-w-none">
-              <div className="whitespace-pre-wrap">
-                {formatList(result.output)}
-              </div>
+          <div className="max-w-none">
+            <div className="whitespace-pre-wrap">
+              {formatContent(result.output)}
             </div>
-          </ScrollArea>
+          </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-6 grid w-full grid-cols-3">
@@ -136,66 +159,70 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsList>
             
             <TabsContent value="completo">
-              <ScrollArea className="max-h-[70vh]">
-                <div className="space-y-6">
-                  {result.mercado && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Análise de Mercado
-                      </h4>
-                      <div className="whitespace-pre-wrap">{formatList(result.mercado)}</div>
-                    </div>
-                  )}
-                  
-                  {result.publico && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Público-Alvo
-                      </h4>
-                      <div className="whitespace-pre-wrap">{formatList(result.publico)}</div>
-                    </div>
-                  )}
-                  
-                  {result.recomendacoes && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Recomendações
-                      </h4>
-                      <div className="whitespace-pre-wrap">{formatList(result.recomendacoes)}</div>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </TabsContent>
-            
-            <TabsContent value="mercado">
-              <ScrollArea className="max-h-[70vh]">
-                {result.mercado ? (
+              <div className="space-y-6">
+                {result.mercado && (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
                       Análise de Mercado
                     </h4>
-                    <div className="whitespace-pre-wrap">{formatList(result.mercado)}</div>
+                    <div className="whitespace-pre-wrap">
+                      {formatContent(result.mercado)}
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
                 )}
-              </ScrollArea>
-            </TabsContent>
-            
-            <TabsContent value="publico">
-              <ScrollArea className="max-h-[70vh]">
-                {result.publico ? (
+                
+                {result.publico && (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
                       Público-Alvo
                     </h4>
-                    <div className="whitespace-pre-wrap">{formatList(result.publico)}</div>
+                    <div className="whitespace-pre-wrap">
+                      {formatContent(result.publico)}
+                    </div>
                   </div>
-                ) : (
-                  <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
                 )}
-              </ScrollArea>
+                
+                {result.recomendacoes && (
+                  <div className="bg-accent rounded-lg p-4">
+                    <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                      Recomendações
+                    </h4>
+                    <div className="whitespace-pre-wrap">
+                      {formatContent(result.recomendacoes)}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="mercado">
+              {result.mercado ? (
+                <div className="bg-accent rounded-lg p-4">
+                  <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                    Análise de Mercado
+                  </h4>
+                  <div className="whitespace-pre-wrap">
+                    {formatContent(result.mercado)}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="publico">
+              {result.publico ? (
+                <div className="bg-accent rounded-lg p-4">
+                  <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                    Público-Alvo
+                  </h4>
+                  <div className="whitespace-pre-wrap">
+                    {formatContent(result.publico)}
+                  </div>
+                </div>
+              ) : (
+                <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
+              )}
             </TabsContent>
           </Tabs>
         )}
