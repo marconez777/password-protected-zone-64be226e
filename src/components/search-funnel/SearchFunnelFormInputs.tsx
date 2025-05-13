@@ -1,5 +1,5 @@
 
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
 import { SearchFunnelFormValues } from './SearchFunnelSchema';
@@ -19,12 +19,13 @@ export function SearchFunnelFormInputs() {
             </FormLabel>
             <FormControl>
               <Input 
+                id="microNicho"
                 placeholder="Ex: Soluções de Automação de Marketing" 
-                className="mt-1"
+                required
                 {...field} 
+                className="mt-1"
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
@@ -39,12 +40,13 @@ export function SearchFunnelFormInputs() {
             </FormLabel>
             <FormControl>
               <Input 
+                id="publicoAlvo"
                 placeholder="Ex: empreendedores" 
-                className="mt-1"
+                required
                 {...field} 
+                className="mt-1"
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
@@ -59,12 +61,13 @@ export function SearchFunnelFormInputs() {
             </FormLabel>
             <FormControl>
               <Input 
+                id="segmento"
                 placeholder="Ex: Agência, Freelancer, Empresa..." 
-                className="mt-1"
+                required
                 {...field} 
+                className="mt-1"
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
