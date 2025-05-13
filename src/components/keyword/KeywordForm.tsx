@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
@@ -5,18 +6,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KeywordResult } from './KeywordResult';
 import { KeywordHistory } from './KeywordHistory';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Loader2 } from 'lucide-react';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 // Define schema for form
 const formSchema = z.object({
   palavras_chave: z.string().min(1, "Por favor, informe pelo menos uma palavra-chave"),
-  notes: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -32,18 +31,20 @@ export const KeywordForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       palavras_chave: "",
-      notes: "",
     }
   });
 
   const onSubmit = async (values: FormValues) => {
     const payload = {
       palavras_chave: values.palavras_chave,
-      notes: values.notes,
     };
     
     const result = await submitToWebhook(payload);
-    return !!result;
+    if (result) {
+      form.reset();
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -74,26 +75,6 @@ export const KeywordForm = () => {
                         <FormControl>
                           <Input 
                             placeholder="Digite uma palavra-chave" 
-                            className="mt-1"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="notes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-medium">
-                          Anotações
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Adicione anotações sobre esta palavra-chave" 
                             className="mt-1"
                             {...field} 
                           />

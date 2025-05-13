@@ -2,7 +2,6 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { KeywordForm } from "@/components/keyword/KeywordForm";
 import { useAuth } from "@/hooks/useAuth";
-import { Card } from "@/components/ui/card";
 
 const Keywords = () => {
   const { user } = useAuth();
