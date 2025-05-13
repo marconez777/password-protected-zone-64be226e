@@ -21,6 +21,7 @@ import TextoSEOProduto from "./pages/TextoSEOProduto";
 import TextoSEOBlog from "./pages/TextoSEOBlog";
 import PautasBlog from "./pages/PautasBlog";
 import MetaDados from "./pages/MetaDados";
+import LandingPage from "./pages/LandingPage";
 import { AuthProvider } from "./hooks/useAuth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -34,7 +35,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/app" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/register-success" element={<RegisterSuccess />} />
