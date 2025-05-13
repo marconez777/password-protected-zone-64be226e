@@ -45,7 +45,7 @@ export function TextoSEOLPForm() {
   return (
     <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6">
+        <TabsList className="mb-6 grid w-full grid-cols-2 max-w-[400px]">
           <TabsTrigger value="formulario">Formulário</TabsTrigger>
           <TabsTrigger value="historico">Histórico</TabsTrigger>
         </TabsList>

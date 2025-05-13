@@ -9,6 +9,7 @@ const TextoSEOLP = () => {
   return (
     <DashboardLayout 
       title="Texto SEO para LP" 
+      subtitle="Gere textos otimizados para SEO em landing pages"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
       <TextoSEOLPForm />
