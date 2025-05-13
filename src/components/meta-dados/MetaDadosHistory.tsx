@@ -1,99 +1,137 @@
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, RotateCw } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useSupabaseClient } from '@/hooks/useSupabaseClient';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2, FileText } from 'lucide-react';
 
-export type MetaDadosHistoryProps = {
+interface HistoryItem {
+  id: string;
+  user_id: string;
+  tipo_recurso: string;
+  input_original: any;
+  output_gerado: any;
+  created_at: string;
+}
+
+interface MetaDadosHistoryProps {
   setActiveTab: (tab: string) => void;
   setFormResult: (result: any) => void;
-};
+}
 
 export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHistoryProps) {
-  const [history, setHistory] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
+  const { toast } = useToast();
 
-  const fetchHistory = async () => {
-    if (!user) return;
-    
-    setIsLoading(true);
-    
-    try {
-      const { data, error } = await supabase
-        .from("user_results")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("tipo_recurso", "metadata_generation")
-        .order("created_at", { ascending: false })
-        .limit(10);
-        
-      if (error) throw error;
-      
-      setHistory(data || []);
-    } catch (error) {
-      console.error("Erro ao carregar histórico:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
   useEffect(() => {
-    fetchHistory();
-  }, [user]);
+    async function loadHistory() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('user_results')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('tipo_recurso', 'metadata_generation')
+          .order('data_criacao', { ascending: false });
 
-  const handleHistoryItemClick = (resultData: any) => {
-    setFormResult(resultData.output_gerado);
-    setActiveTab("result");
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          const formattedData = data.map((item) => ({
+            ...item,
+            created_at: item.data_criacao
+          }));
+          setHistory(formattedData as HistoryItem[]);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar histórico:', error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar seu histórico.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadHistory();
+  }, [user, supabase, toast]);
+
+  const handleLoadResult = (item: HistoryItem) => {
+    setFormResult(item.output_gerado);
+    setActiveTab('formulario');
+    
+    toast({
+      title: "Resultado carregado",
+      description: "O resultado foi carregado com sucesso."
+    });
   };
-  
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  if (history.length === 0) {
+    return (
+      <div className="text-center p-8 text-gray-500">
+        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+        <h3 className="text-lg font-medium">Nenhum resultado encontrado</h3>
+        <p className="mt-2">Você ainda não gerou nenhum meta dado.</p>
+      </div>
+    );
+  }
+
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-medium">Histórico</CardTitle>
-          <Button variant="outline" size="sm" onClick={fetchHistory} disabled={isLoading}>
-            <RotateCw className={`h-4 w-4 mr-1 ${isLoading ? "animate-spin" : ""}`} />
-            Atualizar
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {history.length === 0 ? (
-          <div className="text-center py-4 text-muted-foreground">
-            Nenhum registro encontrado.
-          </div>
-        ) : (
-          <ScrollArea className="h-[200px] pr-4">
-            <div className="space-y-2">
-              {history.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="p-3 border rounded flex justify-between items-center hover:bg-accent cursor-pointer"
-                  onClick={() => handleHistoryItemClick(item)}
-                >
-                  <div className="flex-1">
-                    <div className="font-medium">
-                      {item.input_original?.nomeEmpresa || "Sem nome"}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {item.input_original?.tipoPagina || "Tipo não especificado"}: {item.input_original?.palavraChave || "Sem palavra-chave"}
-                    </div>
-                  </div>
-                  <div className="text-xs text-muted-foreground flex items-center">
-                    <Clock className="h-3 w-3 mr-1" />
-                    {new Date(item.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
+    <div className="space-y-4">
+      {history.map((item) => (
+        <Card key={item.id} className="p-4">
+          <div className="flex flex-col gap-2">
+            <div>
+              <span className="font-medium">Nome da Empresa:</span> 
+              <span className="ml-2">{item.input_original.nomeEmpresa || 'N/A'}</span>
             </div>
-          </ScrollArea>
-        )}
-      </CardContent>
-    </Card>
+            
+            <div>
+              <span className="font-medium">Palavra-chave:</span> 
+              <span className="ml-2">{item.input_original.palavraChave || 'N/A'}</span>
+            </div>
+            
+            <div>
+              <span className="font-medium">Tipo de Página:</span> 
+              <span className="ml-2">{item.input_original.tipoPagina || 'N/A'}</span>
+            </div>
+            
+            <div>
+              <span className="font-medium">Data:</span> 
+              <span className="ml-2">
+                {new Date(item.created_at).toLocaleDateString('pt-BR')} às{' '}
+                {new Date(item.created_at).toLocaleTimeString('pt-BR')}
+              </span>
+            </div>
+            
+            <div className="mt-2">
+              <Button onClick={() => handleLoadResult(item)} size="sm" variant="outline">
+                <FileText className="mr-2 h-4 w-4" />
+                Visualizar resultado
+              </Button>
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
   );
 }
