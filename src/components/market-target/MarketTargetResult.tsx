@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -65,17 +66,25 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
         }
         
         // Then render the heading
-        const element = document.createElement('div');
-        element.innerHTML = line;
-        const Tag = line.substring(1, 3) as keyof JSX.IntrinsicElements;
-        const className = element.firstChild?.getAttribute('class') || '';
-        const content = element.textContent || '';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = line;
         
-        result.push(React.createElement(
-          Tag, 
-          { key: index, className }, 
-          formatBoldText(content)
-        ));
+        // Fix error: Ensure the element exists and is an Element type before calling getAttribute
+        const firstElement = tempDiv.firstElementChild;
+        const className = firstElement ? firstElement.getAttribute('class') || '' : '';
+        const content = tempDiv.textContent || '';
+        
+        // Extract the tag name (h1, h2, etc.)
+        const tagMatch = line.match(/<(h[1-6])/);
+        const Tag = tagMatch ? tagMatch[1] as keyof JSX.IntrinsicElements : 'div';
+        
+        result.push(
+          React.createElement(
+            Tag, 
+            { key: index, className }, 
+            formatBoldText(content)
+          )
+        );
       }
       else if (line.trim().startsWith('- ')) {
         // If it's a list item
@@ -230,3 +239,4 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
     </Card>
   );
 }
+
