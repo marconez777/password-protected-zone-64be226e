@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatMarkdownContent } from '@/lib/markdown-formatter';
+import { MarkdownOutput } from '@/components/market-target/MarkdownOutput';
 
 interface SearchFunnelResultProps {
   result: any;
@@ -22,7 +23,7 @@ export function SearchFunnelResult({ result }: SearchFunnelResultProps) {
             <ScrollArea className="h-[calc(100vh-300px)] pr-4">
               {result.output ? (
                 <div className="whitespace-pre-wrap bg-accent rounded-lg p-4">
-                  <div dangerouslySetInnerHTML={{ __html: formatMarkdownContent(result.output) }} />
+                  <MarkdownOutput output={result.output} />
                 </div>
               ) : (
                 <div className="bg-accent rounded-lg p-4">

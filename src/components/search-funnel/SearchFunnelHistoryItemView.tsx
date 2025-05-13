@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { formatMarkdownContent } from "@/lib/utils"; 
+import { MarkdownOutput } from "@/components/market-target/MarkdownOutput";
 
 interface SearchFunnelHistoryItemViewProps {
   selectedItem: any;
@@ -49,9 +49,7 @@ export function SearchFunnelHistoryItemView({
             <div className="space-y-6 pb-6">
               {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' ? (
                 <div className="bg-accent rounded-lg p-4">
-                  <div dangerouslySetInnerHTML={{ 
-                    __html: formatMarkdownContent(selectedItem.output_gerado.output) 
-                  }} />
+                  <MarkdownOutput output={selectedItem.output_gerado.output} />
                 </div>
               ) : (
                 <div className="bg-muted rounded-md p-4">
