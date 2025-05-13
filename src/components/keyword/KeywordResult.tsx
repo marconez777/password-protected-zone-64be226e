@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ResourceResultDisplay } from '../shared/ResourceResultDisplay';
 
 type KeywordResultProps = {
   result: any;
@@ -70,17 +72,17 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
   }
 
   return (
-    <div className="mt-6">
-      <h3 className="text-lg font-medium mb-4">Palavras-chave Relacionadas:</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        {keywords.map((keyword, index) => (
-          <Card key={index} className="bg-gray-50">
-            <CardContent className="p-3">
-              {keyword}
-            </CardContent>
-          </Card>
-        ))}
+    <ResourceResultDisplay title="Palavras-chave Relacionadas">
+      <div className="bg-accent rounded-lg p-4">
+        <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+          Palavras-chave Sugeridas
+        </h4>
+        <ul className="list-disc pl-5 space-y-2">
+          {keywords.map((keyword, index) => (
+            <li key={index} className="text-gray-800">{keyword}</li>
+          ))}
+        </ul>
       </div>
-    </div>
+    </ResourceResultDisplay>
   );
 };
