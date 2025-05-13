@@ -8,6 +8,7 @@ import { Eye, Loader2, Trash2, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatMarkdownContent } from "@/lib/utils"; // Import from utils where it's re-exported
 
 export interface SearchFunnelHistoryProps {
   setActiveTab: Dispatch<SetStateAction<string>>;

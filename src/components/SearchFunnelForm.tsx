@@ -49,12 +49,15 @@ export function SearchFunnelForm() {
             onSubmit={handleFormSubmit}
             resultComponent={<SearchFunnelResult result={result} />}
           >
-            <SearchFunnelFormInputs onSubmit={handleFormSubmit} />
+            <SearchFunnelFormInputs />
           </ResourceForm>
         </TabsContent>
         
         <TabsContent value="historico">
-          <SearchFunnelHistory />
+          <SearchFunnelHistory 
+            setActiveTab={setActiveTab}
+            setFormResult={setResult}
+          />
         </TabsContent>
       </Tabs>
     </div>
