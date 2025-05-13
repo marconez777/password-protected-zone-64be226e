@@ -1,8 +1,5 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
+import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
 
 type SEOResult = {
   titulo?: string;
@@ -11,30 +8,36 @@ type SEOResult = {
   h2s?: string[];
   meta_description?: string;
   message?: string;
+  output?: string; // Added to handle n8n webhook output format
+  input_original?: {
+    nomeProduto?: string;
+    palavraChave?: string;
+  };
 };
 
 export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) {
-  const [activeTab, setActiveTab] = useState<string>("texto");
-  
   if (!result) {
     return null;
   }
 
   // Mostra mensagem de erro ou aviso, se existir
   if (result.message) {
-    return (
-      <Card>
-        <CardContent className="p-4">
-          <div className="text-amber-600">
-            {result.message}
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <ResourceResultDisplay title="" message={result.message}>
+      <div></div>
+    </ResourceResultDisplay>;
   }
 
+  // Processa o resultado do webhook se vier no formato output
+  const processedResult = {
+    texto: result.texto || result.output,
+    titulo: result.titulo,
+    h1: result.h1,
+    h2s: result.h2s,
+    meta_description: result.meta_description
+  };
+
   // Se não tiver conteúdo para mostrar
-  if (!result.texto && !result.titulo && !result.h1) {
+  if (!processedResult.texto && !processedResult.titulo && !processedResult.h1) {
     return null;
   }
 
@@ -65,6 +68,21 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
         // Se é um item de lista
         inList = true;
         listItems.push(line.trim().substring(2));
+      } else if (line.trim().startsWith('### ')) {
+        // Se é um título H3
+        if (inList) {
+          result.push(
+            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
+              {listItems.map((item, i) => (
+                <li key={i} className="mb-1">{formatBoldText(item)}</li>
+              ))}
+            </ul>
+          );
+          inList = false;
+          listItems = [];
+        }
+        
+        result.push(<h3 key={index} className="text-xl font-semibold mt-4 mb-2">{formatBoldText(line.substring(4))}</h3>);
       } else {
         // Se não é item de lista, mas tinha uma lista antes
         if (inList) {
@@ -102,66 +120,29 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
     return result;
   };
 
+  // Título com base no nome do produto ou no título do resultado
+  const pageTitle = result.input_original?.nomeProduto || processedResult.titulo || "Texto SEO para Produto";
+
   return (
-    <Card className="shadow-lg w-full">
-      <CardContent className="p-4">
-        <Tabs defaultValue="texto" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="texto">Texto Completo</TabsTrigger>
-            <TabsTrigger value="estrutura">Estrutura SEO</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="texto" className="h-full">
-            <div className="h-full overflow-visible">
-              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-                <div className="space-y-4 pb-6">
-                  {result.titulo && (
-                    <h1 className="text-2xl font-bold text-mkranker-purple">{result.titulo}</h1>
-                  )}
-                  {result.texto && (
-                    <div className="whitespace-pre-wrap">
-                      {formatList(result.texto)}
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="estrutura" className="h-full">
-            <div className="h-full overflow-visible">
-              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-                <div className="space-y-4 pb-6">
-                  {result.h1 && (
-                    <div className="bg-accent rounded-lg p-3">
-                      <p className="font-medium text-mkranker-purple">H1:</p>
-                      <p className="pl-4 font-semibold">{result.h1}</p>
-                    </div>
-                  )}
-                  
-                  {result.h2s && result.h2s.length > 0 && (
-                    <div className="bg-accent rounded-lg p-3">
-                      <p className="font-medium text-mkranker-purple">H2:</p>
-                      <ul className="list-disc pl-8">
-                        {result.h2s.map((h2, index) => (
-                          <li key={index} className="font-semibold">{h2}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {result.meta_description && (
-                    <div className="bg-accent rounded-lg p-3">
-                      <p className="font-medium text-mkranker-purple">Meta Description:</p>
-                      <p className="pl-4">{result.meta_description}</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+    <ResourceResultDisplay title={pageTitle}>
+      <div className="bg-white rounded-lg p-4">
+        {processedResult.titulo && (
+          <h2 className="text-xl font-bold text-gray-800 mb-4">{processedResult.titulo}</h2>
+        )}
+        
+        {processedResult.texto && (
+          <div className="whitespace-pre-wrap text-gray-700">
+            {formatList(processedResult.texto)}
+          </div>
+        )}
+
+        {processedResult.meta_description && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="font-medium text-gray-700 mb-2">Meta Description:</h3>
+            <p className="pl-4 text-gray-600 italic">{processedResult.meta_description}</p>
+          </div>
+        )}
+      </div>
+    </ResourceResultDisplay>
   );
 }
