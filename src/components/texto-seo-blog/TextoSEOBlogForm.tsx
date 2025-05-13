@@ -1,18 +1,14 @@
 
 import { useState } from 'react';
-import { ResourceForm } from '@/components/ResourceForm';
 import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TextoSEOBlogFormInputs } from './TextoSEOBlogFormInputs';
 import { TextoSEOBlogResult } from './TextoSEOBlogResult';
 import { TextoSEOBlogHistory } from './TextoSEOBlogHistory';
-import { WEBHOOK_URL, TextoSEOBlogFormData } from './TextoSEOBlogSchema';
+import { WEBHOOK_URL, TextoSEOBlogFormSchema, TextoSEOBlogFormData } from './TextoSEOBlogSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextoSEOBlogFormSchema } from './TextoSEOBlogSchema';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { ResourceForm } from '@/components/ResourceForm';
 
 export function TextoSEOBlogForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
@@ -28,9 +24,7 @@ export function TextoSEOBlogForm() {
     }
   });
   
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleFormSubmit = async () => {
     if (methods.formState.isValid) {
       const values = methods.getValues();
       
@@ -55,32 +49,17 @@ export function TextoSEOBlogForm() {
         </TabsList>
         
         <TabsContent value="formulario">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600 mb-6">
-                Preencha as informações abaixo e clique em gerar seu texto otimizado para blog
-              </p>
-              
-              <FormProvider {...methods}>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <TextoSEOBlogFormInputs />
-                  
-                  <div className="flex justify-end">
-                    <Button type="submit" disabled={isLoading} className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      {isLoading ? 'Processando...' : 'Enviar'}
-                    </Button>
-                  </div>
-                </form>
-              </FormProvider>
-            </CardContent>
-          </Card>
-          
-          {result && (
-            <div className="mt-6">
-              <TextoSEOBlogResult result={result} />
-            </div>
-          )}
+          <FormProvider {...methods}>
+            <ResourceForm
+              resourceType="texto_seo_blog"
+              title="Texto SEO para Blog"
+              description="Preencha as informações abaixo e clique em gerar seu texto otimizado para blog"
+              onSubmit={handleFormSubmit}
+              resultComponent={result && <TextoSEOBlogResult result={result} />}
+            >
+              <TextoSEOBlogFormInputs />
+            </ResourceForm>
+          </FormProvider>
         </TabsContent>
         
         <TabsContent value="historico">
