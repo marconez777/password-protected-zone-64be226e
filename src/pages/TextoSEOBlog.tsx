@@ -9,6 +9,7 @@ const TextoSEOBlog = () => {
   return (
     <DashboardLayout 
       title="Texto SEO para Blog" 
+      subtitle="Gere textos otimizados para SEO de blogs"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
       <TextoSEOBlogForm />
