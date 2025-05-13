@@ -71,11 +71,14 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
     );
   }
 
+  // Get the original keyword from the input
+  const originalKeyword = result.input_original?.palavras_chave || result?.palavras_chave || "Palavra-chave";
+
   return (
     <ResourceResultDisplay title="Palavras-chave Relacionadas">
       <div className="bg-white rounded-lg p-4 border border-gray-200">
         <h4 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1">
-          Palavras-chave Sugeridas
+          Palavras-chave relacionadas a "{originalKeyword}"
         </h4>
         <ul className="list-disc pl-5 space-y-2">
           {keywords.map((keyword, index) => (

@@ -41,6 +41,10 @@ export const KeywordForm = () => {
     
     const result = await submitToWebhook(payload);
     if (result) {
+      // Make sure the form value is included in the result for history display
+      if (result && !result.input_original) {
+        result.input_original = payload;
+      }
       form.reset();
       return true;
     }

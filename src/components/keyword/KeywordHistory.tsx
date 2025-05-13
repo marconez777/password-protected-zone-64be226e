@@ -4,9 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type KeywordHistoryProps = {
   setActiveTab: (tab: string) => void;
@@ -16,6 +17,7 @@ type KeywordHistoryProps = {
 export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryProps) => {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryPr
         .select('*')
         .eq('user_id', user.id)
         .eq('tipo_recurso', 'keyword')
-        .order('created_at', { ascending: false });
+        .order('data_criacao', { ascending: false });
       
       if (error) {
         throw error;
@@ -46,9 +48,109 @@ export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryPr
     }
   };
 
-  const handleItemClick = (item: any) => {
+  const handleViewItem = (item: any) => {
+    setSelectedItem(item);
+  };
+
+  const handleBackToHistory = () => {
+    setSelectedItem(null);
+  };
+
+  const handleUseResult = (item: any) => {
     setFormResult(item.output_gerado);
     setActiveTab('formulario');
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_results')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      await fetchHistory();
+      if (selectedItem?.id === id) {
+        setSelectedItem(null);
+      }
+    } catch (error) {
+      console.error('Error deleting history item:', error);
+    }
+  };
+
+  const renderItemSummary = (item: any) => {
+    const keyword = item.input_original?.palavras_chave || "Sem palavra-chave";
+    const formattedDate = format(
+      new Date(item.data_criacao), 
+      "dd 'de' MMMM 'de' yyyy, HH:mm",
+      { locale: ptBR }
+    );
+    
+    return (
+      <div>
+        <div className="font-medium text-gray-800">{keyword}</div>
+        <div className="text-xs text-gray-500 mt-1">{formattedDate}</div>
+      </div>
+    );
+  };
+
+  const renderItemPreview = (item: any) => {
+    const keyword = item.input_original?.palavras_chave || "Sem palavra-chave";
+    const formattedDate = format(
+      new Date(item.data_criacao), 
+      "dd 'de' MMMM 'de' yyyy, HH:mm",
+      { locale: ptBR }
+    );
+    
+    // Extract keywords from the result
+    let keywords: string[] = [];
+    const result = item.output_gerado;
+    
+    if (result?.output) {
+      keywords = result.output
+        .split('\n')
+        .filter((line: string) => line.trim().length > 0)
+        .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
+    } else if (result?.palavras_relacionadas) {
+      keywords = Array.isArray(result.palavras_relacionadas) 
+        ? result.palavras_relacionadas 
+        : Object.values(result.palavras_relacionadas);
+    }
+    
+    return (
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800">Resultado para: "{keyword}"</h3>
+          <p className="text-sm text-gray-500">{formattedDate}</p>
+        </div>
+        
+        <div className="bg-white rounded-lg p-4 border border-gray-200">
+          <h4 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1">
+            Palavras-chave relacionadas a "{keyword}"
+          </h4>
+          
+          {keywords.length > 0 ? (
+            <ul className="list-disc pl-5 space-y-2">
+              {keywords.map((kw: string, index: number) => (
+                <li key={index} className="text-gray-800">{kw}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">Nenhuma palavra-chave encontrada no resultado.</p>
+          )}
+        </div>
+        
+        <div className="flex justify-end space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => handleUseResult(item)}
+          >
+            Usar este resultado
+          </Button>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -70,34 +172,62 @@ export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryPr
     );
   }
 
-  return (
-    <div className="p-6">
-      <div className="space-y-4">
-        {history.map((item) => (
-          <Card key={item.id} className="hover:border-mkranker-purple/40 transition-colors cursor-pointer" onClick={() => handleItemClick(item)}>
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-medium">
-                    {item.input_original.palavras_chave}
-                  </h3>
-                  {item.output_gerado?.palavras_relacionadas && (
-                    <p className="text-sm text-gray-500 mt-1">
-                      {Array.isArray(item.output_gerado.palavras_relacionadas) 
-                        ? item.output_gerado.palavras_relacionadas.slice(0, 3).join(', ') + 
-                          (item.output_gerado.palavras_relacionadas.length > 3 ? '...' : '')
-                        : 'Sem resultado detalhado'}
-                    </p>
-                  )}
-                </div>
-                <div className="text-xs text-gray-400">
-                  {format(new Date(item.created_at), "dd 'de' MMMM 'de' yyyy, HH:mm", { locale: ptBR })}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+  if (selectedItem) {
+    return (
+      <div>
+        <Button 
+          variant="ghost" 
+          onClick={handleBackToHistory}
+          className="mb-4"
+        >
+          ← Voltar para o histórico
+        </Button>
+        
+        <Card>
+          <CardContent className="p-6">
+            {renderItemPreview(selectedItem)}
+          </CardContent>
+        </Card>
       </div>
+    );
+  }
+
+  return (
+    <div>
+      <Card>
+        <CardContent className="p-0">
+          <ScrollArea className="h-[600px] max-h-[80vh]">
+            <div className="divide-y">
+              {history.map((item) => (
+                <div key={item.id} className="p-4 flex justify-between items-center hover:bg-gray-50">
+                  <div className="flex-grow">
+                    {renderItemSummary(item)}
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleViewItem(item)}
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      Ver
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => handleDeleteItem(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Excluir
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
     </div>
   );
 };
