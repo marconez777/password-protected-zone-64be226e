@@ -35,7 +35,9 @@ export function SearchFunnelForm() {
       const values = methods.getValues();
       
       try {
+        console.log("Enviando dados para o webhook:", WEBHOOK_URL, values);
         const response = await submitToWebhook(values);
+        
         if (response) {
           // Show success notification
           toast({
@@ -43,10 +45,10 @@ export function SearchFunnelForm() {
             description: "Funil de busca gerado com sucesso!",
           });
           
-          // Display the result
+          // Log the response to verify it's being received
           console.log('Resposta do webhook:', response);
           
-          // Garantir que o resultado seja exibido
+          // Ensure the result is set to state for rendering
           setResult(response);
           
           // Reset the form after successful submission
@@ -98,11 +100,10 @@ export function SearchFunnelForm() {
             </CardContent>
           </Card>
           
-          {result && (
-            <div className="mt-6">
-              <SearchFunnelResult result={result} />
-            </div>
-          )}
+          {/* Ensure result is displayed even if it's null initially, the component handles null internally */}
+          <div className="mt-6">
+            <SearchFunnelResult result={result} />
+          </div>
         </TabsContent>
         
         <TabsContent value="historico">

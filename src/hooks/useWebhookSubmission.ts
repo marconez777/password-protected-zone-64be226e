@@ -47,6 +47,7 @@ export function useWebhookSubmission(
       const resultData = await response.json();
       console.log("Resposta do webhook:", resultData);
       
+      // Set the result immediately after receiving it
       setResult(resultData);
       
       // Save to database
