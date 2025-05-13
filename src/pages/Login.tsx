@@ -81,7 +81,7 @@ const Login = () => {
           </div>
           <CardTitle className="text-2xl font-medium text-center">Login</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access your account
+            Digite suas credenciais para acessar sua conta
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -113,7 +113,7 @@ const Login = () => {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="Senha"
                   className="pl-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -129,11 +129,11 @@ const Login = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Signing in...
+                  Entrando...
                 </span>
               ) : (
                 <span className="flex items-center justify-center">
-                  <LogIn className="mr-2 h-4 w-4" /> Sign in
+                  <LogIn className="mr-2 h-4 w-4" /> Entrar
                 </span>
               )}
             </Button>
@@ -142,7 +142,7 @@ const Login = () => {
         <CardFooter className="flex flex-col space-y-4">
           <div className="text-sm text-center text-gray-500">
             <Link to="/reset-password" className="text-mkranker-purple hover:underline">
-              Forgot your password?
+              Esqueceu sua senha?
             </Link>
           </div>
           <div className="text-sm text-center text-gray-500">
