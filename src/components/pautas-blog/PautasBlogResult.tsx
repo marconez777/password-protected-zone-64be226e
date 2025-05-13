@@ -1,6 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
 
 type PautasResult = {
   pautas?: string[];
@@ -15,13 +16,12 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
   // Mostra mensagem de erro ou aviso, se existir
   if (result.message) {
     return (
-      <Card>
-        <CardContent className="p-4">
-          <div className="text-amber-600">
-            {result.message}
-          </div>
-        </CardContent>
-      </Card>
+      <ResourceResultDisplay 
+        title="Ideias de Pautas para Blog" 
+        message={result.message}
+      >
+        <div></div>
+      </ResourceResultDisplay>
     );
   }
 
@@ -31,19 +31,14 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
   }
 
   return (
-    <Card>
-      <CardContent className="p-4">
-        <ScrollArea className="max-h-[400px]">
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Ideias de Pautas Geradas</h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {result.pautas.map((pauta, index) => (
-                <li key={index} className="text-gray-800">{pauta}</li>
-              ))}
-            </ul>
-          </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+    <ResourceResultDisplay title="Ideias de Pautas Geradas">
+      <div className="bg-white rounded-lg p-4">
+        <ul className="list-disc pl-5 space-y-2">
+          {result.pautas.map((pauta, index) => (
+            <li key={index} className="text-gray-800">{pauta}</li>
+          ))}
+        </ul>
+      </div>
+    </ResourceResultDisplay>
   );
 }

@@ -9,9 +9,7 @@ import { WEBHOOK_URL, PautasBlogFormData } from './PautasBlogSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PautasBlogFormSchema } from './PautasBlogSchema';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { ResourceForm } from '@/components/ResourceForm';
 
 export function PautasBlogForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
@@ -24,9 +22,7 @@ export function PautasBlogForm() {
     }
   });
   
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleFormSubmit = async () => {
     if (methods.formState.isValid) {
       const values = methods.getValues();
       
@@ -51,32 +47,17 @@ export function PautasBlogForm() {
         </TabsList>
         
         <TabsContent value="formulario">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600 mb-6">
-                Digite uma palavra-chave para gerar ideias de pautas
-              </p>
-              
-              <FormProvider {...methods}>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <PautasBlogFormInputs />
-                  
-                  <div className="flex justify-end">
-                    <Button type="submit" disabled={isLoading} className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      {isLoading ? 'Processando...' : 'Enviar'}
-                    </Button>
-                  </div>
-                </form>
-              </FormProvider>
-            </CardContent>
-          </Card>
-          
-          {result && (
-            <div className="mt-6">
-              <PautasBlogResult result={result} />
-            </div>
-          )}
+          <FormProvider {...methods}>
+            <ResourceForm
+              resourceType="pautas_blog"
+              title="Ideias de Pautas para Blog"
+              description="Digite uma palavra-chave para gerar ideias de pautas para seu blog"
+              onSubmit={handleFormSubmit}
+              resultComponent={result && <PautasBlogResult result={result} />}
+            >
+              <PautasBlogFormInputs />
+            </ResourceForm>
+          </FormProvider>
         </TabsContent>
         
         <TabsContent value="historico">

@@ -2,10 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@/hooks/useSupabaseClient';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, FileText } from 'lucide-react';
+import { ResourceHistoryDisplay } from '@/components/shared/ResourceHistoryDisplay';
+import { PautasBlogResult } from './PautasBlogResult';
 
 interface HistoryItem {
   id: string;
@@ -13,7 +12,8 @@ interface HistoryItem {
   tipo_recurso: string;
   input_original: any;
   output_gerado: any;
-  created_at: string;
+  created_at?: string;
+  data_criacao: string;
 }
 
 interface PautasBlogHistoryProps {
@@ -24,6 +24,7 @@ interface PautasBlogHistoryProps {
 export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHistoryProps) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
   const supabase = useSupabaseClient();
   const { user } = useAuth();
   const { toast } = useToast();
@@ -46,11 +47,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
         }
 
         if (data) {
-          const formattedData = data.map((item) => ({
-            ...item,
-            created_at: item.data_criacao
-          }));
-          setHistory(formattedData as HistoryItem[]);
+          setHistory(data as HistoryItem[]);
         }
       } catch (error) {
         console.error('Erro ao carregar histórico:', error);
@@ -67,6 +64,44 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
     loadHistory();
   }, [user, supabase, toast]);
 
+  const handleViewItem = (item: HistoryItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_results')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      setHistory(history.filter(item => item.id !== id));
+      if (selectedItem?.id === id) {
+        setSelectedItem(null);
+      }
+
+      toast({
+        title: "Excluído com sucesso",
+        description: "O item foi removido do histórico.",
+      });
+    } catch (error) {
+      console.error('Erro ao excluir item:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível excluir o item.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleBackToHistory = () => {
+    setSelectedItem(null);
+  };
+
   const handleLoadResult = (item: HistoryItem) => {
     setFormResult(item.output_gerado);
     setActiveTab('formulario');
@@ -77,51 +112,27 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
     });
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-      </div>
-    );
-  }
-
-  if (history.length === 0) {
-    return (
-      <div className="text-center p-8 text-gray-500">
-        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-        <h3 className="text-lg font-medium">Nenhum resultado encontrado</h3>
-        <p className="mt-2">Você ainda não gerou nenhuma pauta para blog.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-4">
-      {history.map((item) => (
-        <Card key={item.id} className="p-4">
-          <div className="flex flex-col gap-2">
-            <div>
-              <span className="font-medium">Palavra-chave:</span> 
-              <span className="ml-2">{item.input_original.palavraChave || 'N/A'}</span>
-            </div>
-            
-            <div>
-              <span className="font-medium">Data:</span> 
-              <span className="ml-2">
-                {new Date(item.created_at).toLocaleDateString('pt-BR')} às{' '}
-                {new Date(item.created_at).toLocaleTimeString('pt-BR')}
-              </span>
-            </div>
-            
-            <div className="mt-2">
-              <Button onClick={() => handleLoadResult(item)} size="sm" variant="outline">
-                <FileText className="mr-2 h-4 w-4" />
-                Visualizar resultado
-              </Button>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
+    <ResourceHistoryDisplay
+      loading={loading}
+      history={history}
+      selectedItem={selectedItem}
+      onViewItem={handleViewItem}
+      onDeleteItem={handleDeleteItem}
+      onBackToHistory={handleBackToHistory}
+      renderItemPreview={(item) => (
+        <PautasBlogResult result={item.output_gerado} />
+      )}
+      renderItemSummary={(item) => (
+        <>
+          <p className="font-medium">Palavra-chave: {item.input_original.palavraChave}</p>
+          <p className="text-sm text-gray-500">
+            {new Date(item.data_criacao || item.created_at || '').toLocaleDateString('pt-BR')} às{' '}
+            {new Date(item.data_criacao || item.created_at || '').toLocaleTimeString('pt-BR')}
+          </p>
+        </>
+      )}
+      noHistoryMessage="Você ainda não gerou nenhuma pauta para blog. Gere novas pautas para visualizá-las aqui."
+    />
   );
 }
