@@ -105,7 +105,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsList>
             
             <TabsContent value="completo">
-              <ScrollArea className="max-h-[500px]">
+              <ScrollArea className="max-h-[600px]">
                 <div className="space-y-6">
                   {result.mercado && (
                     <div className="bg-accent rounded-lg p-4">
@@ -138,7 +138,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsContent>
             
             <TabsContent value="mercado">
-              <ScrollArea className="max-h-[500px]">
+              <ScrollArea className="max-h-[600px]">
                 {result.mercado ? (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
@@ -153,7 +153,7 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsContent>
             
             <TabsContent value="publico">
-              <ScrollArea className="max-h-[500px]">
+              <ScrollArea className="max-h-[600px]">
                 {result.publico ? (
                   <div className="bg-accent rounded-lg p-4">
                     <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">

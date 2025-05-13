@@ -4,13 +4,17 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, Loader2 } from "lucide-react";
+import { Eye, Loader2, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function MarketTargetHistory() {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const { user } = useAuth();
+  const { toast } = useToast();
   
   useEffect(() => {
     const fetchHistory = async () => {
@@ -22,19 +26,53 @@ export function MarketTargetHistory() {
           .select('*')
           .eq('user_id', user.id)
           .eq('tipo_recurso', 'market_target')
-          .order('created_at', { ascending: false });
+          .order('data_criacao', { ascending: false });
           
         if (error) throw error;
         setHistory(data || []);
       } catch (error) {
         console.error('Erro ao carregar histórico:', error);
+        toast({
+          title: "Erro ao carregar histórico",
+          description: "Não foi possível carregar seu histórico.",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
     
     fetchHistory();
-  }, [user]);
+  }, [user, toast]);
+  
+  const handleDeleteItem = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_results')
+        .delete()
+        .eq('id', id);
+        
+      if (error) throw error;
+      
+      setHistory(history.filter(item => item.id !== id));
+      
+      if (selectedItem?.id === id) {
+        setSelectedItem(null);
+      }
+      
+      toast({
+        title: "Item excluído",
+        description: "O item foi removido do histórico com sucesso.",
+      });
+    } catch (error) {
+      console.error('Erro ao excluir item:', error);
+      toast({
+        title: "Erro ao excluir",
+        description: "Não foi possível excluir o item do histórico.",
+        variant: "destructive",
+      });
+    }
+  };
   
   if (loading) {
     return (
@@ -46,11 +84,11 @@ export function MarketTargetHistory() {
   
   if (history.length === 0) {
     return (
-      <Card>
-        <CardContent className="pt-6">
-          <p className="text-center text-gray-500">Nenhum resultado encontrado no histórico.</p>
-        </CardContent>
-      </Card>
+      <Alert>
+        <AlertDescription>
+          Nenhum resultado encontrado no histórico. Gere novas análises para visualizá-las aqui.
+        </AlertDescription>
+      </Alert>
     );
   }
 
@@ -69,7 +107,7 @@ export function MarketTargetHistory() {
           <Card>
             <CardContent className="pt-6">
               <div className="mb-6">
-                <h3 className="text-lg font-medium">Consulta de {new Date(selectedItem.created_at).toLocaleString()}</h3>
+                <h3 className="text-lg font-medium">Consulta de {new Date(selectedItem.data_criacao).toLocaleString()}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div>
                     <p className="text-sm text-gray-500">Nicho</p>
@@ -90,28 +128,45 @@ export function MarketTargetHistory() {
                 </div>
               </div>
               
-              <div className="space-y-6">
-                {selectedItem.output_gerado?.mercado && (
-                  <div>
-                    <h4 className="text-lg font-medium text-mkranker-purple mb-2">Análise de Mercado:</h4>
-                    <p className="whitespace-pre-wrap">{selectedItem.output_gerado.mercado}</p>
-                  </div>
-                )}
-                
-                {selectedItem.output_gerado?.publico && (
-                  <div>
-                    <h4 className="text-lg font-medium text-mkranker-purple mb-2">Público-Alvo:</h4>
-                    <p className="whitespace-pre-wrap">{selectedItem.output_gerado.publico}</p>
-                  </div>
-                )}
-                
-                {selectedItem.output_gerado?.recomendacoes && (
-                  <div>
-                    <h4 className="text-lg font-medium text-mkranker-purple mb-2">Recomendações:</h4>
-                    <p className="whitespace-pre-wrap">{selectedItem.output_gerado.recomendacoes}</p>
-                  </div>
-                )}
-              </div>
+              <ScrollArea className="max-h-[500px]">
+                <div className="space-y-6">
+                  {selectedItem.output_gerado?.mercado && (
+                    <div className="bg-accent rounded-lg p-4">
+                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                        Análise de Mercado
+                      </h4>
+                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.mercado}</div>
+                    </div>
+                  )}
+                  
+                  {selectedItem.output_gerado?.publico && (
+                    <div className="bg-accent rounded-lg p-4">
+                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                        Público-Alvo
+                      </h4>
+                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.publico}</div>
+                    </div>
+                  )}
+                  
+                  {selectedItem.output_gerado?.recomendacoes && (
+                    <div className="bg-accent rounded-lg p-4">
+                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                        Recomendações
+                      </h4>
+                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.recomendacoes}</div>
+                    </div>
+                  )}
+
+                  {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' && (
+                    <div className="bg-accent rounded-lg p-4">
+                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
+                        Resultado Completo
+                      </h4>
+                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.output}</div>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
             </CardContent>
           </Card>
         </div>
@@ -123,16 +178,27 @@ export function MarketTargetHistory() {
                 <div key={item.id} className="py-4 flex justify-between items-center">
                   <div>
                     <p className="font-medium">{item.input_original?.nicho || "Sem título"}</p>
-                    <p className="text-sm text-gray-500">{new Date(item.created_at).toLocaleString()}</p>
+                    <p className="text-sm text-gray-500">{new Date(item.data_criacao).toLocaleString()}</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    <Eye className="h-4 w-4 mr-1" />
-                    Ver
-                  </Button>
+                  <div className="flex space-x-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      Ver
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => handleDeleteItem(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Excluir
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

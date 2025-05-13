@@ -74,7 +74,8 @@ export function useWebhookSubmission(
         user_id: user.id,
         tipo_recurso: tipoRecurso,
         input_original: inputOriginal,
-        output_gerado: outputGerado
+        output_gerado: outputGerado,
+        data_criacao: new Date().toISOString()
       });
       
       if (error) {
