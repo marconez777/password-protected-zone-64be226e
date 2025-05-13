@@ -6,36 +6,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MarketTargetFormInputs } from './MarketTargetFormInputs';
 import { MarketTargetResult } from './MarketTargetResult';
 import { MarketTargetHistory } from './MarketTargetHistory';
-import { WEBHOOK_URL } from './MarketTargetSchema';
+import { WEBHOOK_URL, MarketTargetFormData } from './MarketTargetSchema';
+import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 
 export function MarketTargetForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
   const { submitToWebhook, result, setResult, isLoading: isWebhookLoading } = useWebhookSubmission('market_target', WEBHOOK_URL);
+  const form = useForm<MarketTargetFormData>();
   
   const handleFormSubmit = async () => {
-    const values = document.querySelector('form')?.elements;
-    if (!values) return false;
-    
-    // Extract form values
-    const formData = {
-      nicho: (values.namedItem('nicho') as HTMLInputElement)?.value || '',
-      servico: (values.namedItem('servico') as HTMLInputElement)?.value || '',
-      segmentos: (values.namedItem('segmentos') as HTMLInputElement)?.value || '',
-      problema: (values.namedItem('problema') as HTMLTextAreaElement)?.value || '',
-    };
+    const values = form.getValues();
     
     // O webhook será configurado posteriormente
     if (!WEBHOOK_URL) {
-      console.log("Webhook URL não configurada ainda", formData);
+      console.log("Webhook URL não configurada ainda", values);
       // Simular um resultado para testes
       setResult({ message: "Webhook ainda não configurado. Dados capturados com sucesso!" });
       return true;
     }
     
-    const response = await submitToWebhook(formData);
+    const response = await submitToWebhook(values);
     if (response) {
       // Reset the form after successful submission
-      (document.querySelector('form') as HTMLFormElement)?.reset();
+      form.reset();
       return true;
     }
     return false;
@@ -54,11 +48,12 @@ export function MarketTargetForm() {
             resourceType="market_target"
             title="Mercado e Público Alvo"
             description="Preencha as informações abaixo e clique em gerar"
-            webhookUrl={WEBHOOK_URL}
             onSubmit={handleFormSubmit}
             resultComponent={<MarketTargetResult result={result} />}
           >
-            <MarketTargetFormInputs />
+            <Form {...form}>
+              <MarketTargetFormInputs />
+            </Form>
           </ResourceForm>
         </TabsContent>
         

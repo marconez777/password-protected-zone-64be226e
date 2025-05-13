@@ -48,6 +48,7 @@ export function ResourceForm({
         description: "Ocorreu um erro ao processar sua solicitação.",
         variant: "destructive",
       });
+      return null;
     } finally {
       setIsSubmitting(false);
     }
