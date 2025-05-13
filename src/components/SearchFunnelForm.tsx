@@ -13,23 +13,43 @@ export function SearchFunnelForm() {
   const { submitToWebhook, result, setResult, isLoading: isWebhookLoading } = useWebhookSubmission('search_funnel', WEBHOOK_URL);
   
   const handleFormSubmit = async () => {
-    const values = document.querySelector('form')?.elements;
-    if (!values) return false;
+    // Get the form element
+    const form = document.querySelector('form');
+    if (!form) {
+      console.error("Form element not found");
+      return false;
+    }
     
-    // Extract form values
+    // Extract form values manually
+    const microNichoInput = form.querySelector('#microNicho') as HTMLInputElement;
+    const publicoAlvoInput = form.querySelector('#publicoAlvo') as HTMLInputElement;
+    const segmentoInput = form.querySelector('#segmento') as HTMLInputElement;
+    
+    if (!microNichoInput || !publicoAlvoInput || !segmentoInput) {
+      console.error("Required form fields not found", { 
+        microNicho: !!microNichoInput, 
+        publicoAlvo: !!publicoAlvoInput, 
+        segmento: !!segmentoInput 
+      });
+      return false;
+    }
+    
+    // Build the form data
     const formData = {
-      microNicho: (values.namedItem('microNicho') as HTMLInputElement)?.value || '',
-      publicoAlvo: (values.namedItem('publicoAlvo') as HTMLInputElement)?.value || '',
-      segmento: (values.namedItem('segmento') as HTMLInputElement)?.value || '',
+      microNicho: microNichoInput.value,
+      publicoAlvo: publicoAlvoInput.value,
+      segmento: segmentoInput.value,
     };
     
-    console.log("Sending data to test webhook:", WEBHOOK_URL, formData);
+    console.log("Sending data to webhook:", WEBHOOK_URL);
+    console.log("Form data:", formData);
     
+    // Submit data to webhook
     const response = await submitToWebhook(formData);
     if (response) {
-      console.log("Response received from test webhook:", response);
+      console.log("Response received from webhook:", response);
       // Reset the form after successful submission
-      (document.querySelector('form') as HTMLFormElement)?.reset();
+      form.reset();
       return true;
     }
     return false;

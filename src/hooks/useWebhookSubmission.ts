@@ -27,10 +27,20 @@ export function useWebhookSubmission(
       return null;
     }
 
+    if (!webhookUrl) {
+      toast({
+        title: "Erro de configuração",
+        description: "URL do webhook não está configurada.",
+        variant: "destructive",
+      });
+      return null;
+    }
+
     setIsLoading(true);
     
     try {
-      console.log("Enviando dados para o webhook:", webhookUrl, formData);
+      console.log(`Enviando dados para o webhook: ${webhookUrl}`);
+      console.log("Dados:", JSON.stringify(formData));
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -53,12 +63,18 @@ export function useWebhookSubmission(
       // Save to database
       await saveResultToDatabase(resourceType, formData, resultData);
       
+      // Show success toast
+      toast({
+        title: "Sucesso",
+        description: "Conteúdo gerado com sucesso!",
+      });
+      
       return resultData;
     } catch (error) {
       console.error('Error in webhook submission:', error);
       toast({
         title: "Erro na integração",
-        description: "Não foi possível conectar ao serviço de IA.",
+        description: "Não foi possível conectar ao serviço. Verifique o console para mais detalhes.",
         variant: "destructive",
       });
       return null;
