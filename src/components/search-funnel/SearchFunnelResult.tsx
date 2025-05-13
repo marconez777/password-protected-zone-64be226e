@@ -12,7 +12,6 @@ export function SearchFunnelResult({ result }: SearchFunnelResultProps) {
   if (!result) return null;
   
   try {
-    // Debug to see what's actually in the result
     console.log('SearchFunnelResult component received:', result);
     
     return (

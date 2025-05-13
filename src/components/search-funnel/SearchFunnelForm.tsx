@@ -1,23 +1,25 @@
 
 import { useState } from 'react';
-import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SearchFunnelFormValues, searchFunnelSchema } from './SearchFunnelSchema';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SearchFunnelFormInputs } from './SearchFunnelFormInputs';
 import { SearchFunnelResult } from './SearchFunnelResult';
 import { SearchFunnelHistory } from './SearchFunnelHistory';
-import { WEBHOOK_URL, searchFunnelSchema } from './SearchFunnelSchema';
-import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { SearchFunnelFormValues } from './SearchFunnelSchema';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 export function SearchFunnelForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
-  const { submitToWebhook, result, setResult, isLoading } = useWebhookSubmission('search_funnel', WEBHOOK_URL);
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState<any>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const methods = useForm<SearchFunnelFormValues>({
     resolver: zodResolver(searchFunnelSchema),
@@ -31,42 +33,93 @@ export function SearchFunnelForm() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
-    if (methods.formState.isValid) {
+    if (!methods.formState.isValid) {
+      methods.trigger();
+      return;
+    }
+    
+    if (!user) {
+      toast({
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para usar esta funcionalidade.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
       const values = methods.getValues();
       
-      try {
-        console.log("Enviando dados para o webhook:", WEBHOOK_URL, values);
-        const response = await submitToWebhook(values);
-        
-        if (response) {
-          // Show success notification
-          toast({
-            title: "Sucesso",
-            description: "Funil de busca gerado com sucesso!",
-          });
-          
-          // Log the response to verify it's being received
-          console.log('Resposta do webhook:', response);
-          
-          // Ensure the result is set to state for rendering
-          setResult(response);
-          
-          // Reset the form after successful submission
-          methods.reset();
-          return true;
-        }
-      } catch (error) {
-        console.error('Erro ao enviar formulário:', error);
-        toast({
-          title: "Erro",
-          description: "Houve um erro ao gerar o funil de busca.",
-          variant: "destructive",
-        });
+      const webhookUrl = 'https://mkseo77.app.n8n.cloud/webhook/funil';
+      
+      console.log("Enviando dados para o webhook:", webhookUrl, values);
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    } else {
-      // Trigger validation
-      methods.trigger();
-      return false;
+
+      const resultData = await response.json();
+      console.log("Resposta do webhook:", resultData);
+      
+      // Set the result immediately for display
+      setResult(resultData);
+      
+      // Save to database
+      await saveResultToDatabase(values, resultData);
+      
+      // Show success notification
+      toast({
+        title: "Sucesso",
+        description: "Funil de busca gerado com sucesso!",
+      });
+      
+      // Reset the form
+      methods.reset();
+      
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+      toast({
+        title: "Erro",
+        description: "Houve um erro ao gerar o funil de busca.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const saveResultToDatabase = async (inputOriginal: any, outputGerado: any) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase.from('user_results').insert({
+        user_id: user.id,
+        tipo_recurso: 'search_funnel',
+        input_original: inputOriginal,
+        output_gerado: outputGerado,
+        data_criacao: new Date().toISOString()
+      });
+      
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Erro ao salvar resultado no banco de dados:', error);
+      toast({
+        title: "Erro ao salvar resultado",
+        description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -100,7 +153,7 @@ export function SearchFunnelForm() {
             </CardContent>
           </Card>
           
-          {/* Ensure result is displayed even if it's null initially, the component handles null internally */}
+          {/* Display result */}
           <div className="mt-6">
             <SearchFunnelResult result={result} />
           </div>
