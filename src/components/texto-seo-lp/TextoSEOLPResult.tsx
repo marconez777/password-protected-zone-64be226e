@@ -1,7 +1,5 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
 import { useState } from "react";
 
 type SEOResult = {
@@ -15,23 +13,13 @@ type SEOResult = {
 };
 
 export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
-  const [activeTab, setActiveTab] = useState<string>("texto");
-  
   if (!result) {
     return null;
   }
 
   // Mostra mensagem de erro ou aviso, se existir
   if (result.message) {
-    return (
-      <Card>
-        <CardContent className="p-4">
-          <div className="text-amber-600">
-            {result.message}
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <ResourceResultDisplay title="" message={result.message} />;
   }
 
   // Processa o resultado do webhook se vier no formato output
@@ -127,66 +115,29 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
     return result;
   };
 
+  // Título com base no tema da pesquisa ou no título do resultado
+  const pageTitle = result.input_original?.tema || processedResult.titulo || "Texto SEO para Landing Page";
+
   return (
-    <Card className="border border-gray-200 shadow-sm w-full">
-      <CardContent className="p-4">
-        <Tabs defaultValue="texto" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="texto">Texto Completo</TabsTrigger>
-            <TabsTrigger value="estrutura">Estrutura SEO</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="texto" className="h-full">
-            <div className="h-full overflow-visible">
-              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-                <div className="space-y-4 pb-6">
-                  {processedResult.titulo && (
-                    <h1 className="text-2xl font-bold text-gray-800">{processedResult.titulo}</h1>
-                  )}
-                  {processedResult.texto && (
-                    <div className="whitespace-pre-wrap">
-                      {formatList(processedResult.texto)}
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="estrutura" className="h-full">
-            <div className="h-full overflow-visible">
-              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-                <div className="space-y-4 pb-6">
-                  {processedResult.h1 && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="font-medium text-gray-700">H1:</p>
-                      <p className="pl-4 font-semibold">{processedResult.h1}</p>
-                    </div>
-                  )}
-                  
-                  {processedResult.h2s && processedResult.h2s.length > 0 && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="font-medium text-gray-700">H2:</p>
-                      <ul className="list-disc pl-8">
-                        {processedResult.h2s.map((h2, index) => (
-                          <li key={index} className="font-semibold">{h2}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {processedResult.meta_description && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="font-medium text-gray-700">Meta Description:</p>
-                      <p className="pl-4">{processedResult.meta_description}</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+    <ResourceResultDisplay title={pageTitle}>
+      <div className="bg-white rounded-lg p-4">
+        {processedResult.titulo && (
+          <h2 className="text-xl font-bold text-gray-800 mb-4">{processedResult.titulo}</h2>
+        )}
+        
+        {processedResult.texto && (
+          <div className="whitespace-pre-wrap text-gray-700">
+            {formatList(processedResult.texto)}
+          </div>
+        )}
+
+        {processedResult.meta_description && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="font-medium text-gray-700 mb-2">Meta Description:</h3>
+            <p className="pl-4 text-gray-600 italic">{processedResult.meta_description}</p>
+          </div>
+        )}
+      </div>
+    </ResourceResultDisplay>
   );
 }

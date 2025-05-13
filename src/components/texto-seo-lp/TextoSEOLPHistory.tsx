@@ -2,12 +2,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ResourceHistoryDisplay } from "../shared/ResourceHistoryDisplay";
+import { TextoSEOLPResult } from "./TextoSEOLPResult";
 
 type HistoryProps = {
   setActiveTab: (tab: string) => void;
@@ -24,6 +21,7 @@ type HistoryItem = {
 export function TextoSEOLPHistory({ setActiveTab, setFormResult }: HistoryProps) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -65,7 +63,15 @@ export function TextoSEOLPHistory({ setActiveTab, setFormResult }: HistoryProps)
     fetchHistory();
   }, [user, toast]);
 
-  const handleViewResult = (item: HistoryItem) => {
+  const handleViewItem = (item: HistoryItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleBackToHistory = () => {
+    setSelectedItem(null);
+  };
+
+  const handleUseItem = (item: HistoryItem) => {
     setFormResult(item.output_gerado);
     setActiveTab("formulario");
   };
@@ -80,6 +86,8 @@ export function TextoSEOLPHistory({ setActiveTab, setFormResult }: HistoryProps)
       if (error) throw error;
       
       setHistory(history.filter(item => item.id !== id));
+      setSelectedItem(null);
+      
       toast({
         title: "Item excluído",
         description: "O item foi excluído do seu histórico.",
@@ -94,87 +102,38 @@ export function TextoSEOLPHistory({ setActiveTab, setFormResult }: HistoryProps)
     }
   };
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Histórico</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="mb-4 space-y-2">
-              <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-10 w-28" />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-    );
-  }
+  const renderItemPreview = (item: HistoryItem) => {
+    return <TextoSEOLPResult result={item.output_gerado} />;
+  };
 
-  if (history.length === 0) {
+  const renderItemSummary = (item: HistoryItem) => {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Histórico</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center text-gray-500 py-8">
-            Você ainda não possui histórico de textos SEO para LP.
-          </p>
-        </CardContent>
-      </Card>
+      <div>
+        <div className="font-medium">
+          {item.input_original?.tema || "Sem título"}
+        </div>
+        <div className="text-sm text-gray-500">
+          Palavra-chave: {item.input_original?.palavraChave || "N/A"}
+        </div>
+        <div className="text-xs text-gray-400 mt-1">
+          {new Date(item.created_at).toLocaleDateString()} às{" "}
+          {new Date(item.created_at).toLocaleTimeString()}
+        </div>
+      </div>
     );
-  }
+  };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Histórico</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[600px]">
-          {history.map((item) => (
-            <div
-              key={item.id}
-              className="border-b border-gray-100 p-4 hover:bg-gray-50"
-            >
-              <div className="mb-2">
-                <div className="font-medium">
-                  {item.input_original.tema || "Sem título"}
-                </div>
-                <div className="text-sm text-gray-500">
-                  Palavra-chave: {item.input_original.palavraChave || "N/A"}
-                </div>
-                <div className="text-xs text-gray-400 mt-1">
-                  {new Date(item.created_at).toLocaleDateString()} às{" "}
-                  {new Date(item.created_at).toLocaleTimeString()}
-                </div>
-              </div>
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleViewResult(item)}
-                >
-                  <FileText className="h-4 w-4 mr-1" />
-                  Ver Resultado
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
-                  onClick={() => handleDeleteItem(item.id)}
-                >
-                  <Trash2 className="h-4 w-4 mr-1" />
-                  Excluir
-                </Button>
-              </div>
-            </div>
-          ))}
-        </ScrollArea>
-      </CardContent>
-    </Card>
+    <ResourceHistoryDisplay
+      loading={loading}
+      history={history}
+      selectedItem={selectedItem}
+      onViewItem={handleViewItem}
+      onDeleteItem={handleDeleteItem}
+      onBackToHistory={handleBackToHistory}
+      renderItemPreview={renderItemPreview}
+      renderItemSummary={renderItemSummary}
+      noHistoryMessage="Você ainda não possui histórico de textos SEO para LP."
+    />
   );
 }

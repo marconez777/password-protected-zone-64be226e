@@ -28,12 +28,6 @@ export function TextoSEOLPForm() {
   const handleFormSubmit = async () => {
     const values = methods.getValues();
     
-    if (!WEBHOOK_URL) {
-      console.log("Webhook URL não configurada ainda", values);
-      setResult({ message: "Webhook ainda não configurado. Dados capturados com sucesso!" });
-      return true;
-    }
-    
     const response = await submitToWebhook(values);
     if (response) {
       methods.reset();
