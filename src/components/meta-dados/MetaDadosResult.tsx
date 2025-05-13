@@ -1,10 +1,8 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-type MetaDadosResultProps = {
-  result: MetaDataResult | null;
-};
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 type MetaDataResult = {
   titulo?: string;
@@ -16,7 +14,12 @@ type MetaDataResult = {
   message?: string;
 };
 
-export function MetaDadosResult({ result }: MetaDadosResultProps) {
+export type MetaDadosResultProps = {
+  result: MetaDataResult | null;
+  onBack: () => void;
+};
+
+export function MetaDadosResult({ result, onBack }: MetaDadosResultProps) {
   if (!result) {
     return null;
   }
@@ -26,6 +29,10 @@ export function MetaDadosResult({ result }: MetaDadosResultProps) {
     return (
       <Card>
         <CardContent className="p-4">
+          <Button onClick={onBack} variant="outline" className="mb-4">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar
+          </Button>
           <div className="text-amber-600">
             {result.message}
           </div>
@@ -37,6 +44,11 @@ export function MetaDadosResult({ result }: MetaDadosResultProps) {
   return (
     <Card>
       <CardContent className="p-4">
+        <Button onClick={onBack} variant="outline" className="mb-4">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Voltar
+        </Button>
+        
         <ScrollArea className="max-h-[400px]">
           <div className="space-y-6">
             {result.titulo && (

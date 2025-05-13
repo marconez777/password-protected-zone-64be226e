@@ -19,9 +19,10 @@ import { useResourceLimits } from "@/hooks/useResourceLimits";
 export const MetaDadosForm = () => {
   const [showResult, setShowResult] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<string>("form");
   const { toast } = useToast();
-  const { submitToWebhook, isLoading } = useWebhookSubmission();
-  const { checkAndUpdateLimit } = useResourceLimits();
+  const { submitToWebhook, isLoading } = useWebhookSubmission("metadata_generation", WEBHOOK_URL);
+  const { checkAndIncrementResource } = useResourceLimits();
 
   const form = useForm<MetaDadosFormData>({
     resolver: zodResolver(MetaDadosFormSchema),
@@ -34,7 +35,7 @@ export const MetaDadosForm = () => {
   });
 
   const onSubmit = async (data: MetaDadosFormData) => {
-    const canProceed = await checkAndUpdateLimit("meta-dados");
+    const canProceed = await checkAndIncrementResource("metadata_generation");
     if (!canProceed) {
       toast({
         title: "Limite atingido",
@@ -45,7 +46,7 @@ export const MetaDadosForm = () => {
     }
 
     try {
-      const result = await submitToWebhook<MetaDadosFormData>(WEBHOOK_URL, data);
+      const result = await submitToWebhook(data);
       setResultData(result);
       setShowResult(true);
       form.reset();
@@ -68,12 +69,12 @@ export const MetaDadosForm = () => {
   };
 
   if (showResult && resultData) {
-    return <MetaDadosResult data={resultData} onBack={handleBack} />;
+    return <MetaDadosResult result={resultData} onBack={handleBack} />;
   }
 
   return (
     <div className="grid gap-6">
-      <MetaDadosHistory />
+      <MetaDadosHistory setActiveTab={setActiveTab} setFormResult={setResultData} />
       
       <Card className="bg-gray-900 border-gray-800 text-white">
         <CardHeader>
