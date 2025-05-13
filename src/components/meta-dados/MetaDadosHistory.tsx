@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, FileText } from 'lucide-react';
 import { ResourceHistoryDisplay } from '@/components/shared/ResourceHistoryDisplay';
+import { MetaDadosResult } from '@/components/meta-dados/MetaDadosResult';
 
 interface HistoryItem {
   id: string;
@@ -37,6 +38,13 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
       
       try {
         setLoading(true);
+        
+        // Check if session is valid before querying
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !sessionData.session) {
+          throw new Error('Session invalid or expired');
+        }
+        
         const { data, error } = await supabase
           .from('user_results')
           .select('*')
@@ -59,7 +67,7 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
         console.error('Erro ao carregar histórico:', error);
         toast({
           title: "Erro",
-          description: "Não foi possível carregar seu histórico.",
+          description: "Não foi possível carregar seu histórico. Tente fazer login novamente.",
           variant: "destructive",
         });
       } finally {
@@ -81,6 +89,12 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
 
   const handleDeleteItem = async (id: string) => {
     try {
+      // Check if session is valid before deleting
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session) {
+        throw new Error('Session invalid or expired');
+      }
+      
       const { error } = await supabase
         .from('user_results')
         .delete()
@@ -97,7 +111,7 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
       console.error('Erro ao excluir item:', error);
       toast({
         title: "Erro",
-        description: "Não foi possível excluir o resultado.",
+        description: "Não foi possível excluir o resultado. Tente fazer login novamente.",
         variant: "destructive",
       });
     }

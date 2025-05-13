@@ -61,7 +61,18 @@ export function useWebhookSubmission(
       setResult(resultData);
       
       // Save to database
-      await saveResultToDatabase(resourceType, formData, resultData);
+      try {
+        await saveResultToDatabase(resourceType, formData, resultData);
+      } catch (error) {
+        console.error('Error saving result to database:', error);
+        // Even if saving fails, we still have the result displayed
+        toast({
+          title: "Aviso",
+          description: "O resultado foi gerado mas não pôde ser salvo no histórico. Você pode tentar fazer login novamente.",
+          variant: "default",
+        });
+        // Continue with the result even if saving fails
+      }
       
       // Show success toast
       toast({
@@ -87,6 +98,12 @@ export function useWebhookSubmission(
     if (!user) return;
     
     try {
+      // Check if session is valid before attempting to save
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session) {
+        throw new Error('Session invalid or expired');
+      }
+      
       const { error } = await supabase.from('user_results').insert({
         user_id: user.id,
         tipo_recurso: tipoRecurso,
@@ -100,11 +117,7 @@ export function useWebhookSubmission(
       }
     } catch (error) {
       console.error('Error saving result to database:', error);
-      toast({
-        title: "Erro ao salvar resultado",
-        description: "O resultado foi gerado mas não pôde ser salvo no banco de dados.",
-        variant: "destructive",
-      });
+      throw error; // Let the calling function handle this error
     }
   };
 
