@@ -8,5 +8,6 @@
 export const calculateUsagePercentage = (used: number, limit: number | null): number => {
   if (limit === null) return 0; // Plano escala (ilimitado)
   if (limit === 0) return 100; // Evitar divisão por zero
-  return Math.min(Math.round((used / limit) * 100), 100);
+  const percentage = (used / limit) * 100;
+  return Math.min(Math.round(percentage), 100); // Ensure it's between 0-100
 };

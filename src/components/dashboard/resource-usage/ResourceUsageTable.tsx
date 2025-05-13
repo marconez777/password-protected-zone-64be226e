@@ -11,36 +11,46 @@ interface ResourceUsageTableProps {
 export const ResourceUsageTable = ({ usage, planLimits }: ResourceUsageTableProps) => {
   if (!planLimits) return null;
   
-  // Define the resource mapping for display
+  // Use a default value of 0 for usage counts if usage data is null
+  const safeUsage = usage || {
+    market_research_count: 0,
+    search_funnel_count: 0,
+    keyword_count: 0,
+    seo_text_count: 0,
+    topic_research_count: 0,
+    metadata_generation_count: 0
+  } as Usage;
+  
+  // Define the resource mapping for display with clear labels
   const resources = [
     {
       name: "Pesquisas de Mercado",
-      count: usage?.market_research_count || 0,
+      count: safeUsage.market_research_count || 0,
       limit: planLimits.market_research_limit
     },
     {
       name: "Funis de Busca",
-      count: usage?.search_funnel_count || 0,
+      count: safeUsage.search_funnel_count || 0,
       limit: planLimits.search_funnel_limit
     },
     {
       name: "Palavras-chave",
-      count: usage?.keyword_count || 0,
+      count: safeUsage.keyword_count || 0,
       limit: planLimits.keyword_limit
     },
     {
       name: "Textos SEO",
-      count: usage?.seo_text_count || 0,
+      count: safeUsage.seo_text_count || 0,
       limit: planLimits.seo_text_limit
     },
     {
       name: "Pautas para Blog",
-      count: usage?.topic_research_count || 0,
+      count: safeUsage.topic_research_count || 0,
       limit: planLimits.topic_research_limit
     },
     {
       name: "Meta Dados",
-      count: usage?.metadata_generation_count || 0,
+      count: safeUsage.metadata_generation_count || 0,
       limit: planLimits.metadata_generation_limit
     }
   ];

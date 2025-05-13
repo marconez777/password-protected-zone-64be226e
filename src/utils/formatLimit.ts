@@ -6,5 +6,6 @@
  */
 export const formatLimit = (limit: number | null): string => {
   if (limit === null) return "Ilimitado";
-  return String(limit);
+  if (limit === 0) return "0"; // Handle zero explicitly
+  return new Intl.NumberFormat('pt-BR').format(limit); // Format with thousands separators
 };
