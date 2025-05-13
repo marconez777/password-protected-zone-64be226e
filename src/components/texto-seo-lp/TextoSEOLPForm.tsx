@@ -54,7 +54,7 @@ export function TextoSEOLPForm() {
           <FormProvider {...methods}>
             <ResourceForm
               resourceType="texto_seo_lp"
-              title="Texto SEO para LP"
+              title=""
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado"
               onSubmit={handleFormSubmit}
               resultComponent={<TextoSEOLPResult result={result} />}
