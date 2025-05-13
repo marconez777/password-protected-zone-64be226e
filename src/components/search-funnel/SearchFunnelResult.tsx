@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatMarkdownContent } from '@/lib/markdown-formatter';
 
 interface SearchFunnelResultProps {
   result: any;
@@ -13,12 +14,16 @@ export function SearchFunnelResult({ result }: SearchFunnelResultProps) {
   try {
     return (
       <Card className="shadow-lg w-full">
-        <CardContent className="p-4">
-          <h3 className="text-lg font-bold mb-4">Resultado do Funil de Busca</h3>
+        <CardContent className="pt-6">
+          <h3 className="text-2xl font-bold mb-6 text-mkranker-purple border-b pb-2">Resultado do Funil de Busca</h3>
           <div className="h-full overflow-visible">
-            <ScrollArea className="h-[calc(100vh-300px)]">
-              <div className="whitespace-pre-wrap bg-muted p-4 rounded-md">
-                <pre className="break-words">{JSON.stringify(result, null, 2)}</pre>
+            <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+              <div className="whitespace-pre-wrap bg-accent rounded-lg p-4">
+                {typeof result.output === 'string' ? (
+                  <div dangerouslySetInnerHTML={{ __html: formatMarkdownContent(result.output) }} />
+                ) : (
+                  <pre className="break-words">{JSON.stringify(result, null, 2)}</pre>
+                )}
               </div>
             </ScrollArea>
           </div>
