@@ -39,7 +39,7 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
   }
 
   return (
-    <Card>
+    <Card className="shadow-lg w-full">
       <CardContent className="p-4">
         <Tabs defaultValue="texto" value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="mb-4">
@@ -48,8 +48,8 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
           </TabsList>
           
           <TabsContent value="texto">
-            <ScrollArea className="max-h-[400px]">
-              <div className="space-y-4">
+            <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+              <div className="space-y-4 pb-6">
                 {result.titulo && (
                   <h1 className="text-2xl font-bold text-gray-800">{result.titulo}</h1>
                 )}
@@ -63,8 +63,8 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
           </TabsContent>
           
           <TabsContent value="estrutura">
-            <ScrollArea className="max-h-[400px]">
-              <div className="space-y-4">
+            <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+              <div className="space-y-4 pb-6">
                 {result.h1 && (
                   <div>
                     <p className="font-medium text-gray-500">H1:</p>

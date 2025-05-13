@@ -21,15 +21,17 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
   const hasMarkdownOutput = result.output && typeof result.output === 'string';
   
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg w-full">
       <CardContent className="pt-6">
         <h3 className="text-2xl font-bold mb-6 text-mkranker-purple border-b pb-2">Resultado da Análise</h3>
         
         {result.message ? (
           <p className="text-gray-700">{result.message}</p>
         ) : hasMarkdownOutput ? (
-          <ScrollArea className="max-h-[600px] pr-4">
-            <MarkdownOutput output={result.output} />
+          <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+            <div className="pb-6">
+              <MarkdownOutput output={result.output} />
+            </div>
           </ScrollArea>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -40,32 +42,38 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
             </TabsList>
             
             <TabsContent value="completo">
-              <ScrollArea className="max-h-[600px] pr-4">
-                <CompleteAnalysisTab 
-                  mercado={result.mercado}
-                  publico={result.publico}
-                  recomendacoes={result.recomendacoes}
-                />
+              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+                <div className="pb-6">
+                  <CompleteAnalysisTab 
+                    mercado={result.mercado}
+                    publico={result.publico}
+                    recomendacoes={result.recomendacoes}
+                  />
+                </div>
               </ScrollArea>
             </TabsContent>
             
             <TabsContent value="mercado">
-              <ScrollArea className="max-h-[600px] pr-4">
-                {result.mercado ? (
-                  <AnalysisSection title="Análise de Mercado" content={result.mercado} />
-                ) : (
-                  <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
-                )}
+              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+                <div className="pb-6">
+                  {result.mercado ? (
+                    <AnalysisSection title="Análise de Mercado" content={result.mercado} />
+                  ) : (
+                    <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
+                  )}
+                </div>
               </ScrollArea>
             </TabsContent>
             
             <TabsContent value="publico">
-              <ScrollArea className="max-h-[600px] pr-4">
-                {result.publico ? (
-                  <AnalysisSection title="Público-Alvo" content={result.publico} />
-                ) : (
-                  <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
-                )}
+              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
+                <div className="pb-6">
+                  {result.publico ? (
+                    <AnalysisSection title="Público-Alvo" content={result.publico} />
+                  ) : (
+                    <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
+                  )}
+                </div>
               </ScrollArea>
             </TabsContent>
           </Tabs>
