@@ -9,6 +9,7 @@ const MetaDados = () => {
   return (
     <DashboardLayout 
       title="Meta Dados" 
+      subtitle="Gere meta dados otimizados para suas páginas"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
       <MetaDadosForm />
