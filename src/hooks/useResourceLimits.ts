@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 
 // Resource types that match backend definitions
 export type ResourceType = 
+  | 'market_target'
   | 'market_research'
   | 'search_funnel'
   | 'keyword'
