@@ -28,6 +28,8 @@ export function PautasBlogForm() {
       
       const response = await submitToWebhook(values);
       if (response) {
+        // Make sure we set the result correctly
+        console.log("Response received from webhook:", response);
         methods.reset();
         return true;
       }

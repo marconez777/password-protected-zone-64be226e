@@ -106,6 +106,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
 
   const handleLoadResult = (item: HistoryItem) => {
     console.log("Loading result from history:", item.output_gerado);
+    // Make sure we're passing the result in the format the component expects
     setFormResult(item.output_gerado);
     setActiveTab('formulario');
     
@@ -128,7 +129,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
       )}
       renderItemSummary={(item) => (
         <>
-          <p className="font-medium">Palavra-chave: {item.input_original.palavraChave}</p>
+          <p className="font-medium">Palavra-chave: {item.input_original?.palavraChave || "N/A"}</p>
           <p className="text-sm text-gray-500">
             {new Date(item.data_criacao || item.created_at || '').toLocaleDateString('pt-BR')} às{' '}
             {new Date(item.data_criacao || item.created_at || '').toLocaleTimeString('pt-BR')}
