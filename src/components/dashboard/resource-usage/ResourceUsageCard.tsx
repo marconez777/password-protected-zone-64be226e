@@ -6,28 +6,27 @@ import { Usage, PlanLimit } from "@/types/usage";
 interface ResourceUsageCardProps {
   usage: Usage | null;
   planLimits: PlanLimit | null;
+  loading?: boolean;
 }
 
-export const ResourceUsageCard = ({ usage, planLimits }: ResourceUsageCardProps) => {
-  // Early return if no plan limits are available
-  if (!planLimits) {
-    return (
-      <Card className="border border-gray-200 shadow-sm mb-8">
-        <CardContent className="p-6">
-          <h2 className="text-xl font-medium mb-6">Uso de Recursos</h2>
-          <div className="text-center py-10">
-            <p className="text-gray-500">Carregando informações do plano...</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
+export const ResourceUsageCard = ({ usage, planLimits, loading = false }: ResourceUsageCardProps) => {
   return (
     <Card className="border border-gray-200 shadow-sm mb-8">
       <CardContent className="p-6">
-        <h2 className="text-xl font-medium mb-6">Uso de Recursos</h2>
-        <ResourceUsageTable usage={usage} planLimits={planLimits} />
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-medium">Uso de Recursos</h2>
+          {loading && (
+            <span className="text-xs text-gray-500 animate-pulse">
+              Atualizando...
+            </span>
+          )}
+        </div>
+        
+        <ResourceUsageTable 
+          usage={usage} 
+          planLimits={planLimits} 
+          isLoading={loading}
+        />
       </CardContent>
     </Card>
   );

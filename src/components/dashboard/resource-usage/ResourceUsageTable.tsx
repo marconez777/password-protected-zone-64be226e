@@ -6,10 +6,17 @@ import { Usage, PlanLimit } from "@/types/usage";
 interface ResourceUsageTableProps {
   usage: Usage | null;
   planLimits: PlanLimit | null;
+  isLoading?: boolean;
 }
 
-export const ResourceUsageTable = ({ usage, planLimits }: ResourceUsageTableProps) => {
-  if (!planLimits) return null;
+export const ResourceUsageTable = ({ usage, planLimits, isLoading = false }: ResourceUsageTableProps) => {
+  if (!planLimits) {
+    return (
+      <div className="text-center p-4 text-gray-500">
+        Não foi possível carregar os limites do plano.
+      </div>
+    );
+  }
   
   // Use a default value of 0 for usage counts if usage data is null
   const safeUsage = usage || {
@@ -54,6 +61,35 @@ export const ResourceUsageTable = ({ usage, planLimits }: ResourceUsageTableProp
       limit: planLimits.metadata_generation_limit
     }
   ];
+  
+  if (isLoading) {
+    return (
+      <div className="overflow-x-auto opacity-70">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px]">Recurso</TableHead>
+              <TableHead className="w-[180px]">Utilizado</TableHead>
+              <TableHead className="w-[180px]">Limite</TableHead>
+              <TableHead>Uso</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {resources.map((resource) => (
+              <TableRow key={resource.name} className="animate-pulse">
+                <TableCell className="font-medium">{resource.name}</TableCell>
+                <TableCell className="bg-gray-200 h-6 rounded"></TableCell>
+                <TableCell className="bg-gray-200 h-6 rounded"></TableCell>
+                <TableCell className="w-[300px]">
+                  <div className="h-6 bg-gray-200 rounded w-full"></div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
   
   return (
     <div className="overflow-x-auto">

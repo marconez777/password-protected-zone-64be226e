@@ -35,6 +35,20 @@ export function useUsageData() {
         const usageData = await fetchUsageData(user.id);
         if (usageData) {
           setUsage(usageData);
+        } else {
+          // If no usage data, set default empty usage
+          setUsage({
+            id: '',
+            user_id: user.id,
+            keyword_count: 0,
+            market_research_count: 0,
+            search_funnel_count: 0,
+            seo_text_count: 0,
+            topic_research_count: 0,
+            metadata_generation_count: 0,
+            created_at: '',
+            updated_at: ''
+          });
         }
 
         // Load plan limits
@@ -50,6 +64,26 @@ export function useUsageData() {
         const defaultPlanLimits = await fetchPlanLimits('solo');
         if (defaultPlanLimits) {
           setPlanLimits(defaultPlanLimits);
+          
+          // Também precisamos carregar os dados de uso, mesmo sem assinatura
+          const usageData = await fetchUsageData(user.id);
+          if (usageData) {
+            setUsage(usageData);
+          } else {
+            // If no usage data, set default empty usage
+            setUsage({
+              id: '',
+              user_id: user.id,
+              keyword_count: 0,
+              market_research_count: 0,
+              search_funnel_count: 0,
+              seo_text_count: 0,
+              topic_research_count: 0,
+              metadata_generation_count: 0,
+              created_at: '',
+              updated_at: ''
+            });
+          }
         }
       }
     } catch (err) {

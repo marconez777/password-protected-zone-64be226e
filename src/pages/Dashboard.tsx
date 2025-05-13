@@ -41,7 +41,7 @@ const Dashboard = () => {
     return () => clearInterval(intervalId);
   }, [session, navigate, reload]);
 
-  if (!user || loading) {
+  if (!user) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -59,10 +59,11 @@ const Dashboard = () => {
           variant="outline" 
           size="sm"
           onClick={() => reload()}
+          disabled={loading}
           className="flex items-center gap-2"
         >
-          <RefreshCw className="h-4 w-4" />
-          Atualizar dados
+          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          {loading ? 'Atualizando...' : 'Atualizar dados'}
         </Button>
       </div>
       
@@ -73,7 +74,8 @@ const Dashboard = () => {
       
       <ResourceUsageCard 
         usage={usage} 
-        planLimits={planLimits} 
+        planLimits={planLimits}
+        loading={loading}
       />
       
       <FeatureCards />
