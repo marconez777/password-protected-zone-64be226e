@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,7 +11,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { FormattedMarkdownContent } from './FormattedMarkdownContent';
 import { AnalysisSection } from './AnalysisSection';
 
-export function MarketTargetHistory() {
+interface MarketTargetHistoryProps {
+  setActiveTab: Dispatch<SetStateAction<string>>;
+  setFormResult: Dispatch<SetStateAction<any>>;
+}
+
+export function MarketTargetHistory({ setActiveTab, setFormResult }: MarketTargetHistoryProps) {
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
@@ -73,6 +78,17 @@ export function MarketTargetHistory() {
         description: "Não foi possível excluir o item do histórico.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleViewItem = (item: any) => {
+    setSelectedItem(item);
+  };
+
+  const handleSelectItemForForm = (item: any) => {
+    if (item.output_gerado) {
+      setFormResult(item.output_gerado);
+      setActiveTab('formulario');
     }
   };
   
@@ -171,7 +187,7 @@ export function MarketTargetHistory() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => setSelectedItem(item)}
+                      onClick={() => handleViewItem(item)}
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       Ver
