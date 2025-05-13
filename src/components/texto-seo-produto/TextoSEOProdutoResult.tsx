@@ -38,8 +38,72 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
     return null;
   }
 
+  // Função para formatar texto com negrito
+  const formatBoldText = (text: string) => {
+    if (!text) return null;
+    
+    // Substitui **texto** por <strong>texto</strong>
+    return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index} className="font-bold">{part.slice(2, -2)}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+  
+  // Função para converter texto em lista quando tem linhas com "- "
+  const formatList = (text: string) => {
+    if (!text) return null;
+    
+    const lines = text.split('\n');
+    const result: JSX.Element[] = [];
+    let inList = false;
+    let listItems: string[] = [];
+    
+    lines.forEach((line, index) => {
+      if (line.trim().startsWith('- ')) {
+        // Se é um item de lista
+        inList = true;
+        listItems.push(line.trim().substring(2));
+      } else {
+        // Se não é item de lista, mas tinha uma lista antes
+        if (inList) {
+          result.push(
+            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
+              {listItems.map((item, i) => (
+                <li key={i} className="mb-1">{formatBoldText(item)}</li>
+              ))}
+            </ul>
+          );
+          inList = false;
+          listItems = [];
+        }
+        
+        // Adiciona linha normal
+        if (line.trim()) {
+          result.push(<p key={index} className="mb-2">{formatBoldText(line)}</p>);
+        } else {
+          result.push(<div key={index} className="h-2" />);
+        }
+      }
+    });
+    
+    // Se terminar com lista
+    if (inList) {
+      result.push(
+        <ul key="final-list" className="list-disc pl-5 my-2">
+          {listItems.map((item, i) => (
+            <li key={i} className="mb-1">{formatBoldText(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+    
+    return result;
+  };
+
   return (
-    <Card>
+    <Card className="shadow-lg">
       <CardContent className="p-4">
         <Tabs defaultValue="texto" value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="mb-4">
@@ -51,11 +115,11 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
             <ScrollArea className="max-h-[400px]">
               <div className="space-y-4">
                 {result.titulo && (
-                  <h1 className="text-2xl font-bold text-gray-800">{result.titulo}</h1>
+                  <h1 className="text-2xl font-bold text-mkranker-purple">{result.titulo}</h1>
                 )}
                 {result.texto && (
                   <div className="whitespace-pre-wrap">
-                    {result.texto}
+                    {formatList(result.texto)}
                   </div>
                 )}
               </div>
@@ -66,15 +130,15 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
             <ScrollArea className="max-h-[400px]">
               <div className="space-y-4">
                 {result.h1 && (
-                  <div>
-                    <p className="font-medium text-gray-500">H1:</p>
+                  <div className="bg-accent rounded-lg p-3">
+                    <p className="font-medium text-mkranker-purple">H1:</p>
                     <p className="pl-4 font-semibold">{result.h1}</p>
                   </div>
                 )}
                 
                 {result.h2s && result.h2s.length > 0 && (
-                  <div>
-                    <p className="font-medium text-gray-500">H2:</p>
+                  <div className="bg-accent rounded-lg p-3">
+                    <p className="font-medium text-mkranker-purple">H2:</p>
                     <ul className="list-disc pl-8">
                       {result.h2s.map((h2, index) => (
                         <li key={index} className="font-semibold">{h2}</li>
@@ -84,8 +148,8 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
                 )}
                 
                 {result.meta_description && (
-                  <div>
-                    <p className="font-medium text-gray-500">Meta Description:</p>
+                  <div className="bg-accent rounded-lg p-3">
+                    <p className="font-medium text-mkranker-purple">Meta Description:</p>
                     <p className="pl-4">{result.meta_description}</p>
                   </div>
                 )}
