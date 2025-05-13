@@ -8,6 +8,9 @@ import { Usage } from '@/types/usage';
  * @returns The usage data or null if not found
  */
 export async function fetchUsageData(userId: string): Promise<Usage | null> {
+  // Add query parameter to avoid browser caching
+  const timestamp = new Date().getTime();
+  
   const { data: usageData, error: usageError } = await supabase
     .from("user_usage")
     .select("*")

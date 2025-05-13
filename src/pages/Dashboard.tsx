@@ -1,8 +1,9 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUsageData } from "@/hooks/useUsageData";
+import { useToast } from "@/hooks/use-toast";
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SubscriptionCard } from "@/components/dashboard/SubscriptionCard";
@@ -14,14 +15,39 @@ import { RefreshCw } from "lucide-react";
 const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const { 
     subscription, 
     usage, 
     planLimits, 
-    loading,
+    loading: dataLoading,
     reload,
     error
   } = useUsageData();
+
+  // Combined loading state for better UX
+  const loading = dataLoading || isRefreshing;
+
+  const handleManualRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await reload();
+      toast({
+        title: "Dados atualizados",
+        description: "Os dados de uso foram atualizados com sucesso.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao atualizar",
+        description: "Não foi possível atualizar os dados de uso.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     // Se não autenticado, redirecionar para login
@@ -33,10 +59,10 @@ const Dashboard = () => {
     // Recarregar dados quando a página do dashboard é mostrada
     reload();
     
-    // Configurar recarregamento periódico dos dados de uso (a cada 30 segundos)
+    // Configurar recarregamento periódico dos dados de uso (a cada 15 segundos)
     const intervalId = setInterval(() => {
       reload();
-    }, 30000);
+    }, 15000);
     
     return () => clearInterval(intervalId);
   }, [session, navigate, reload]);
@@ -58,7 +84,7 @@ const Dashboard = () => {
         <Button 
           variant="outline" 
           size="sm"
-          onClick={() => reload()}
+          onClick={handleManualRefresh}
           disabled={loading}
           className="flex items-center gap-2"
         >
