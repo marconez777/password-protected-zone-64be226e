@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ResourceHistoryDisplay } from '@/components/shared/ResourceHistoryDisplay';
 import { TextoSEOBlogResult } from './TextoSEOBlogResult';
 import { formatMarkdownContent } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface HistoryItem {
   id: string;
@@ -175,6 +176,3 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
     />
   );
 }
-
-// Import Button component
-import { Button } from '@/components/ui/button';

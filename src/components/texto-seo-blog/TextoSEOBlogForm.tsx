@@ -30,6 +30,11 @@ export function TextoSEOBlogForm() {
       
       const response = await submitToWebhook(values);
       if (response) {
+        // For responses from n8n that contain an "output" field
+        if (response && typeof response.output === 'string') {
+          console.log("Resposta formatada do webhook recebida:", response);
+        }
+        
         methods.reset();
         return true;
       }
@@ -39,6 +44,9 @@ export function TextoSEOBlogForm() {
       return false;
     }
   };
+
+  // Make sure the result is passed to TextoSEOBlogResult
+  const resultComponent = result ? <TextoSEOBlogResult result={result} /> : null;
 
   return (
     <div>
@@ -55,7 +63,7 @@ export function TextoSEOBlogForm() {
               title="Texto SEO para Blog"
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado para blog"
               onSubmit={handleFormSubmit}
-              resultComponent={result && <TextoSEOBlogResult result={result} />}
+              resultComponent={resultComponent}
             >
               <TextoSEOBlogFormInputs />
             </ResourceForm>

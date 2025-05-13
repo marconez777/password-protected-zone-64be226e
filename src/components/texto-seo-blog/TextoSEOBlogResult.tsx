@@ -8,7 +8,6 @@ import { formatMarkdownContent } from "@/lib/utils";
 
 type SEOResult = {
   titulo?: string;
-  texto?: string;
   h1?: string;
   h2s?: string[];
   meta_description?: string;
@@ -17,7 +16,8 @@ type SEOResult = {
     tema?: string;
     palavraChave?: string;
   };
-};
+  output?: string; // Add this field to handle the n8n response format
+}
 
 export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
   const [activeTab, setActiveTab] = useState<string>("texto");
@@ -38,8 +38,11 @@ export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
     );
   }
 
+  // Para respostas do formato n8n que retornam um campo "output" com todo o conteúdo
+  const texto = result.output || result.texto;
+  
   // Se não tiver conteúdo para mostrar
-  if (!result.texto && !result.titulo && !result.h1) {
+  if (!texto && !result.titulo && !result.h1) {
     return null;
   }
 
@@ -51,48 +54,52 @@ export function TextoSEOBlogResult({ result }: { result: SEOResult | null }) {
       <Tabs defaultValue="texto" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="texto">Texto Completo</TabsTrigger>
-          <TabsTrigger value="estrutura">Estrutura SEO</TabsTrigger>
+          {(result.h1 || result.h2s || result.meta_description) && (
+            <TabsTrigger value="estrutura">Estrutura SEO</TabsTrigger>
+          )}
         </TabsList>
         
         <TabsContent value="texto">
           {result.titulo && (
             <h1 className="text-2xl font-bold text-gray-800 mb-4">{result.titulo}</h1>
           )}
-          {result.texto && (
+          {texto && (
             <div className="text-gray-700">
-              {formatMarkdownContent(result.texto)}
+              {formatMarkdownContent(texto)}
             </div>
           )}
         </TabsContent>
         
-        <TabsContent value="estrutura">
-          <div className="space-y-4">
-            {result.h1 && (
-              <div>
-                <p className="font-medium text-gray-500">H1:</p>
-                <p className="pl-4 font-semibold">{result.h1}</p>
-              </div>
-            )}
-            
-            {result.h2s && result.h2s.length > 0 && (
-              <div>
-                <p className="font-medium text-gray-500">H2:</p>
-                <ul className="list-disc pl-8">
-                  {result.h2s.map((h2, index) => (
-                    <li key={index} className="font-semibold">{h2}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {result.meta_description && (
-              <div>
-                <p className="font-medium text-gray-500">Meta Description:</p>
-                <p className="pl-4">{result.meta_description}</p>
-              </div>
-            )}
-          </div>
-        </TabsContent>
+        {(result.h1 || result.h2s || result.meta_description) && (
+          <TabsContent value="estrutura">
+            <div className="space-y-4">
+              {result.h1 && (
+                <div>
+                  <p className="font-medium text-gray-500">H1:</p>
+                  <p className="pl-4 font-semibold">{result.h1}</p>
+                </div>
+              )}
+              
+              {result.h2s && result.h2s.length > 0 && (
+                <div>
+                  <p className="font-medium text-gray-500">H2:</p>
+                  <ul className="list-disc pl-8">
+                    {result.h2s.map((h2, index) => (
+                      <li key={index} className="font-semibold">{h2}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {result.meta_description && (
+                <div>
+                  <p className="font-medium text-gray-500">Meta Description:</p>
+                  <p className="pl-4">{result.meta_description}</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        )}
       </Tabs>
     </ResourceResultDisplay>
   );
