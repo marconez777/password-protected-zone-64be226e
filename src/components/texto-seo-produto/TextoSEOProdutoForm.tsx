@@ -45,7 +45,7 @@ export function TextoSEOProdutoForm() {
   return (
     <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6">
+        <TabsList className="mb-6 grid w-full grid-cols-2 max-w-[400px]">
           <TabsTrigger value="formulario">Formulário</TabsTrigger>
           <TabsTrigger value="historico">Histórico</TabsTrigger>
         </TabsList>
@@ -54,7 +54,7 @@ export function TextoSEOProdutoForm() {
           <FormProvider {...methods}>
             <ResourceForm
               resourceType="texto_seo_produto"
-              title="Texto SEO para Produto"
+              title=""
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado para produto"
               onSubmit={handleFormSubmit}
               resultComponent={<TextoSEOProdutoResult result={result} />}
