@@ -6,12 +6,12 @@ import { useFormContext } from "react-hook-form";
 import { MarketTargetFormData } from "./MarketTargetSchema";
 
 export function MarketTargetFormInputs() {
-  const form = useFormContext<MarketTargetFormData>();
+  const { control } = useFormContext<MarketTargetFormData>();
 
   return (
     <div className="space-y-6">
       <FormField
-        control={form.control}
+        control={control}
         name="nicho"
         render={({ field }) => (
           <FormItem>
@@ -31,7 +31,7 @@ export function MarketTargetFormInputs() {
       />
 
       <FormField
-        control={form.control}
+        control={control}
         name="servico"
         render={({ field }) => (
           <FormItem>
@@ -51,7 +51,7 @@ export function MarketTargetFormInputs() {
       />
 
       <FormField
-        control={form.control}
+        control={control}
         name="segmentos"
         render={({ field }) => (
           <FormItem>
@@ -71,7 +71,7 @@ export function MarketTargetFormInputs() {
       />
 
       <FormField
-        control={form.control}
+        control={control}
         name="problema"
         render={({ field }) => (
           <FormItem>

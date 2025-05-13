@@ -7,16 +7,15 @@ import { MarketTargetFormInputs } from './MarketTargetFormInputs';
 import { MarketTargetResult } from './MarketTargetResult';
 import { MarketTargetHistory } from './MarketTargetHistory';
 import { WEBHOOK_URL, MarketTargetFormData } from './MarketTargetSchema';
-import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
+import { useForm, FormProvider } from 'react-hook-form';
 
 export function MarketTargetForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
   const { submitToWebhook, result, setResult, isLoading: isWebhookLoading } = useWebhookSubmission('market_target', WEBHOOK_URL);
-  const form = useForm<MarketTargetFormData>();
+  const methods = useForm<MarketTargetFormData>();
   
   const handleFormSubmit = async () => {
-    const values = form.getValues();
+    const values = methods.getValues();
     
     // O webhook será configurado posteriormente
     if (!WEBHOOK_URL) {
@@ -29,7 +28,7 @@ export function MarketTargetForm() {
     const response = await submitToWebhook(values);
     if (response) {
       // Reset the form after successful submission
-      form.reset();
+      methods.reset();
       return true;
     }
     return false;
@@ -44,17 +43,17 @@ export function MarketTargetForm() {
         </TabsList>
         
         <TabsContent value="formulario">
-          <ResourceForm
-            resourceType="market_target"
-            title="Mercado e Público Alvo"
-            description="Preencha as informações abaixo e clique em gerar"
-            onSubmit={handleFormSubmit}
-            resultComponent={<MarketTargetResult result={result} />}
-          >
-            <Form {...form}>
+          <FormProvider {...methods}>
+            <ResourceForm
+              resourceType="market_target"
+              title="Mercado e Público Alvo"
+              description="Preencha as informações abaixo e clique em gerar"
+              onSubmit={handleFormSubmit}
+              resultComponent={<MarketTargetResult result={result} />}
+            >
               <MarketTargetFormInputs />
-            </Form>
-          </ResourceForm>
+            </ResourceForm>
+          </FormProvider>
         </TabsContent>
         
         <TabsContent value="historico">
