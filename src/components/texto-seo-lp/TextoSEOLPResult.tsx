@@ -1,6 +1,5 @@
 
 import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
-import { useState } from "react";
 
 type SEOResult = {
   titulo?: string;
@@ -10,6 +9,10 @@ type SEOResult = {
   meta_description?: string;
   message?: string;
   output?: string; // Added to handle n8n webhook output format
+  input_original?: {
+    tema?: string;
+    palavraChave?: string;
+  };
 };
 
 export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
@@ -19,7 +22,9 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
 
   // Mostra mensagem de erro ou aviso, se existir
   if (result.message) {
-    return <ResourceResultDisplay title="" message={result.message} />;
+    return <ResourceResultDisplay title="" message={result.message}>
+      <div></div>
+    </ResourceResultDisplay>;
   }
 
   // Processa o resultado do webhook se vier no formato output
