@@ -9,6 +9,7 @@ const PautasBlog = () => {
   return (
     <DashboardLayout 
       title="Pautas para Blog" 
+      subtitle="Gere ideias de conteúdo para seu blog"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
       <PautasBlogForm />
