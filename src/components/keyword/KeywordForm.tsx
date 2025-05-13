@@ -4,35 +4,42 @@ import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useWebhookSubmission } from '@/hooks/useWebhookSubmission';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { KeywordResult } from './KeywordResult';
 import { KeywordHistory } from './KeywordHistory';
-import { ResourceForm } from '@/components/ResourceForm';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Loader2 } from 'lucide-react';
 
 // Define schema for form
 const formSchema = z.object({
   palavras_chave: z.string().min(1, "Por favor, informe pelo menos uma palavra-chave"),
+  notes: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/palavra-chave';
+
 export const KeywordForm = () => {
   const [activeTab, setActiveTab] = useState("formulario");
-  const { submitToWebhook, isLoading, result, setResult } = useWebhookSubmission('keyword', 'https://mkseo77.app.n8n.cloud/webhook/palavra-chave');
+  const { submitToWebhook, isLoading, result, setResult } = useWebhookSubmission('keyword', WEBHOOK_URL);
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       palavras_chave: "",
+      notes: "",
     }
   });
 
   const onSubmit = async (values: FormValues) => {
     const payload = {
       palavras_chave: values.palavras_chave,
+      notes: values.notes,
     };
     
     const result = await submitToWebhook(payload);
@@ -49,25 +56,45 @@ export const KeywordForm = () => {
         
         <TabsContent value="formulario">
           <Card>
-            <div className="p-6">
+            <CardContent className="pt-6">
               <p className="text-gray-600 mb-6">
-                Digite uma palavra-chave para gerar sugestões relacionadas
+                Preencha as informações abaixo e clique em gerar
               </p>
               
               <FormProvider {...form}>
-                <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
                     control={form.control}
                     name="palavras_chave"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base">
+                        <FormLabel className="text-base font-medium">
                           Palavra-chave em Foco <span className="text-red-500">*</span>
                         </FormLabel>
                         <FormControl>
-                          <input 
+                          <Input 
                             placeholder="Digite uma palavra-chave" 
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+                            className="mt-1"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-medium">
+                          Anotações
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Adicione anotações sobre esta palavra-chave" 
+                            className="mt-1"
                             {...field} 
                           />
                         </FormControl>
@@ -78,17 +105,17 @@ export const KeywordForm = () => {
 
                   <div className="flex justify-end">
                     <Button 
-                      type="button" 
+                      type="submit" 
                       disabled={isLoading} 
                       className="bg-mkranker-purple hover:bg-mkranker-dark-purple"
-                      onClick={() => form.handleSubmit(onSubmit)()}
                     >
+                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       {isLoading ? 'Processando...' : 'Enviar'}
                     </Button>
                   </div>
                 </form>
               </FormProvider>
-            </div>
+            </CardContent>
           </Card>
           
           {result && (
