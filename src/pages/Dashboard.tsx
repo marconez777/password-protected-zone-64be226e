@@ -16,7 +16,8 @@ const Dashboard = () => {
     subscription, 
     usage, 
     planLimits, 
-    loading 
+    loading,
+    reload 
   } = useUsageData();
 
   useEffect(() => {
@@ -25,7 +26,10 @@ const Dashboard = () => {
       navigate("/login");
       return;
     }
-  }, [session, navigate]);
+    
+    // Recarregar dados quando a página do dashboard é mostrada
+    reload();
+  }, [session, navigate, reload]);
 
   if (!user || loading) {
     return (

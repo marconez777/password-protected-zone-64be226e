@@ -8,9 +8,7 @@ import { MetaDadosHistory } from './MetaDadosHistory';
 import { WEBHOOK_URL, MetaDadosFormData, MetaDadosFormSchema } from './MetaDadosSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { ResourceForm } from '@/components/ResourceForm';
 
 export function MetaDadosForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
@@ -26,21 +24,12 @@ export function MetaDadosForm() {
     }
   });
   
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    
+  const handleFormSubmit = async () => {
     if (methods.formState.isValid) {
       const values = methods.getValues();
       console.log("Enviando dados para webhook:", values);
       
-      if (!WEBHOOK_URL) {
-        console.log("Webhook URL não configurada ainda", values);
-        setResult({ message: "Webhook ainda não configurado. Dados capturados com sucesso!" });
-        return true;
-      }
-      
       const response = await submitToWebhook(values);
-      console.log("Resposta do webhook:", response);
       if (response) {
         methods.reset();
         return true;
@@ -61,32 +50,17 @@ export function MetaDadosForm() {
         </TabsList>
         
         <TabsContent value="formulario">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600 mb-6">
-                Preencha as informações abaixo para gerar meta dados otimizados
-              </p>
-              
-              <FormProvider {...methods}>
-                <form onSubmit={handleFormSubmit} className="space-y-6">
-                  <MetaDadosFormInputs />
-                  
-                  <div className="flex justify-end">
-                    <Button type="submit" disabled={isLoading} className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      {isLoading ? 'Processando...' : 'Enviar'}
-                    </Button>
-                  </div>
-                </form>
-              </FormProvider>
-            </CardContent>
-          </Card>
-          
-          {result && (
-            <div className="mt-6">
-              <MetaDadosResult result={result} />
-            </div>
-          )}
+          <FormProvider {...methods}>
+            <ResourceForm
+              resourceType="metadata_generation"
+              title="Geração de Meta Dados"
+              description="Preencha as informações abaixo para gerar meta dados otimizados"
+              onSubmit={handleFormSubmit}
+              resultComponent={<MetaDadosResult result={result} />}
+            >
+              <MetaDadosFormInputs />
+            </ResourceForm>
+          </FormProvider>
         </TabsContent>
         
         <TabsContent value="historico">

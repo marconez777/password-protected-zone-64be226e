@@ -6,6 +6,7 @@ import { useResourceLimits } from '@/hooks/useResourceLimits';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceFormProps } from '@/types/resource';
+import { useUsageData } from '@/hooks/useUsageData';
 
 /**
  * A reusable component that wraps forms for resources that have usage limits
@@ -21,6 +22,7 @@ export function ResourceForm({
   const { checkAndIncrementResource, isChecking } = useResourceLimits();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { reload: reloadUsageData } = useUsageData();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +41,9 @@ export function ResourceForm({
             title: "Sucesso!",
             description: "Seu conteúdo foi gerado com sucesso.",
           });
+          
+          // Reload usage data to update the dashboard counts
+          reloadUsageData();
         }
       }
     } catch (error) {

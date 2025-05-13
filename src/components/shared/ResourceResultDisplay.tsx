@@ -2,36 +2,43 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ResourceResultDisplayProps {
   title: string;
-  children: React.ReactNode;
   message?: string;
+  children: React.ReactNode;
 }
 
-export function ResourceResultDisplay({ title, children, message }: ResourceResultDisplayProps) {
+export function ResourceResultDisplay({
+  title,
+  message,
+  children
+}: ResourceResultDisplayProps) {
   if (message) {
     return (
-      <Card className="shadow-lg w-full">
+      <Card>
         <CardContent className="pt-6">
-          <p className="text-gray-700">{message}</p>
+          <h2 className="text-xl font-semibold mb-4">{title}</h2>
+          <Alert>
+            <AlertDescription>
+              {message}
+            </AlertDescription>
+          </Alert>
         </CardContent>
       </Card>
     );
   }
-
+  
   return (
-    <Card className="shadow-lg w-full bg-white">
+    <Card>
       <CardContent className="pt-6">
-        <h3 className="text-2xl font-bold mb-6 text-mkranker-purple border-b pb-2">{title}</h3>
-        
-        <div className="h-full overflow-visible">
-          <ScrollArea className="h-[calc(100vh-300px)] pr-4">
-            <div className="pb-6">
-              {children}
-            </div>
-          </ScrollArea>
-        </div>
+        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+        <ScrollArea className="h-full max-h-[600px] pr-4 overflow-auto">
+          <div className="space-y-4">
+            {children}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

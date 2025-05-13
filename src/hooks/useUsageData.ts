@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -51,7 +51,7 @@ export function useUsageData() {
   const [loading, setLoading] = useState(true);
 
   // Function to load all usage data
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
@@ -102,14 +102,14 @@ export function useUsageData() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   // Load data on component mount and when user changes
   useEffect(() => {
     if (user) {
       loadData();
     }
-  }, [user]);
+  }, [user, loadData]);
 
   return {
     subscription,

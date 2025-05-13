@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceType } from '@/hooks/useResourceLimits';
+import { useUsageData } from '@/hooks/useUsageData';
 
 /**
  * Hook for handling webhook submissions with integrated database saving
@@ -16,6 +17,7 @@ export function useWebhookSubmission(
   const [result, setResult] = useState<any>(null);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { reload: reloadUsageData } = useUsageData();
 
   const submitToWebhook = async (formData: any): Promise<any> => {
     if (!user) {
@@ -63,6 +65,9 @@ export function useWebhookSubmission(
       // Save to database
       try {
         await saveResultToDatabase(resourceType, formData, resultData);
+        
+        // Reload usage data to update the dashboard counts
+        reloadUsageData();
       } catch (error) {
         console.error('Error saving result to database:', error);
         // Even if saving fails, we still have the result displayed
