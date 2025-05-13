@@ -46,8 +46,22 @@ export const ResourceUsageCard = ({ usage, planLimits }: ResourceUsageCardProps)
   // Formatar limite com base no plano
   const formatLimit = (limit: number | null) => {
     if (limit === null) return "Ilimitado";
-    return limit.toString();
+    return String(limit); // Use String() instead of toString() to safely convert
   };
+
+  // Early return if no plan limits are available
+  if (!planLimits) {
+    return (
+      <Card className="border border-gray-200 shadow-sm mb-8">
+        <CardContent className="p-6">
+          <h2 className="text-xl font-medium mb-6">Uso de Recursos</h2>
+          <div className="text-center py-10">
+            <p className="text-gray-500">Carregando informações do plano...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="border border-gray-200 shadow-sm mb-8">
