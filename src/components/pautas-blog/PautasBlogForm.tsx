@@ -38,6 +38,9 @@ export function PautasBlogForm() {
     }
   };
 
+  // Debug log to see the result structure
+  console.log("Current result state:", result);
+
   return (
     <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -53,7 +56,7 @@ export function PautasBlogForm() {
               title="Ideias de Pautas para Blog"
               description="Digite uma palavra-chave para gerar ideias de pautas para seu blog"
               onSubmit={handleFormSubmit}
-              resultComponent={result && <PautasBlogResult result={result} />}
+              resultComponent={<PautasBlogResult result={result} />}
             >
               <PautasBlogFormInputs />
             </ResourceForm>

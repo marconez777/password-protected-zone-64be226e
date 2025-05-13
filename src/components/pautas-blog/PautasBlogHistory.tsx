@@ -47,6 +47,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
         }
 
         if (data) {
+          console.log("History data loaded:", data);
           setHistory(data as HistoryItem[]);
         }
       } catch (error) {
@@ -65,6 +66,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
   }, [user, supabase, toast]);
 
   const handleViewItem = (item: HistoryItem) => {
+    console.log("Viewing history item:", item);
     setSelectedItem(item);
   };
 
@@ -103,6 +105,7 @@ export function PautasBlogHistory({ setActiveTab, setFormResult }: PautasBlogHis
   };
 
   const handleLoadResult = (item: HistoryItem) => {
+    console.log("Loading result from history:", item.output_gerado);
     setFormResult(item.output_gerado);
     setActiveTab('formulario');
     

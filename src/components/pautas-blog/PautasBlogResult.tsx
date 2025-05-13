@@ -9,6 +9,8 @@ type PautasResult = {
 };
 
 export function PautasBlogResult({ result }: { result: PautasResult | null }) {
+  console.log("PautasBlogResult received:", result);
+  
   if (!result) {
     return null;
   }
@@ -27,7 +29,13 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
 
   // Se não tiver pautas para mostrar
   if (!result.pautas || result.pautas.length === 0) {
-    return null;
+    return (
+      <ResourceResultDisplay title="Ideias de Pautas Geradas">
+        <div className="bg-white rounded-lg p-4">
+          <p className="text-gray-700">Nenhuma pauta foi gerada. Tente novamente com outra palavra-chave.</p>
+        </div>
+      </ResourceResultDisplay>
+    );
   }
 
   return (
