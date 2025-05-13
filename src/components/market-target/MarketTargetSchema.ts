@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 // URL do webhook de teste para Mercado e Público Alvo
-export const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook-test/pesquisa-mercado';
+export const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/pesquisa-mercado';
 
 // Esquema de validação do formulário com Zod
 export const MarketTargetFormSchema = z.object({
