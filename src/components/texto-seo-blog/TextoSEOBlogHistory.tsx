@@ -5,8 +5,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceHistoryDisplay } from '@/components/shared/ResourceHistoryDisplay';
 import { TextoSEOBlogResult } from './TextoSEOBlogResult';
-import { formatMarkdownContent } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 interface HistoryItem {
   id: string;
@@ -152,12 +150,6 @@ export function TextoSEOBlogHistory({ setActiveTab, setFormResult }: TextoSEOBlo
           </div>
           
           <TextoSEOBlogResult result={item.output_gerado} />
-          
-          <div className="flex justify-end">
-            <Button onClick={() => handleLoadResult(item)} variant="default" className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
-              Usar este resultado
-            </Button>
-          </div>
         </div>
       )}
       renderItemSummary={(item) => (
