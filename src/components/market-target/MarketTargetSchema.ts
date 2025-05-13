@@ -1,5 +1,5 @@
 
-export const WEBHOOK_URL = ""; // Será configurado posteriormente
+export const WEBHOOK_URL = "https://mkseo77.app.n8n.cloud/webhook-test/pesquisa-mercado";
 
 export interface MarketTargetFormData {
   nicho: string;
