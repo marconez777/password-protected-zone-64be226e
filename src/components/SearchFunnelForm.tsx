@@ -6,11 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SearchFunnelFormInputs } from './search-funnel/SearchFunnelFormInputs';
 import { SearchFunnelResult } from './search-funnel/SearchFunnelResult';
 import { SearchFunnelHistory } from './search-funnel/SearchFunnelHistory';
-import { WEBHOOK_URL } from './search-funnel/SearchFunnelSchema';
+import { SearchFunnelFormSchema, WEBHOOK_URL } from './search-funnel/SearchFunnelSchema';
 
 export function SearchFunnelForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
-  const { submitToWebhook, result, setResult, isLoading: isWebhookLoading } = useWebhookSubmission('search_funnel', WEBHOOK_URL);
+  const { submitToWebhook, result, setResult, isLoading } = useWebhookSubmission('search_funnel', WEBHOOK_URL);
   
   const handleFormSubmit = async () => {
     // Get the form element
