@@ -1,5 +1,6 @@
 
 import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
+import { formatMarkdownContent } from "@/lib/utils";
 
 type SEOResult = {
   titulo?: string;
@@ -41,85 +42,6 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
     return null;
   }
 
-  // Função para formatar texto com negrito
-  const formatBoldText = (text: string) => {
-    if (!text) return null;
-    
-    // Substitui **texto** por <strong>texto</strong>
-    return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={index} className="font-bold">{part.slice(2, -2)}</strong>;
-      }
-      return <span key={index}>{part}</span>;
-    });
-  };
-  
-  // Função para converter texto em lista quando tem linhas com "- "
-  const formatList = (text: string) => {
-    if (!text) return null;
-    
-    const lines = text.split('\n');
-    const result: JSX.Element[] = [];
-    let inList = false;
-    let listItems: string[] = [];
-    
-    lines.forEach((line, index) => {
-      if (line.trim().startsWith('- ')) {
-        // Se é um item de lista
-        inList = true;
-        listItems.push(line.trim().substring(2));
-      } else if (line.trim().startsWith('### ')) {
-        // Se é um título H3
-        if (inList) {
-          result.push(
-            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
-              {listItems.map((item, i) => (
-                <li key={i} className="mb-1">{formatBoldText(item)}</li>
-              ))}
-            </ul>
-          );
-          inList = false;
-          listItems = [];
-        }
-        
-        result.push(<h3 key={index} className="text-xl font-semibold mt-4 mb-2">{formatBoldText(line.substring(4))}</h3>);
-      } else {
-        // Se não é item de lista, mas tinha uma lista antes
-        if (inList) {
-          result.push(
-            <ul key={`list-${index}`} className="list-disc pl-5 my-2">
-              {listItems.map((item, i) => (
-                <li key={i} className="mb-1">{formatBoldText(item)}</li>
-              ))}
-            </ul>
-          );
-          inList = false;
-          listItems = [];
-        }
-        
-        // Adiciona linha normal
-        if (line.trim()) {
-          result.push(<p key={index} className="mb-2">{formatBoldText(line)}</p>);
-        } else {
-          result.push(<div key={index} className="h-2" />);
-        }
-      }
-    });
-    
-    // Se terminar com lista
-    if (inList) {
-      result.push(
-        <ul key="final-list" className="list-disc pl-5 my-2">
-          {listItems.map((item, i) => (
-            <li key={i} className="mb-1">{formatBoldText(item)}</li>
-          ))}
-        </ul>
-      );
-    }
-    
-    return result;
-  };
-
   // Título com base no nome do produto ou no título do resultado
   const pageTitle = result.input_original?.nomeProduto || processedResult.titulo || "Texto SEO para Produto";
 
@@ -131,8 +53,8 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
         )}
         
         {processedResult.texto && (
-          <div className="whitespace-pre-wrap text-gray-700">
-            {formatList(processedResult.texto)}
+          <div className="text-gray-700">
+            {formatMarkdownContent(processedResult.texto)}
           </div>
         )}
 
