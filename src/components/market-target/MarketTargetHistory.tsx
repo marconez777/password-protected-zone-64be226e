@@ -8,6 +8,8 @@ import { Eye, Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { FormattedMarkdownContent } from './FormattedMarkdownContent';
+import { AnalysisSection } from './AnalysisSection';
 
 export function MarketTargetHistory() {
   const [history, setHistory] = useState<any[]>([]);
@@ -104,7 +106,7 @@ export function MarketTargetHistory() {
             ← Voltar para o histórico
           </Button>
           
-          <Card>
+          <Card className="shadow-lg w-full">
             <CardContent className="pt-6">
               <div className="mb-6">
                 <h3 className="text-lg font-medium">Consulta de {new Date(selectedItem.data_criacao).toLocaleString()}</h3>
@@ -128,33 +130,18 @@ export function MarketTargetHistory() {
                 </div>
               </div>
               
-              <ScrollArea className="max-h-[500px]">
-                <div className="space-y-6">
+              <ScrollArea className="h-full overflow-visible max-h-[calc(100vh-300px)]">
+                <div className="space-y-6 pb-6">
                   {selectedItem.output_gerado?.mercado && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Análise de Mercado
-                      </h4>
-                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.mercado}</div>
-                    </div>
+                    <AnalysisSection title="Análise de Mercado" content={selectedItem.output_gerado.mercado} />
                   )}
                   
                   {selectedItem.output_gerado?.publico && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Público-Alvo
-                      </h4>
-                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.publico}</div>
-                    </div>
+                    <AnalysisSection title="Público-Alvo" content={selectedItem.output_gerado.publico} />
                   )}
                   
                   {selectedItem.output_gerado?.recomendacoes && (
-                    <div className="bg-accent rounded-lg p-4">
-                      <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
-                        Recomendações
-                      </h4>
-                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.recomendacoes}</div>
-                    </div>
+                    <AnalysisSection title="Recomendações" content={selectedItem.output_gerado.recomendacoes} />
                   )}
 
                   {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' && (
@@ -162,7 +149,7 @@ export function MarketTargetHistory() {
                       <h4 className="text-lg font-bold text-mkranker-purple mb-3 border-b border-mkranker-purple/20 pb-1">
                         Resultado Completo
                       </h4>
-                      <div className="whitespace-pre-wrap">{selectedItem.output_gerado.output}</div>
+                      <FormattedMarkdownContent content={selectedItem.output_gerado.output} />
                     </div>
                   )}
                 </div>
