@@ -117,17 +117,6 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
     }
   };
 
-  const handleLoadResult = (item: HistoryItem) => {
-    console.log("Carregando resultado do histórico:", item.output_gerado);
-    setFormResult(item.output_gerado);
-    setActiveTab('formulario');
-    
-    toast({
-      title: "Resultado carregado",
-      description: "O resultado foi carregado com sucesso."
-    });
-  };
-
   return (
     <ResourceHistoryDisplay
       loading={loading}
@@ -152,12 +141,6 @@ export function MetaDadosHistory({ setActiveTab, setFormResult }: MetaDadosHisto
           <div>
             <h3 className="text-lg font-semibold mb-2">Meta Dados Gerados</h3>
             <MetaDadosResult result={item.output_gerado} />
-          </div>
-
-          <div className="pt-4 flex justify-center">
-            <Button onClick={() => handleLoadResult(item)}>
-              Usar Este Resultado
-            </Button>
           </div>
         </div>
       )}
