@@ -111,50 +111,54 @@ export function TextoSEOProdutoResult({ result }: { result: SEOResult | null }) 
             <TabsTrigger value="estrutura">Estrutura SEO</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="texto">
-            <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-              <div className="space-y-4 pb-6">
-                {result.titulo && (
-                  <h1 className="text-2xl font-bold text-mkranker-purple">{result.titulo}</h1>
-                )}
-                {result.texto && (
-                  <div className="whitespace-pre-wrap">
-                    {formatList(result.texto)}
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
+          <TabsContent value="texto" className="h-full">
+            <div className="h-full overflow-visible">
+              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+                <div className="space-y-4 pb-6">
+                  {result.titulo && (
+                    <h1 className="text-2xl font-bold text-mkranker-purple">{result.titulo}</h1>
+                  )}
+                  {result.texto && (
+                    <div className="whitespace-pre-wrap">
+                      {formatList(result.texto)}
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </div>
           </TabsContent>
           
-          <TabsContent value="estrutura">
-            <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-              <div className="space-y-4 pb-6">
-                {result.h1 && (
-                  <div className="bg-accent rounded-lg p-3">
-                    <p className="font-medium text-mkranker-purple">H1:</p>
-                    <p className="pl-4 font-semibold">{result.h1}</p>
-                  </div>
-                )}
-                
-                {result.h2s && result.h2s.length > 0 && (
-                  <div className="bg-accent rounded-lg p-3">
-                    <p className="font-medium text-mkranker-purple">H2:</p>
-                    <ul className="list-disc pl-8">
-                      {result.h2s.map((h2, index) => (
-                        <li key={index} className="font-semibold">{h2}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                
-                {result.meta_description && (
-                  <div className="bg-accent rounded-lg p-3">
-                    <p className="font-medium text-mkranker-purple">Meta Description:</p>
-                    <p className="pl-4">{result.meta_description}</p>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
+          <TabsContent value="estrutura" className="h-full">
+            <div className="h-full overflow-visible">
+              <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+                <div className="space-y-4 pb-6">
+                  {result.h1 && (
+                    <div className="bg-accent rounded-lg p-3">
+                      <p className="font-medium text-mkranker-purple">H1:</p>
+                      <p className="pl-4 font-semibold">{result.h1}</p>
+                    </div>
+                  )}
+                  
+                  {result.h2s && result.h2s.length > 0 && (
+                    <div className="bg-accent rounded-lg p-3">
+                      <p className="font-medium text-mkranker-purple">H2:</p>
+                      <ul className="list-disc pl-8">
+                        {result.h2s.map((h2, index) => (
+                          <li key={index} className="font-semibold">{h2}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {result.meta_description && (
+                    <div className="bg-accent rounded-lg p-3">
+                      <p className="font-medium text-mkranker-purple">Meta Description:</p>
+                      <p className="pl-4">{result.meta_description}</p>
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>

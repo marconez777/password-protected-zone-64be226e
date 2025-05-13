@@ -28,11 +28,13 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
         {result.message ? (
           <p className="text-gray-700">{result.message}</p>
         ) : hasMarkdownOutput ? (
-          <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-            <div className="pb-6">
-              <MarkdownOutput output={result.output} />
-            </div>
-          </ScrollArea>
+          <div className="h-full overflow-visible">
+            <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+              <div className="pb-6">
+                <MarkdownOutput output={result.output} />
+              </div>
+            </ScrollArea>
+          </div>
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-6 grid w-full grid-cols-3">
@@ -41,40 +43,46 @@ export function MarketTargetResult({ result }: MarketTargetResultProps) {
               <TabsTrigger value="publico">Público-Alvo</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="completo">
-              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-                <div className="pb-6">
-                  <CompleteAnalysisTab 
-                    mercado={result.mercado}
-                    publico={result.publico}
-                    recomendacoes={result.recomendacoes}
-                  />
-                </div>
-              </ScrollArea>
+            <TabsContent value="completo" className="h-full">
+              <div className="h-full overflow-visible">
+                <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+                  <div className="pb-6">
+                    <CompleteAnalysisTab 
+                      mercado={result.mercado}
+                      publico={result.publico}
+                      recomendacoes={result.recomendacoes}
+                    />
+                  </div>
+                </ScrollArea>
+              </div>
             </TabsContent>
             
-            <TabsContent value="mercado">
-              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-                <div className="pb-6">
-                  {result.mercado ? (
-                    <AnalysisSection title="Análise de Mercado" content={result.mercado} />
-                  ) : (
-                    <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
-                  )}
-                </div>
-              </ScrollArea>
+            <TabsContent value="mercado" className="h-full">
+              <div className="h-full overflow-visible">
+                <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+                  <div className="pb-6">
+                    {result.mercado ? (
+                      <AnalysisSection title="Análise de Mercado" content={result.mercado} />
+                    ) : (
+                      <p className="text-muted-foreground italic">Nenhuma análise de mercado disponível</p>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
             </TabsContent>
             
-            <TabsContent value="publico">
-              <ScrollArea className="max-h-[80vh] pr-4 overflow-visible">
-                <div className="pb-6">
-                  {result.publico ? (
-                    <AnalysisSection title="Público-Alvo" content={result.publico} />
-                  ) : (
-                    <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
-                  )}
-                </div>
-              </ScrollArea>
+            <TabsContent value="publico" className="h-full">
+              <div className="h-full overflow-visible">
+                <ScrollArea className="h-[calc(100vh-300px)] pr-4">
+                  <div className="pb-6">
+                    {result.publico ? (
+                      <AnalysisSection title="Público-Alvo" content={result.publico} />
+                    ) : (
+                      <p className="text-muted-foreground italic">Nenhuma informação de público-alvo disponível</p>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
             </TabsContent>
           </Tabs>
         )}
