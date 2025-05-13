@@ -7,7 +7,7 @@ import { PlanLimit } from '@/types/usage';
  * @param planType The plan type ('solo', 'discovery', or 'escala')
  * @returns The plan limits or null if not found
  */
-export async function fetchPlanLimits(planType: string): Promise<PlanLimit | null> {
+export async function fetchPlanLimits(planType: 'solo' | 'discovery' | 'escala'): Promise<PlanLimit | null> {
   const { data: planLimitsData, error: planLimitsError } = await supabase
     .from("plan_limits")
     .select("*")
