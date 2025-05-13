@@ -6,13 +6,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MarketTargetFormInputs } from './MarketTargetFormInputs';
 import { MarketTargetResult } from './MarketTargetResult';
 import { MarketTargetHistory } from './MarketTargetHistory';
-import { WEBHOOK_URL, MarketTargetFormData } from './MarketTargetSchema';
+import { WEBHOOK_URL, MarketTargetFormData, MarketTargetFormSchema } from './MarketTargetSchema';
 import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function MarketTargetForm() {
   const [activeTab, setActiveTab] = useState<string>('formulario');
-  const { submitToWebhook, result, setResult, isLoading: isWebhookLoading } = useWebhookSubmission('market_target', WEBHOOK_URL);
-  const methods = useForm<MarketTargetFormData>();
+  const { submitToWebhook, result, setResult, isLoading } = useWebhookSubmission('market_target', WEBHOOK_URL);
+  
+  const methods = useForm<MarketTargetFormData>({
+    resolver: zodResolver(MarketTargetFormSchema),
+    defaultValues: {
+      nicho: '',
+      servico: '',
+      segmentos: '',
+      problema: ''
+    }
+  });
   
   const handleFormSubmit = async () => {
     const values = methods.getValues();
@@ -57,7 +67,7 @@ export function MarketTargetForm() {
         </TabsContent>
         
         <TabsContent value="historico">
-          <MarketTargetHistory />
+          <MarketTargetHistory setActiveTab={setActiveTab} setFormResult={setResult} />
         </TabsContent>
       </Tabs>
     </div>
