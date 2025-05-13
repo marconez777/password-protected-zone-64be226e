@@ -6,7 +6,7 @@ import { useUsageData } from "@/hooks/useUsageData";
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SubscriptionCard } from "@/components/dashboard/SubscriptionCard";
-import { ResourceUsageCard } from "@/components/dashboard/ResourceUsageCard";
+import { ResourceUsageCard } from "@/components/dashboard/resource-usage/ResourceUsageCard";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
 
 const Dashboard = () => {
