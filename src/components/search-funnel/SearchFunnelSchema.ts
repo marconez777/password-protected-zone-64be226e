@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 
-// URL do webhook de produção
+// URL do webhook específico para Funil de Busca
 export const WEBHOOK_URL = import.meta.env.VITE_SEARCH_FUNNEL_WEBHOOK_URL || 'https://mkseo77.app.n8n.cloud/webhook/funildebusca';
 
 // Esquema de validação do formulário com Zod

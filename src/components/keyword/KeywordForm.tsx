@@ -22,7 +22,8 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/palavra-chave';
+// URL do webhook específico para Palavras-chave
+const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/palavras-chave';
 
 export const KeywordForm = () => {
   const [activeTab, setActiveTab] = useState("formulario");

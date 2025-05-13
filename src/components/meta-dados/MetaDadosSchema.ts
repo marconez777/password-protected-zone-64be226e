@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 
-export const WEBHOOK_URL = "https://mkseo77.app.n8n.cloud/webhook-test/meta";
+export const WEBHOOK_URL = "https://mkseo77.app.n8n.cloud/webhook/metadados";
 
 export const MetaDadosFormSchema = z.object({
   nomeEmpresa: z.string().min(1, "Por favor, informe o nome da empresa/loja/blog"),
