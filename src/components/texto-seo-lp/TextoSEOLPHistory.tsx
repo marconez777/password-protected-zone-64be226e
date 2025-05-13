@@ -37,11 +37,19 @@ export function TextoSEOLPHistory({ setActiveTab, setFormResult }: HistoryProps)
           .select("*")
           .eq("user_id", user.id)
           .eq("tipo_recurso", "texto_seo_lp")
-          .order("created_at", { ascending: false });
+          .order("data_criacao", { ascending: false });
           
         if (error) throw error;
         
-        setHistory(data || []);
+        // Map database fields to HistoryItem interface
+        const mappedData: HistoryItem[] = (data || []).map(item => ({
+          id: item.id,
+          created_at: item.data_criacao,
+          input_original: item.input_original,
+          output_gerado: item.output_gerado
+        }));
+        
+        setHistory(mappedData);
       } catch (error) {
         console.error("Erro ao carregar histórico:", error);
         toast({

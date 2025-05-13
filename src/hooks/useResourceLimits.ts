@@ -11,7 +11,8 @@ export type ResourceType =
   | 'keyword'
   | 'seo_text'
   | 'topic_research'
-  | 'metadata_generation';
+  | 'metadata_generation'
+  | 'texto_seo_lp'; // Added this new resource type
 
 interface UseResourceLimitsReturn {
   checkAndIncrementResource: (resourceType: ResourceType) => Promise<boolean>;
