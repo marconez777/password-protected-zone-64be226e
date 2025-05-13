@@ -9,4 +9,4 @@ export const searchFunnelSchema = z.object({
 
 export type SearchFunnelFormValues = z.infer<typeof searchFunnelSchema>;
 
-export const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook/f403ed72-e710-4b5d-a2bb-5c57679857d3';
+export const WEBHOOK_URL = 'https://mkseo77.app.n8n.cloud/webhook-test/funil';
