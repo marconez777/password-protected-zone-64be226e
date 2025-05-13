@@ -61,7 +61,7 @@ export function formatFunnelContent(content: string): React.ReactNode {
     const line = lines[i];
     
     // Identifica títulos de seções (1 - Topo do Funil, etc)
-    if (line.match(/^\d+\s*-\s*.*Funil/i)) {
+    if (line.match(/^\d+\s*[-\.]\s*.*Funil/i) || line.match(/^\*\*\d+\s*[-\.]\s*.*Funil/i)) {
       // Se já temos conteúdo em uma seção atual, salva ela
       if (currentSection.title) {
         sections.push({...currentSection});

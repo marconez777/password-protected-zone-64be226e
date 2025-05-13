@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatFunnelContent } from '@/lib/markdown-formatter';
-import { MarkdownOutput } from '@/components/market-target/MarkdownOutput';
 
 interface SearchFunnelResultProps {
   result: any;
