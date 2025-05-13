@@ -12,7 +12,9 @@ const SearchFunnel = () => {
       subtitle="Gere funis de busca para seu negócio"
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
-      <SearchFunnelForm />
+      <div className="bg-white rounded-lg">
+        <SearchFunnelForm />
+      </div>
     </DashboardLayout>
   );
 };

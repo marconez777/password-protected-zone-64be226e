@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MarkdownOutput } from "@/components/market-target/MarkdownOutput";
+import { formatFunnelContent } from "@/lib/markdown-formatter";
 
 interface SearchFunnelHistoryItemViewProps {
   selectedItem: any;
@@ -49,7 +50,7 @@ export function SearchFunnelHistoryItemView({
             <div className="space-y-6 pb-6">
               {selectedItem.output_gerado?.output && typeof selectedItem.output_gerado.output === 'string' ? (
                 <div className="bg-white rounded-lg p-4">
-                  <MarkdownOutput output={selectedItem.output_gerado.output} />
+                  {formatFunnelContent(selectedItem.output_gerado.output)}
                 </div>
               ) : (
                 <div className="bg-white rounded-md p-4">
