@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -19,42 +19,63 @@ export function usePlanData() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadPlanData() {
-      if (!user) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const { data, error } = await supabase
-          .from('subscriptions')
-          .select('plan_type, is_active, current_period_end')
-          .eq('user_id', user.id)
-          .single();
-
-        if (error) {
-          console.error('Error fetching plan data:', error);
-          setError('Failed to load plan data');
-          setPlanData(null);
-        } else {
-          setPlanData(data);
-        }
-      } catch (err) {
-        console.error('Unexpected error loading plan data:', err);
-        setError('An unexpected error occurred');
-        setPlanData(null);
-      } finally {
-        setIsLoading(false);
-      }
+  const loadPlanData = useCallback(async () => {
+    if (!user) {
+      setIsLoading(false);
+      return;
     }
 
-    loadPlanData();
+    try {
+      // Limpar cache forçando nova consulta
+      setIsLoading(true);
+      
+      // Adicionar timestamp para evitar cache no Supabase
+      const timestamp = new Date().getTime();
+      
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('plan_type, is_active, current_period_end')
+        .eq('user_id', user.id)
+        .single()
+        .order('created_at', { ascending: false })
+        .then(result => {
+          console.log(`[usePlanData] Dados do plano carregados (timestamp: ${timestamp})`, result);
+          return result;
+        });
+
+      if (error) {
+        console.error('[usePlanData] Error fetching plan data:', error);
+        setError('Failed to load plan data');
+        setPlanData(null);
+      } else {
+        console.log('[usePlanData] Plan data loaded successfully:', data);
+        setPlanData(data);
+        setError(null);
+      }
+    } catch (err) {
+      console.error('[usePlanData] Unexpected error loading plan data:', err);
+      setError('An unexpected error occurred');
+      setPlanData(null);
+    } finally {
+      setIsLoading(false);
+    }
   }, [user]);
+
+  // Carregar dados quando o usuário muda
+  useEffect(() => {
+    if (user) {
+      console.log('[usePlanData] Usuário detectado, carregando dados...');
+      loadPlanData();
+    } else {
+      console.log('[usePlanData] Nenhum usuário detectado');
+      setIsLoading(false);
+    }
+  }, [user, loadPlanData]);
 
   return {
     planData,
     isLoading,
-    error
+    error,
+    reload: loadPlanData
   };
 }

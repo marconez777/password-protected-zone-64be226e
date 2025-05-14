@@ -4,3 +4,6 @@ project_id = "buizhanvxiykyapyndsh"
 [functions.mercado-pago]
 verify_jwt = false
 
+[functions.webhooks]
+verify_jwt = false
+

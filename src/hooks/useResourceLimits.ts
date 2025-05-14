@@ -38,8 +38,20 @@ const RESOURCE_TYPE_MAPPING: Record<ResourceType, string> = {
 export function useResourceLimits() {
   const [isChecking, setIsChecking] = useState(false);
   const { toast } = useToast();
-  const { planData } = usePlanData();
+  const { planData, reload: reloadPlanData } = usePlanData();
   const navigate = useNavigate();
+  
+  /**
+   * Recarrega os dados do plano do usuário antes de verificar o limite
+   * para garantir que estamos usando dados atualizados
+   */
+  const refreshPlanData = async () => {
+    try {
+      await reloadPlanData();
+    } catch (error) {
+      console.error('Erro ao recarregar dados do plano:', error);
+    }
+  };
   
   /**
    * Only checks if a user has exceeded their resource limit without incrementing.
@@ -48,7 +60,11 @@ export function useResourceLimits() {
   const checkResourceLimit = async (resourceType: ResourceType): Promise<boolean> => {
     console.log('=== CHECKING RESOURCE LIMIT ===');
     console.log('Resource Type:', resourceType);
-    console.log('Plan Data:', planData);
+    
+    // Reload plan data to make sure we have the most recent data
+    await refreshPlanData();
+    
+    console.log('Updated Plan Data:', planData);
     
     // Verify user has active plan
     if (!planData || !planData.is_active || !planData.plan_type) {
@@ -60,6 +76,12 @@ export function useResourceLimits() {
       });
       navigate('/subscribe');
       return false;
+    }
+    
+    // Para planos escala, todos os recursos são ilimitados
+    if (planData.plan_type === 'escala') {
+      console.log('Plano Escala detectado - recursos ilimitados disponíveis');
+      return true;
     }
     
     setIsChecking(true);
@@ -91,7 +113,7 @@ export function useResourceLimits() {
         return false;
       }
 
-      console.log('Resource limit check successful');
+      console.log('Resource limit check successful - recurso disponível');
       return true;
       
     } catch (error) {
@@ -114,6 +136,12 @@ export function useResourceLimits() {
   const incrementResourceUsage = async (resourceType: ResourceType): Promise<boolean> => {
     console.log('=== INCREMENTING RESOURCE USAGE ===');
     console.log('Resource Type:', resourceType);
+    
+    // Para planos escala, não precisamos incrementar pois é ilimitado
+    if (planData?.plan_type === 'escala') {
+      console.log('Plano Escala detectado - não é necessário incrementar');
+      return true;
+    }
     
     try {
       // Map resource type correctly

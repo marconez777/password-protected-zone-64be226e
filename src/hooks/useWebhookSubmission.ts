@@ -53,12 +53,17 @@ export function useWebhookSubmission(
       console.log(`Enviando dados para o webhook: ${webhookUrl}`);
       console.log("Dados:", JSON.stringify(formData));
       
+      // Adicionar origem para resolver problemas de CORS
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Origin': window.location.origin,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          user_id: user.id  // Incluir ID do usuário para rastreabilidade
+        }),
       });
 
       if (!response.ok) {
@@ -79,7 +84,7 @@ export function useWebhookSubmission(
         await incrementResourceUsage(resourceType);
         
         // 5. Reload usage data to update the dashboard counts
-        reloadUsageData();
+        await reloadUsageData();
       } catch (error) {
         console.error('Error saving result to database:', error);
         // Even if saving fails, we still have the result displayed

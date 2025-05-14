@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,7 +32,8 @@ const Dashboard = () => {
   // and isn't skipped due to early return in the previous effect
   useEffect(() => {
     if (session) {
-      // Reload data when the dashboard page is shown
+      // Força um reload toda vez que o dashboard é mostrado
+      console.log("Dashboard montado - forçando reload dos dados de uso");
       reload();
     }
   }, [session, reload]);
@@ -43,8 +45,9 @@ const Dashboard = () => {
     
     // Periodic refresh every 30 seconds to keep data current
     const intervalId = setInterval(() => {
+      console.log("Atualizando dados de uso periodicamente");
       reload();
-    }, 30000); // 30 seconds
+    }, 20000); // 20 seconds
     
     // Clean up interval on unmount
     return () => clearInterval(intervalId);
