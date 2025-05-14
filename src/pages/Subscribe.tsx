@@ -5,10 +5,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CheckCircle, Loader2, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 
 const Subscribe = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { active, endsAt, remainingUses } = useSubscription();
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,23 @@ const Subscribe = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Logout realizado",
+        description: "Você foi desconectado com sucesso",
+      });
+      navigate("/login");
+    } catch (error) {
+      toast({
+        title: "Erro ao fazer logout",
+        description: "Não foi possível desconectar sua conta",
+        variant: "destructive",
+      });
+    }
+  };
+
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('pt-BR');
@@ -53,6 +72,15 @@ const Subscribe = () => {
           <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
             Acesse todas as ferramentas para otimização de keywords e conteúdo
           </p>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-4"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Fazer Logout
+          </Button>
         </div>
 
         {active ? (
