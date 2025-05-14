@@ -1,11 +1,10 @@
-
-import { useState, useEffect } from 'react';
+// Hook corrigido para useResourceLimits
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { usePlanData } from '@/hooks/usePlanData';
 
-// Resource types that match backend definitions
 export type ResourceType = 
   | 'market_target'
   | 'market_research'
@@ -19,35 +18,40 @@ export type ResourceType =
   | 'texto_seo_blog'
   | 'pautas_blog';
 
-interface UseResourceLimitsReturn {
-  checkAndIncrementResource: (resourceType: ResourceType) => Promise<boolean>;
-  isChecking: boolean;
-}
+// Mapeamento correto dos tipos de recursos
+const RESOURCE_TYPE_MAPPING: Record<ResourceType, string> = {
+  'market_target': 'market_research',
+  'market_research': 'market_research',
+  'search_funnel': 'search_funnel',
+  'keyword': 'keyword',
+  'seo_text': 'seo_text',
+  'topic_research': 'topic_research',
+  'metadata_generation': 'metadata_generation',
+  'texto_seo_lp': 'seo_text',
+  'texto_seo_produto': 'seo_text',
+  'texto_seo_blog': 'seo_text',
+  'pautas_blog': 'topic_research'
+};
 
-/**
- * Hook to manage resource usage limits based on the user's subscription plan
- */
-export function useResourceLimits(): UseResourceLimitsReturn {
+export function useResourceLimits() {
   const [isChecking, setIsChecking] = useState(false);
   const { toast } = useToast();
   const { planData } = usePlanData();
   const navigate = useNavigate();
   
-  // Automatically redirect to subscription page if user doesn't have an active plan
-  useEffect(() => {
-    if (!planData || !planData.is_active || !planData.plan_type) {
-      navigate('/subscribe');
-    }
-  }, [planData, navigate]);
-
-  /**
-   * Checks if the user has exceeded their limit and increments usage if not
-   * @param resourceType The type of resource being used
-   * @returns boolean indicating if the operation can proceed (true) or was blocked (false)
-   */
   const checkAndIncrementResource = async (resourceType: ResourceType): Promise<boolean> => {
-    // If no active plan, redirect and don't proceed
+    console.log('=== CHECKING RESOURCE LIMIT ===');
+    console.log('Resource Type:', resourceType);
+    console.log('Plan Data:', planData);
+    
+    // Verificar se o usuário tem plano ativo
     if (!planData || !planData.is_active || !planData.plan_type) {
+      console.log('No active plan, redirecting to subscribe');
+      toast({
+        title: "Plano necessário",
+        description: "Você precisa de um plano ativo para usar este recurso.",
+        variant: "destructive",
+      });
       navigate('/subscribe');
       return false;
     }
@@ -55,51 +59,60 @@ export function useResourceLimits(): UseResourceLimitsReturn {
     setIsChecking(true);
     
     try {
-      // First check if the user has exceeded their limit
+      // Verificar sessão
+      const { data: session, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !session.session) {
+        console.error('Session error:', sessionError);
+        throw new Error('Sessão inválida');
+      }
+      
+      // Mapear o tipo de recurso corretamente
+      const mappedResourceType = RESOURCE_TYPE_MAPPING[resourceType] || resourceType;
+      console.log('Mapped Resource Type:', mappedResourceType);
+      
+      // Verificar limite
       const { data: hasExceeded, error: checkError } = await supabase
-        .rpc('user_has_exceeded_limit', { resource_type: resourceType });
+        .rpc('user_has_exceeded_limit', { 
+          resource_type: mappedResourceType 
+        });
 
+      console.log('Limit check result:', { hasExceeded, checkError });
+      
       if (checkError) {
         console.error('Error checking resource limit:', checkError);
-        toast({
-          title: "Erro ao verificar limite",
-          description: "Não foi possível verificar o limite do recurso. Tente novamente.",
-          variant: "destructive",
-        });
-        return false;
+        throw checkError;
       }
 
-      // If the user has exceeded their limit, show a message and return false
       if (hasExceeded) {
         toast({
           title: "Limite excedido",
-          description: "Você atingiu o limite de uso para este recurso no seu plano atual. Faça upgrade para continuar.",
+          description: `Você atingiu o limite de uso para este recurso no seu plano ${planData.plan_type}.`,
           variant: "destructive",
         });
         return false;
       }
 
-      // If within limits, increment the usage
-      const { data: incrementSuccess, error: incrementError } = await supabase
-        .rpc('increment_user_usage', { resource_type: resourceType });
+      // Incrementar uso
+      const { error: incrementError } = await supabase
+        .rpc('increment_user_usage', { 
+          resource_type: mappedResourceType 
+        });
 
+      console.log('Increment result:', { incrementError });
+      
       if (incrementError) {
         console.error('Error incrementing resource usage:', incrementError);
-        toast({
-          title: "Erro ao atualizar uso",
-          description: "Não foi possível registrar o uso do recurso. Tente novamente.",
-          variant: "destructive",
-        });
-        return false;
+        throw incrementError;
       }
 
-      // If successful, return true
+      console.log('Resource limit check successful');
       return true;
+      
     } catch (error) {
-      console.error('Unexpected error in resource limits check:', error);
+      console.error('Error in resource limits check:', error);
       toast({
-        title: "Erro inesperado",
-        description: "Ocorreu um erro ao processar sua solicitação. Tente novamente.",
+        title: "Erro ao verificar limite",
+        description: error.message || "Erro desconhecido ao verificar limite do recurso.",
         variant: "destructive",
       });
       return false;
