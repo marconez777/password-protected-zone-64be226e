@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { PlanProvider } from "./contexts/PlanContext";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute as AuthRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute as SubscriptionRoute } from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -44,17 +45,54 @@ const App = () => (
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path="/subscribe" element={<Subscribe />} />
               
-              {/* Rotas protegidas */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/funil-de-busca" element={<SearchFunnel />} />
-                <Route path="/palavras-chave" element={<Keywords />} />
-                <Route path="/mercado-publico-alvo" element={<MarketAndTarget />} />
-                <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
-                <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
-                <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
-                <Route path="/pautas-blog" element={<PautasBlog />} />
-                <Route path="/meta-dados" element={<MetaDados />} />
+              {/* Rotas protegidas por autenticação */}
+              <Route element={<AuthRoute />}>
+                {/* Rotas protegidas por assinatura ativa */}
+                <Route path="/dashboard" element={
+                  <SubscriptionRoute>
+                    <Dashboard />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/funil-de-busca" element={
+                  <SubscriptionRoute>
+                    <SearchFunnel />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/palavras-chave" element={
+                  <SubscriptionRoute>
+                    <Keywords />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/mercado-publico-alvo" element={
+                  <SubscriptionRoute>
+                    <MarketAndTarget />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/texto-seo-lp" element={
+                  <SubscriptionRoute>
+                    <TextoSEOLP />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/texto-seo-produto" element={
+                  <SubscriptionRoute>
+                    <TextoSEOProduto />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/texto-seo-blog" element={
+                  <SubscriptionRoute>
+                    <TextoSEOBlog />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/pautas-blog" element={
+                  <SubscriptionRoute>
+                    <PautasBlog />
+                  </SubscriptionRoute>
+                } />
+                <Route path="/meta-dados" element={
+                  <SubscriptionRoute>
+                    <MetaDados />
+                  </SubscriptionRoute>
+                } />
               </Route>
               
               {/* Rota de fallback */}
