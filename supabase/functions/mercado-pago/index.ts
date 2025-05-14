@@ -5,7 +5,7 @@ import { createMercadoPagoPreference } from './mercado-pago-api.ts';
 import { handleWebhook } from './webhook-handler.ts';
 
 serve(async (req) => {
-  // Lidar com CORS
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, {
       headers: corsHeaders,
@@ -16,12 +16,12 @@ serve(async (req) => {
   const url = new URL(req.url);
   
   try {
-    // Verificar se é uma solicitação de webhook
+    // Handle webhook requests
     if (url.searchParams.get("webhook") === "true") {
       return await handleWebhook(req);
     }
     
-    // Se não for webhook, é uma solicitação para criar um checkout
+    // Handle checkout creation requests
     if (req.method === "POST") {
       const { planType, userId, successUrl, failureUrl } = await req.json();
       
@@ -29,7 +29,7 @@ serve(async (req) => {
         throw new Error("Parâmetros inválidos: planType e userId são obrigatórios");
       }
       
-      // Criar uma preferência de pagamento no Mercado Pago
+      // Create payment preference in Mercado Pago
       const preferenceData = await createMercadoPagoPreference(
         planType, 
         userId, 

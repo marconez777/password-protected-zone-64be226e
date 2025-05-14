@@ -223,11 +223,15 @@ export type Database = {
         Returns: string
       }
       increment_user_usage: {
-        Args: { resource_type: string }
+        Args:
+          | { resource_type: string }
+          | { resource_type: string; target_user_id?: string }
         Returns: undefined
       }
       user_has_exceeded_limit: {
-        Args: { resource_type: string }
+        Args:
+          | { resource_type: string }
+          | { resource_type: string; target_user_id?: string }
         Returns: boolean
       }
     }
