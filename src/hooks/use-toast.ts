@@ -14,6 +14,9 @@ export type Toast = {
   description?: string;
   action?: React.ReactNode;
   variant?: "default" | "destructive" | "success";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  dismiss?: () => void;
 };
 
 export type ToastActionElement = React.ReactElement<{
@@ -26,10 +29,6 @@ const TOAST_LIMIT = 5;
 const TOAST_REMOVE_DELAY = 5000;
 
 type ToasterToast = Toast & {
-  id: string;
-  title?: string;
-  description?: string;
-  action?: React.ReactNode;
   dismiss: () => void;
 };
 
@@ -154,9 +153,10 @@ function dispatch(action: Action) {
   });
 }
 
-type Toast = Omit<ToasterToast, "id" | "dismiss">;
+type ToastInput = Omit<ToasterToast, "id" | "dismiss">;
 
-function toast(props: Toast) {
+// Key fix: Changed function signature to accept ToastProps
+function toast(props: ToastProps) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
