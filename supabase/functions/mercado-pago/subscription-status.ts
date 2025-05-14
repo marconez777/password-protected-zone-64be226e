@@ -3,8 +3,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 import { serve } from 'https://deno.land/std@0.190.0/http/server.ts';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // This allows any domain to access the function
+  'Access-Control-Allow-Origin': '*', // Permite acesso de qualquer origem
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
 };
 
 serve(async (req: Request) => {
@@ -18,17 +19,30 @@ serve(async (req: Request) => {
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
   const authHeader = req.headers.get('Authorization')!;
   
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    global: {
-      headers: { Authorization: authHeader },
-    },
-  });
+  if (!authHeader) {
+    return new Response(
+      JSON.stringify({ error: 'Não autorizado: Cabeçalho de autorização ausente' }),
+      { 
+        status: 401, 
+        headers: { 
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        } 
+      }
+    );
+  }
 
   try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    });
+
     const { data: { user }, error: userError } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      throw new Error(userError?.message || 'User not authenticated');
+      throw new Error(userError?.message || 'Usuário não autenticado');
     }
 
     // Get user's subscription
@@ -64,43 +78,6 @@ serve(async (req: Request) => {
     const usage = usageData?.total_usage || 0;
     const limit = 80; // Fixed limit
     const remainingUses = Math.max(0, limit - usage);
-    
-    // Determine if notification emails should be sent based on usage thresholds
-    let shouldSendUsageNotification = false;
-    let usageThreshold = '';
-    
-    if (isActive && usage >= limit * 0.75 && usage < limit * 0.9) {
-      shouldSendUsageNotification = true;
-      usageThreshold = '75%';
-    } else if (isActive && usage >= limit * 0.9) {
-      shouldSendUsageNotification = true;
-      usageThreshold = '90%';
-    }
-    
-    // Determine if subscription expiry notification should be sent
-    let shouldSendExpiryNotification = false;
-    let daysToExpiry = 0;
-    
-    if (isActive && subscriptions) {
-      const expiryDate = new Date(subscriptions.current_period_end);
-      const currentDate = new Date();
-      daysToExpiry = Math.ceil((expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (daysToExpiry <= 7 && daysToExpiry > 0) {
-        shouldSendExpiryNotification = true;
-      }
-    }
-    
-    // Send email notifications if necessary using a fire-and-forget approach
-    if (shouldSendUsageNotification) {
-      console.log(`Usage notification threshold reached: ${usageThreshold}, sending email notification`);
-      // In a real implementation, we would call an email service here
-    }
-    
-    if (shouldSendExpiryNotification) {
-      console.log(`Subscription expiry notification threshold reached: ${daysToExpiry} days, sending email notification`);
-      // In a real implementation, we would call an email service here
-    }
     
     return new Response(
       JSON.stringify({

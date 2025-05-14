@@ -39,7 +39,7 @@ export const useSubscription = () => {
       
       // Get the current session
       const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData.session?.access_token;
+      const accessToken = sessionData?.session?.access_token;
       
       if (!accessToken) {
         console.error('No access token available');
@@ -47,30 +47,36 @@ export const useSubscription = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('mercado-pago/subscription-status', {
+      // Definir cabeçalhos CORS para todas as solicitações
+      const requestOptions = {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
         }
-      });
+      };
+
+      // Usar supabase.functions.invoke para chamar a função Edge
+      const { data, error } = await supabase.functions.invoke('mercado-pago/subscription-status', requestOptions);
       
       if (error) {
         console.error('Erro ao verificar assinatura:', error);
         toast({
           title: "Erro de verificação",
-          description: "Não foi possível verificar seu status de assinatura. Por favor, tente novamente.",
+          description: "Não foi possível verificar seu status de assinatura. Tente novamente após relogar.",
           variant: "destructive"
         });
         setStatus(prev => ({ ...prev, isLoading: false }));
         return;
       }
       
+      // Se chegou até aqui, temos uma resposta válida da função Edge
       const updatedStatus: SubscriptionStatus = {
         active: data.active,
         endsAt: data.endsAt,
-        planType: 'mensal', // Simplified to a single plan
+        planType: 'mensal', // Simplificado para um único plano
         usage: data.usage,
         remainingUses: data.remainingUses,
-        limit: 80, // Fixed limit for all users
+        limit: 80, // Limite fixo para todos os usuários
         isLoading: false
       };
       
@@ -106,6 +112,9 @@ export const useSubscription = () => {
         });
         return false;
       }
+      
+      // Atualize a sessão para garantir que tenhamos um token válido
+      await refreshSession();
       
       // Call function to increment usage
       const { error } = await supabase.rpc('increment_global_usage');
