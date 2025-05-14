@@ -6,6 +6,9 @@ export type ToastProps = {
   description?: string;
   action?: React.ReactNode;
   variant?: "default" | "destructive" | "success";
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  dismiss?: () => void;
 };
 
 export type Toast = {
@@ -155,7 +158,7 @@ function dispatch(action: Action) {
 
 type ToastInput = Omit<ToasterToast, "id" | "dismiss">;
 
-// Key fix: Changed function signature to accept ToastProps
+// Using ToastProps for the function signature
 function toast(props: ToastProps) {
   const id = genId();
 
