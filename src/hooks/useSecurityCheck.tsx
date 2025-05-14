@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { useSubscription } from '@/hooks/useSubscription';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +24,6 @@ interface SecurityEvent {
 
 export const useSecurityCheck = () => {
   const { user } = useAuth();
-  const { active, remainingUses, isLoading } = useSubscription();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [checkingAccess, setCheckingAccess] = useState(false);
@@ -66,7 +64,7 @@ export const useSecurityCheck = () => {
 
   // Simplified access check that always returns true
   const verifyResourceAccess = async (resourceType: string): Promise<boolean> => {
-    if (checkingAccess || isLoading) return false;
+    if (checkingAccess) return false;
     setCheckingAccess(true);
     
     try {

@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/ui/logo";
 import {
-  CreditCard,
   Home,
   SearchCheck,
   KeyRound,
@@ -26,13 +25,11 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { SubscriptionNotification } from '@/components/ui/sidebar/SubscriptionNotification';
-import { useSubscription } from '@/hooks/useSubscription';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 export function AppSidebar() {
   const { user } = useAuth();
-  const { active, remainingUses, limit } = useSubscription();
   
   const handleSignOut = () => {
     // This is a safe fallback since signOut might not be available
@@ -71,22 +68,6 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              
-              {active && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/subscription-management">
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      <span>
-                        Assinatura
-                        <span className="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-200 text-gray-700">
-                          {remainingUses}/{limit}
-                        </span>
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -191,16 +172,6 @@ export function AppSidebar() {
           <SidebarGroupLabel>Conta</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {!active && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/subscribe">
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      <span>Assinar</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild onClick={handleSignOut}>
                   <Link to="#">

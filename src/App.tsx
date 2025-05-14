@@ -9,9 +9,6 @@ import Register from "@/pages/Register";
 import RegisterSuccess from "@/pages/RegisterSuccess";
 import ResetPassword from "@/pages/ResetPassword";
 import UpdatePassword from "@/pages/UpdatePassword";
-import Subscribe from "@/pages/Subscribe";
-import PaymentSuccess from "@/pages/PaymentSuccess";
-import UsageLimit from "@/pages/UsageLimit";
 import Dashboard from "@/pages/Dashboard";
 import SearchFunnel from "@/pages/SearchFunnel";
 import Keywords from "@/pages/Keywords";
@@ -23,7 +20,6 @@ import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
 import NotFound from "@/pages/NotFound";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import SubscriptionManagement from "@/pages/SubscriptionManagement";
 
 const App = () => {
   return (
@@ -36,10 +32,6 @@ const App = () => {
           <Route path="/register-success" element={<RegisterSuccess />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/update-password" element={<UpdatePassword />} />
-          <Route path="/subscribe" element={<Subscribe />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/usage-limit" element={<UsageLimit />} />
-          <Route path="/subscription-management" element={<SubscriptionManagement />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/search-funnel" element={<SearchFunnel />} />
