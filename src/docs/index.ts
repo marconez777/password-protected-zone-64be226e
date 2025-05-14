@@ -1,3 +1,5 @@
 
 // Export documentation files that actually exist
-export * from './SystemOverview.md';
+import SystemOverview from './SystemOverview.md';
+
+export { SystemOverview };
