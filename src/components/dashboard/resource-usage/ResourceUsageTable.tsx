@@ -38,8 +38,8 @@ export const ResourceUsageTable = ({ usage, planLimits }: ResourceUsageTableProp
             <ResourceUsageRow 
               key={resource.key}
               name={resource.label}
-              count={safeUsage[resource.usageField] || 0}
-              limit={planLimits[resource.limitField]}
+              count={Number(safeUsage[resource.usageField] || 0)}
+              limit={planLimits[resource.limitField] === null ? null : Number(planLimits[resource.limitField])}
             />
           ))}
         </TableBody>
