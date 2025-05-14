@@ -7,7 +7,6 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceFormProps } from '@/types/resource';
 import { useUsageData } from '@/hooks/useUsageData';
-import { usePlanData } from '@/hooks/usePlanData';
 import { Link } from 'react-router-dom';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
@@ -27,24 +26,14 @@ export function ResourceForm({
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
   
-  // Verifique se o usuário tem um plano ativo
-  const { planData, isLoading: planIsLoading } = usePlanData();
-  
-  // Get plan limits to check if the specific resource has a limit of 0
+  // Removemos a verificação de plano aqui, já que useResourceLimits já faz isso
   const { planLimits } = useUsageData();
   
-  // Determine if the resource is blocked by checking plan and limit
-  const isPlanActive = planData?.is_active && planData?.plan_type;
-  const resourceLimit = planLimits ? planLimits[`${resourceType}_limit`] : null;
-  const isResourceBlocked = !isPlanActive || resourceLimit === 0 || resourceLimit === null;
+  const loading = isChecking || isSubmitting;
 
-  if (planIsLoading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
-      </div>
-    );
-  }
+  // Determine if the resource is blocked by checking plan and limit
+  const resourceLimit = planLimits ? planLimits[`${resourceType}_limit`] : null;
+  const isResourceBlocked = resourceLimit === 0 || resourceLimit === null;
 
   if (isResourceBlocked) {
     return (
@@ -57,9 +46,7 @@ export function ResourceForm({
           <Alert className="bg-yellow-50 border border-yellow-200">
             <AlertTriangle className="h-4 w-4 text-yellow-600" />
             <AlertDescription className="text-yellow-800">
-              {!isPlanActive
-                ? 'Você precisa ativar um plano para utilizar esta funcionalidade.'
-                : resourceLimit === 0 || resourceLimit === null
+              {resourceLimit === 0 || resourceLimit === null
                 ? 'Seu plano atual não permite mais uso deste recurso.'
                 : 'Este recurso está temporariamente indisponível.'}
             </AlertDescription>
@@ -111,8 +98,6 @@ export function ResourceForm({
       setIsSubmitting(false);
     }
   };
-
-  const loading = isChecking || isSubmitting;
 
   return (
     <Card>

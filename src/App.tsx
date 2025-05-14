@@ -1,3 +1,4 @@
+
 // App.tsx com roteamento corrigido
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -6,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { PlanProvider } from "./contexts/PlanContext";
-import { ProtectedRoute } from "./components/ProtectedRoute";  // Usar apenas um arquivo
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -45,60 +46,26 @@ const App = () => (
               <Route path="/update-password" element={<UpdatePassword />} />
               
               {/* Rota para subscription - requer apenas autenticação */}
-              <Route path="/subscribe" element={
-                <ProtectedRoute>
-                  <Subscribe />
-                </ProtectedRoute>
-              } />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/subscribe" element={<Subscribe />} />
+              </Route>
               
               {/* Dashboard - requer apenas autenticação (permite upgrade) */}
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
               
               {/* Recursos - requerem autenticação E assinatura ativa */}
-              <Route path="/funil-de-busca" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <SearchFunnel />
-                </ProtectedRoute>
-              } />
-              <Route path="/palavras-chave" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <Keywords />
-                </ProtectedRoute>
-              } />
-              <Route path="/mercado-publico-alvo" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <MarketAndTarget />
-                </ProtectedRoute>
-              } />
-              <Route path="/texto-seo-lp" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <TextoSEOLP />
-                </ProtectedRoute>
-              } />
-              <Route path="/texto-seo-produto" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <TextoSEOProduto />
-                </ProtectedRoute>
-              } />
-              <Route path="/texto-seo-blog" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <TextoSEOBlog />
-                </ProtectedRoute>
-              } />
-              <Route path="/pautas-blog" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <PautasBlog />
-                </ProtectedRoute>
-              } />
-              <Route path="/meta-dados" element={
-                <ProtectedRoute requireSubscription={true}>
-                  <MetaDados />
-                </ProtectedRoute>
-              } />
+              <Route element={<ProtectedRoute requireSubscription={true} />}>
+                <Route path="/funil-de-busca" element={<SearchFunnel />} />
+                <Route path="/palavras-chave" element={<Keywords />} />
+                <Route path="/mercado-publico-alvo" element={<MarketAndTarget />} />
+                <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
+                <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
+                <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
+                <Route path="/pautas-blog" element={<PautasBlog />} />
+                <Route path="/meta-dados" element={<MetaDados />} />
+              </Route>
               
               {/* Fallback */}
               <Route path="*" element={<NotFound />} />

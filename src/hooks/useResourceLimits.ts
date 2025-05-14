@@ -1,3 +1,4 @@
+
 // Hook corrigido para useResourceLimits
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -59,12 +60,7 @@ export function useResourceLimits() {
     setIsChecking(true);
     
     try {
-      // Verificar sessão
-      const { data: session, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !session.session) {
-        console.error('Session error:', sessionError);
-        throw new Error('Sessão inválida');
-      }
+      // Removida verificação desnecessária da sessão
       
       // Mapear o tipo de recurso corretamente
       const mappedResourceType = RESOURCE_TYPE_MAPPING[resourceType] || resourceType;
