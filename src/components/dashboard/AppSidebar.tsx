@@ -8,7 +8,8 @@ import {
   SidebarMenuButton,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarGroupContent
+  SidebarGroupContent,
+  SidebarFooter
 } from "@/components/ui/sidebar";
 import { Logo } from "@/components/ui/logo";
 import {
@@ -21,21 +22,20 @@ import {
   FileQuestion,
   ScrollText,
   LogOut,
-  X
+  X,
+  User
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function AppSidebar() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   
-  const handleSignOut = () => {
-    // This is a safe fallback since signOut might not be available
-    if (localStorage) {
-      localStorage.removeItem('supabase.auth.token');
-      window.location.href = '/login';
-    }
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/login');
   };
   
   return (
@@ -53,6 +53,20 @@ export function AppSidebar() {
       </SidebarHeader>
       
       <SidebarContent>
+        {user && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Usuário</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <div className="px-4 py-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <User className="h-4 w-4" />
+                  <span className="truncate" title={user.email || ""}>{user.email}</span>
+                </div>
+              </div>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+        
         <SidebarGroup>
           <SidebarGroupLabel>Principal</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -164,23 +178,18 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Conta</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild onClick={handleSignOut}>
-                  <Link to="#">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    <span>Sair</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
+      
+      <SidebarFooter className="border-t p-4">
+        <Button 
+          variant="outline" 
+          className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+          onClick={handleSignOut}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          <span>Sair</span>
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }

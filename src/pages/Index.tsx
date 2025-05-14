@@ -1,14 +1,14 @@
 
 import { Link } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 import { LogIn, UserPlus, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/providers/AuthProvider";
 
 const Index = () => {
-  const { user, isLoading } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -26,7 +26,7 @@ const Index = () => {
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-800">MKRanker</h1>
         <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-          Sistema de análise e otimização de palavras-chave com verificação de assinatura ativa.
+          Sistema de análise e otimização de palavras-chave.
         </p>
         
         {user ? (

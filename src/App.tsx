@@ -1,5 +1,7 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider, ProtectedRoute } from "@/providers/AuthProvider";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
@@ -16,23 +18,27 @@ import NotFound from "@/pages/NotFound";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/search-funnel" element={<SearchFunnel />} />
-        <Route path="/keywords" element={<Keywords />} />
-        <Route path="/market-and-target" element={<MarketAndTarget />} />
-        <Route path="/texto-seo-lp" element={<TextoSEOLP />} />
-        <Route path="/texto-seo-produto" element={<TextoSEOProduto />} />
-        <Route path="/texto-seo-blog" element={<TextoSEOBlog />} />
-        <Route path="/pautas-blog" element={<PautasBlog />} />
-        <Route path="/meta-dados" element={<MetaDados />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Toaster />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/search-funnel" element={<ProtectedRoute><SearchFunnel /></ProtectedRoute>} />
+          <Route path="/keywords" element={<ProtectedRoute><Keywords /></ProtectedRoute>} />
+          <Route path="/market-and-target" element={<ProtectedRoute><MarketAndTarget /></ProtectedRoute>} />
+          <Route path="/texto-seo-lp" element={<ProtectedRoute><TextoSEOLP /></ProtectedRoute>} />
+          <Route path="/texto-seo-produto" element={<ProtectedRoute><TextoSEOProduto /></ProtectedRoute>} />
+          <Route path="/texto-seo-blog" element={<ProtectedRoute><TextoSEOBlog /></ProtectedRoute>} />
+          <Route path="/pautas-blog" element={<ProtectedRoute><PautasBlog /></ProtectedRoute>} />
+          <Route path="/meta-dados" element={<ProtectedRoute><MetaDados /></ProtectedRoute>} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Toaster />
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

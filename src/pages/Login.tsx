@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigate, useNavigate, Link } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/providers/AuthProvider";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,19 +25,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // If already authenticated, redirect to dashboard
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
-
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });

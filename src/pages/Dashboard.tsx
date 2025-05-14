@@ -1,23 +1,13 @@
 
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/providers/AuthProvider";
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
-import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
-  const { session, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!session) {
-      navigate("/login");
-      return;
-    }
-  }, [session, navigate]);
 
   if (!user) {
     return (
@@ -32,7 +22,7 @@ const Dashboard = () => {
       title="Dashboard"
     >
       <div className="bg-white p-6 rounded-lg shadow mb-6">
-        <h2 className="text-2xl font-medium text-gray-800 mb-4">Bem-vindo!</h2>
+        <h2 className="text-2xl font-medium text-gray-800 mb-4">Bem-vindo, {user.email}!</h2>
         <p className="text-gray-600 mb-4">
           Use o painel lateral para acessar todas as funcionalidades disponíveis.
         </p>

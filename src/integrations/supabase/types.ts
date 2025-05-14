@@ -165,48 +165,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_usage: {
-        Row: {
-          created_at: string
-          id: string
-          keyword_count: number
-          market_research_count: number
-          metadata_generation_count: number
-          search_funnel_count: number
-          seo_text_count: number
-          topic_research_count: number
-          total_usage: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          keyword_count?: number
-          market_research_count?: number
-          metadata_generation_count?: number
-          search_funnel_count?: number
-          seo_text_count?: number
-          topic_research_count?: number
-          total_usage?: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          keyword_count?: number
-          market_research_count?: number
-          metadata_generation_count?: number
-          search_funnel_count?: number
-          seo_text_count?: number
-          topic_research_count?: number
-          total_usage?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
