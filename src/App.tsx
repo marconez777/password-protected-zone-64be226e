@@ -1,4 +1,4 @@
-
+// App.tsx com roteamento corrigido
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,8 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { PlanProvider } from "./contexts/PlanContext";
-import { ProtectedRoute as AuthRoute } from "./components/ProtectedRoute";
-import { ProtectedRoute as SubscriptionRoute } from "./components/auth/ProtectedRoute";
+import { ProtectedRoute } from "./components/ProtectedRoute";  // Usar apenas um arquivo
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -37,65 +36,71 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Rotas públicas */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/register-success" element={<RegisterSuccess />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
-              <Route path="/subscribe" element={<Subscribe />} />
               
-              {/* Rotas protegidas por autenticação */}
-              <Route element={<AuthRoute />}>
-                {/* Rotas protegidas por assinatura ativa */}
-                <Route path="/dashboard" element={
-                  <SubscriptionRoute>
-                    <Dashboard />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/funil-de-busca" element={
-                  <SubscriptionRoute>
-                    <SearchFunnel />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/palavras-chave" element={
-                  <SubscriptionRoute>
-                    <Keywords />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/mercado-publico-alvo" element={
-                  <SubscriptionRoute>
-                    <MarketAndTarget />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/texto-seo-lp" element={
-                  <SubscriptionRoute>
-                    <TextoSEOLP />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/texto-seo-produto" element={
-                  <SubscriptionRoute>
-                    <TextoSEOProduto />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/texto-seo-blog" element={
-                  <SubscriptionRoute>
-                    <TextoSEOBlog />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/pautas-blog" element={
-                  <SubscriptionRoute>
-                    <PautasBlog />
-                  </SubscriptionRoute>
-                } />
-                <Route path="/meta-dados" element={
-                  <SubscriptionRoute>
-                    <MetaDados />
-                  </SubscriptionRoute>
-                } />
-              </Route>
+              {/* Rota para subscription - requer apenas autenticação */}
+              <Route path="/subscribe" element={
+                <ProtectedRoute>
+                  <Subscribe />
+                </ProtectedRoute>
+              } />
               
-              {/* Rota de fallback */}
+              {/* Dashboard - requer apenas autenticação (permite upgrade) */}
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              
+              {/* Recursos - requerem autenticação E assinatura ativa */}
+              <Route path="/funil-de-busca" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <SearchFunnel />
+                </ProtectedRoute>
+              } />
+              <Route path="/palavras-chave" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <Keywords />
+                </ProtectedRoute>
+              } />
+              <Route path="/mercado-publico-alvo" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <MarketAndTarget />
+                </ProtectedRoute>
+              } />
+              <Route path="/texto-seo-lp" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <TextoSEOLP />
+                </ProtectedRoute>
+              } />
+              <Route path="/texto-seo-produto" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <TextoSEOProduto />
+                </ProtectedRoute>
+              } />
+              <Route path="/texto-seo-blog" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <TextoSEOBlog />
+                </ProtectedRoute>
+              } />
+              <Route path="/pautas-blog" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <PautasBlog />
+                </ProtectedRoute>
+              } />
+              <Route path="/meta-dados" element={
+                <ProtectedRoute requireSubscription={true}>
+                  <MetaDados />
+                </ProtectedRoute>
+              } />
+              
+              {/* Fallback */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
