@@ -36,7 +36,7 @@ export function ResourceForm({
   // Determine if the resource is blocked by checking plan and limit
   const isPlanActive = planData?.is_active && planData?.plan_type;
   const resourceLimit = planLimits ? planLimits[`${resourceType}_limit`] : null;
-  const isResourceBlocked = !isPlanActive || resourceLimit === 0;
+  const isResourceBlocked = !isPlanActive || resourceLimit === 0 || resourceLimit === null;
 
   if (planIsLoading) {
     return (
@@ -57,9 +57,11 @@ export function ResourceForm({
           <Alert className="bg-yellow-50 border border-yellow-200">
             <AlertTriangle className="h-4 w-4 text-yellow-600" />
             <AlertDescription className="text-yellow-800">
-              {!isPlanActive 
-                ? "Você precisa ativar um plano para utilizar esta funcionalidade."
-                : "Seu plano atual não permite o uso desta funcionalidade."}
+              {!isPlanActive
+                ? 'Você precisa ativar um plano para utilizar esta funcionalidade.'
+                : resourceLimit === 0 || resourceLimit === null
+                ? 'Seu plano atual não permite mais uso deste recurso.'
+                : 'Este recurso está temporariamente indisponível.'}
             </AlertDescription>
           </Alert>
           
