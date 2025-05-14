@@ -9,7 +9,7 @@ import { displayUsageNotifications, displayExpiryNotification, handleUsageIncrem
 export type { SubscriptionStatus } from '@/types/subscription';
 
 export const useSubscription = () => {
-  const { user } = useAuth();
+  const { user, refreshSession } = useAuth();
   const { toast } = useToast();
   const [status, setStatus] = useState<SubscriptionStatus>({
     active: false,
@@ -34,10 +34,32 @@ export const useSubscription = () => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('mercado-pago/subscription-status');
+      // First ensure we have a valid session by refreshing it
+      await refreshSession();
+      
+      // Get the current session
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+      
+      if (!accessToken) {
+        console.error('No access token available');
+        setStatus(prev => ({ ...prev, isLoading: false }));
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('mercado-pago/subscription-status', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
       
       if (error) {
         console.error('Erro ao verificar assinatura:', error);
+        toast({
+          title: "Erro de verificação",
+          description: "Não foi possível verificar seu status de assinatura. Por favor, tente novamente.",
+          variant: "destructive"
+        });
         setStatus(prev => ({ ...prev, isLoading: false }));
         return;
       }

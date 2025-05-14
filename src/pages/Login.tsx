@@ -23,6 +23,10 @@ const Login = () => {
     setIsLoading(true);
 
     try {
+      // First, sign out to clear any invalid tokens
+      await supabase.auth.signOut();
+      
+      // Then sign in with fresh credentials
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,

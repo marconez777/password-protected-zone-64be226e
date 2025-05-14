@@ -7,18 +7,40 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   isLoading: boolean;
+  refreshSession: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
   isLoading: true,
+  refreshSession: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const refreshSession = async () => {
+    try {
+      const { data, error } = await supabase.auth.refreshSession();
+      
+      if (!error) {
+        setSession(data.session);
+        setUser(data.session?.user ?? null);
+      } else {
+        console.error('Error refreshing session:', error);
+        // If refresh fails, we should clear the session
+        setSession(null);
+        setUser(null);
+      }
+    } catch (error) {
+      console.error('Exception refreshing session:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const setData = async () => {
@@ -58,7 +80,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, user, isLoading }}>
+    <AuthContext.Provider value={{ session, user, isLoading, refreshSession }}>
       {children}
     </AuthContext.Provider>
   );
