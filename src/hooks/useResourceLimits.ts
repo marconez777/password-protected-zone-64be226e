@@ -1,6 +1,9 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { usePlanData } from '@/hooks/usePlanData';
 
 // Resource types that match backend definitions
 export type ResourceType = 
@@ -27,6 +30,15 @@ interface UseResourceLimitsReturn {
 export function useResourceLimits(): UseResourceLimitsReturn {
   const [isChecking, setIsChecking] = useState(false);
   const { toast } = useToast();
+  const { planData } = usePlanData();
+  const navigate = useNavigate();
+  
+  // Automatically redirect to subscription page if user doesn't have an active plan
+  useEffect(() => {
+    if (!planData || !planData.is_active || !planData.plan_type) {
+      navigate('/subscribe');
+    }
+  }, [planData, navigate]);
 
   /**
    * Checks if the user has exceeded their limit and increments usage if not
@@ -34,6 +46,12 @@ export function useResourceLimits(): UseResourceLimitsReturn {
    * @returns boolean indicating if the operation can proceed (true) or was blocked (false)
    */
   const checkAndIncrementResource = async (resourceType: ResourceType): Promise<boolean> => {
+    // If no active plan, redirect and don't proceed
+    if (!planData || !planData.is_active || !planData.plan_type) {
+      navigate('/subscribe');
+      return false;
+    }
+    
     setIsChecking(true);
     
     try {
