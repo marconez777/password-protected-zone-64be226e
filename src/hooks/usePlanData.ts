@@ -36,8 +36,8 @@ export function usePlanData() {
         .from('subscriptions')
         .select('plan_type, is_active, current_period_end')
         .eq('user_id', user.id)
-        .single()
         .order('created_at', { ascending: false })
+        .single()
         .then(result => {
           console.log(`[usePlanData] Dados do plano carregados (timestamp: ${timestamp})`, result);
           return result;
