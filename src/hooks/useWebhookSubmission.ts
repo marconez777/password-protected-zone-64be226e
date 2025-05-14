@@ -3,22 +3,19 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { ResourceType, useResourceLimits } from '@/hooks/useResourceLimits';
-import { useUsageData } from '@/hooks/useUsageData';
 
 /**
  * Hook for handling webhook submissions with integrated database saving
+ * Simplified version without subscription limitations
  */
 export function useWebhookSubmission(
-  resourceType: ResourceType, 
+  resourceType: string, 
   webhookUrl: string
 ) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const { user } = useAuth();
   const { toast } = useToast();
-  const { reload: reloadUsageData } = useUsageData();
-  const { checkResourceLimit, incrementResourceUsage } = useResourceLimits();
 
   const submitToWebhook = async (formData: any): Promise<any> => {
     if (!user) {
@@ -41,15 +38,8 @@ export function useWebhookSubmission(
 
     setIsLoading(true);
     
-    // 1. Primeiro APENAS verificar se o usuário pode proceder (sem incrementar o contador)
     try {
-      const canProceed = await checkResourceLimit(resourceType);
-      if (!canProceed) {
-        setIsLoading(false);
-        return null;
-      }
-      
-      // 2. Agora, enviar a requisição para o webhook
+      // Enviar a requisição para o webhook
       console.log(`Enviando dados para o webhook: ${webhookUrl}`);
       console.log("Dados:", JSON.stringify(formData));
       
@@ -76,15 +66,9 @@ export function useWebhookSubmission(
       // Set the result immediately after receiving it
       setResult(resultData);
       
-      // 3. Se tudo deu certo, salvar no banco
+      // Salvar no banco de dados para histórico
       try {
         await saveResultToDatabase(resourceType, formData, resultData);
-        
-        // 4. Somente AGORA incrementar o contador de uso (depois do sucesso)
-        await incrementResourceUsage(resourceType);
-        
-        // 5. Reload usage data to update the dashboard counts
-        await reloadUsageData();
       } catch (error) {
         console.error('Error saving result to database:', error);
         // Even if saving fails, we still have the result displayed
@@ -93,7 +77,6 @@ export function useWebhookSubmission(
           description: "O resultado foi gerado mas não pôde ser salvo no histórico. Você pode tentar fazer login novamente.",
           variant: "default",
         });
-        // Continue with the result even if saving fails
       }
       
       // Show success toast

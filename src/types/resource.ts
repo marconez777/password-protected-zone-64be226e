@@ -1,12 +1,11 @@
 
-import { ResourceType } from '@/hooks/useResourceLimits';
+import { ReactNode } from 'react';
 
 export interface ResourceFormProps {
-  resourceType: ResourceType;
   title: string;
   description: string;
-  webhookUrl?: string;
-  onSubmit: () => Promise<boolean | void>;
-  children: React.ReactNode;
-  resultComponent?: React.ReactNode;
+  children: ReactNode;
+  onSubmit: () => Promise<boolean>;
+  resultComponent?: ReactNode;
+  resourceType?: string; // Kept for backwards compatibility
 }
