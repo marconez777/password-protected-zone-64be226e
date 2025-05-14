@@ -1,6 +1,5 @@
 
-import { ReactNode, useState, useEffect } from "react";
-import { useUsageTracking } from "@/hooks/useUsageTracking";
+import { ReactNode, useState } from "react";
 import { useSecurityCheck } from "@/hooks/useSecurityCheck";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Shield } from "lucide-react";
@@ -10,7 +9,7 @@ interface ResourceWrapperProps {
   children: ReactNode;
   title: string;
   description?: string;
-  resourceType?: string; // Type of resource for specific verification
+  resourceType?: string;
 }
 
 export const ResourceWrapper = ({ 
@@ -19,54 +18,16 @@ export const ResourceWrapper = ({
   description,
   resourceType = 'generic' 
 }: ResourceWrapperProps) => {
-  const { canUseResource, remainingUses, isLoading } = useUsageTracking(false);
   const { verifyResourceAccess, checkingAccess } = useSecurityCheck();
   const [hasChecked, setHasChecked] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
   
-  useEffect(() => {
-    // Reset verification state when component mounts or when resourceType changes
-    setIsVerified(false);
-    setHasChecked(false);
-  }, [resourceType]);
-
-  const handleContinue = async () => {
-    // Perform security verification
-    const accessVerified = await verifyResourceAccess(resourceType);
-    setIsVerified(accessVerified);
-    setHasChecked(true);
-  };
-  
-  if (isLoading || checkingAccess) {
+  if (checkingAccess) {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
         <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
         <span className="ml-2">Verificando acesso...</span>
-      </div>
-    );
-  }
-  
-  if (!canUseResource && hasChecked) {
-    return (
-      <div className="border rounded-lg p-6 bg-amber-50 border-amber-200 text-center">
-        <AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-amber-800 mb-2">
-          {remainingUses <= 0 ? "Limite de uso atingido" : "Sem permissão de acesso"}
-        </h3>
-        <p className="text-amber-700 mb-4">
-          {remainingUses <= 0 
-            ? "Você atingiu o limite de 80 requisições." 
-            : "Você não tem permissão para acessar este recurso."}
-        </p>
-        <div className="flex justify-center gap-4">
-          <Button 
-            onClick={() => navigate(remainingUses <= 0 ? '/usage-limit' : '/dashboard')}
-            className="bg-amber-600 hover:bg-amber-700"
-          >
-            {remainingUses <= 0 ? "Ver detalhes" : "Voltar ao Dashboard"}
-          </Button>
-        </div>
       </div>
     );
   }
@@ -80,12 +41,16 @@ export const ResourceWrapper = ({
         <div className="bg-gray-50 p-4 rounded-md mb-4 flex items-center justify-center">
           <Shield className="h-5 w-5 text-green-600 mr-2" />
           <p className="text-sm text-gray-600">
-            Esta ação consumirá 1 de suas {remainingUses} requisições restantes.
+            Clique em continuar para acessar este recurso.
           </p>
         </div>
         
         <Button 
-          onClick={handleContinue}
+          onClick={async () => {
+            const accessVerified = await verifyResourceAccess(resourceType);
+            setIsVerified(accessVerified);
+            setHasChecked(true);
+          }}
           className="bg-mkranker-purple hover:bg-mkranker-dark-purple"
         >
           Continuar

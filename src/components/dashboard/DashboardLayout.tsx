@@ -5,7 +5,6 @@ import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { User as UserIcon, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSubscription } from "@/hooks/useSubscription";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -20,10 +19,6 @@ export const DashboardLayout = ({
   subtitle, 
   userName 
 }: DashboardLayoutProps) => {
-  const { remainingUses, limit } = useSubscription();
-  
-  const usagePercentage = limit > 0 ? ((limit - remainingUses) / limit) * 100 : 0;
-  
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gray-50">
@@ -36,19 +31,6 @@ export const DashboardLayout = ({
               {subtitle && <p className="text-gray-500">{subtitle}</p>}
             </div>
             <div className="flex items-center gap-4">
-              <div className="hidden md:block">
-                <div className="bg-white px-4 py-2 rounded-md shadow-sm border border-gray-100">
-                  <div className="text-sm text-gray-500">
-                    <span className="font-medium text-mkranker-purple">{remainingUses}</span> de {limit} requisições restantes
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                    <div 
-                      className={`h-1.5 rounded-full ${usagePercentage > 75 ? 'bg-red-500' : 'bg-mkranker-purple'}`}
-                      style={{ width: `${usagePercentage}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
               <SidebarTrigger className="block md:hidden" />
               <div className="hidden md:flex items-center gap-2">
                 <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">

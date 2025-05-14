@@ -1,13 +1,5 @@
 
+// This file is now simplified as we're removing subscription functionality
 export interface SubscriptionStatus {
-  active: boolean;
-  usage: number;
-  remainingUses: number;
-  limit: number;
   isLoading: boolean;
-}
-
-export interface SubscriptionNotificationState {
-  has90PercentNotification: boolean;
-  has75PercentNotification: boolean;
 }
