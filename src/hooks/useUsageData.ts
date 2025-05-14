@@ -19,51 +19,67 @@ export function useUsageData() {
 
   // Function to load all usage data
   const loadData = useCallback(async () => {
-    if (!user) return;
+    console.log('[useUsageData] Iniciando carregamento de dados...');
+    if (!user) {
+      console.log('[useUsageData] Nenhum usuário encontrado, interrompendo carregamento');
+      return;
+    }
     
     setLoading(true);
     setError(null);
     
     try {
       // Load subscription data
+      console.log('[useUsageData] Buscando dados de assinatura para o usuário:', user.id);
       const subscriptionData = await fetchSubscriptionData(user.id);
+      console.log('[useUsageData] Dados de assinatura:', subscriptionData);
       
       if (subscriptionData) {
         setSubscription(subscriptionData);
 
         // Load usage data with modified fetchUsageData that will handle null
+        console.log('[useUsageData] Buscando dados de uso para o usuário:', user.id);
         const usageData = await fetchUsageData(user.id);
+        console.log('[useUsageData] Dados de uso:', usageData);
         // Always set usage data - if null is returned, we'll use a default object with zeros
         setUsage(usageData || createDefaultUsage(user.id));
 
         // Load plan limits
+        console.log('[useUsageData] Buscando limites para o plano:', subscriptionData.plan_type);
         const planLimitsData = await fetchPlanLimits(subscriptionData.plan_type);
+        console.log('[useUsageData] Limites do plano:', planLimitsData);
         if (planLimitsData) {
           setPlanLimits(planLimitsData);
         } else {
-          console.error("Erro: Não foi possível carregar os limites do plano");
+          console.error("[useUsageData] Erro: Não foi possível carregar os limites do plano");
           setError("Não foi possível carregar os limites do plano");
         }
       } else {
         // Se não tem assinatura, o usuário não deve ter limites disponíveis
+        console.warn('[useUsageData] Assinatura não encontrada. Sem limites carregados.');
         setPlanLimits(null);
         
         // Ensure we have usage data even without subscription
+        console.log('[useUsageData] Buscando dados de uso sem assinatura para o usuário:', user.id);
         const usageData = await fetchUsageData(user.id);
+        console.log('[useUsageData] Dados de uso (sem assinatura):', usageData);
         setUsage(usageData || createDefaultUsage(user.id));
       }
     } catch (err) {
-      console.error("Erro ao carregar dados:", err);
+      console.error('[useUsageData] Erro ao carregar dados:', err);
       setError("Erro ao carregar dados de uso e assinatura");
       // Set default usage data to prevent UI errors even if there was an error
+      console.log('[useUsageData] Criando dados de uso padrão após erro');
       setUsage(createDefaultUsage(user.id));
     } finally {
+      console.log('[useUsageData] Carregamento de dados finalizado');
       setLoading(false);
     }
   }, [user]);
 
   // Create a default usage object with zero counts
   const createDefaultUsage = (userId: string): Usage => {
+    console.log('[useUsageData] Criando objeto de uso padrão para', userId);
     return {
       id: 'default',
       user_id: userId,
@@ -81,7 +97,10 @@ export function useUsageData() {
   // Load data on component mount and when user changes
   useEffect(() => {
     if (user) {
+      console.log('[useUsageData] Usuário detectado, iniciando carregamento de dados');
       loadData();
+    } else {
+      console.log('[useUsageData] Nenhum usuário detectado no useEffect');
     }
   }, [user, loadData]);
 
