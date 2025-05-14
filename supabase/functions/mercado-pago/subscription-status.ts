@@ -41,6 +41,11 @@ serve(async (req: Request) => {
       .limit(1)
       .maybeSingle();
 
+    if (subError) {
+      console.error('Error fetching subscription:', subError);
+      throw new Error(`Error fetching subscription: ${subError.message}`);
+    }
+
     // Check if subscription is active
     const isActive = !!subscriptions && new Date(subscriptions.current_period_end) > new Date();
     
@@ -50,6 +55,11 @@ serve(async (req: Request) => {
       .select('total_usage')
       .eq('user_id', user.id)
       .maybeSingle();
+    
+    if (usageError) {
+      console.error('Error fetching usage:', usageError);
+      throw new Error(`Error fetching usage: ${usageError.message}`);
+    }
     
     const usage = usageData?.total_usage || 0;
     const limit = 80; // Fixed limit
