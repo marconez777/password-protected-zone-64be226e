@@ -28,6 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/providers/AuthProvider";
+import { toast } from "sonner";
 
 export function AppSidebar() {
   const { user, signOut } = useAuth();
@@ -35,6 +36,7 @@ export function AppSidebar() {
   
   const handleSignOut = async () => {
     await signOut();
+    toast.success("Você saiu com sucesso.");
     navigate('/login');
   };
   
