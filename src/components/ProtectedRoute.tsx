@@ -44,6 +44,7 @@ export const ProtectedRoute = ({
         }
         
         // If usage data shows irregular pattern, refresh subscription status
+        // Check if total_usage is divisible by 10 to determine if refresh is needed
         const needsRefresh = data && data.total_usage > 0 && data.total_usage % 10 === 0;
         if (needsRefresh) {
           await checkSubscription();

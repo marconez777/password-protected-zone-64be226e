@@ -13,6 +13,16 @@ export const USAGE_LIMIT_CONFIG = {
   CRITICAL_THRESHOLD_PERCENT: 90
 };
 
+// Define the security event structure to help TypeScript
+interface SecurityEvent {
+  user_id: string;
+  action_type: 'usage' | 'payment' | 'auth' | 'system';
+  ip_address: string;
+  device_info: string;
+  status: 'success' | 'warning' | 'blocked' | 'error';
+  details: string;
+}
+
 export const useSecurityCheck = () => {
   const { user } = useAuth();
   const { active, remainingUses, isLoading } = useSubscription();
@@ -34,17 +44,21 @@ export const useSecurityCheck = () => {
         .then(res => res.json())
         .catch(() => ({ ip: 'unknown' }));
       
-      // Log to security_events table directly instead of using an RPC
+      // Insert security event directly
+      const eventData: SecurityEvent = {
+        user_id: user.id,
+        action_type: action,
+        ip_address: ipResponse.ip || 'unknown',
+        device_info: navigator.userAgent,
+        status: status,
+        details: details
+      };
+
+      // Using the "as any" type assertion to bypass TypeScript's table checking
+      // This is necessary since security_events isn't in the generated types
       await supabase
-        .from('security_events')
-        .insert({
-          user_id: user.id,
-          action_type: action,
-          ip_address: ipResponse.ip || 'unknown',
-          device_info: navigator.userAgent,
-          status: status,
-          details: details
-        });
+        .from('security_events' as any)
+        .insert(eventData);
     } catch (error) {
       console.error('Failed to log security event:', error);
     }
@@ -131,33 +145,34 @@ export const useSecurityCheck = () => {
     if (!user) return false;
     
     try {
-      // Instead of using an RPC, implement the logic directly
+      // Calculate time 2 hours ago
       const twoHoursAgo = new Date();
       twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+      const twoHoursAgoStr = twoHoursAgo.toISOString();
       
-      // Count recent access events
-      const { data, error } = await supabase
-        .from("security_events")
-        .select("id")
+      // Count recent access events - using "as any" to bypass type checking for security_events table
+      const { data, error, count } = await supabase
+        .from('security_events' as any)
+        .select('*', { count: 'exact' })
         .eq("user_id", user.id)
         .eq("action_type", "usage")
-        .gte("created_at", twoHoursAgo.toISOString())
-        .count();
+        .gte("created_at", twoHoursAgoStr);
       
       if (error) {
         console.error('Error checking for suspicious activity:', error);
         return false;
       }
       
-      const isSuspicious = data && data.count > 30; // Many accesses in 2 hours is suspicious
-      const reason = isSuspicious ? 'Múltiplos acessos em curto período' : null;
+      // Use the array length as count (compatible with all Supabase versions)
+      const eventCount = count || (data ? data.length : 0);
+      const isSuspicious = eventCount > 30; // Many accesses in 2 hours is suspicious
       
       if (isSuspicious) {
         // Log suspicious activity
         await logSecurityEvent(
           'system',
           'warning',
-          `Atividade suspeita detectada: ${reason || 'Múltiplos acessos'}`
+          `Atividade suspeita detectada: Múltiplos acessos em curto período`
         );
         
         toast({
