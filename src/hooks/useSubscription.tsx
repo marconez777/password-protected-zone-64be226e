@@ -51,6 +51,15 @@ export const useSubscription = () => {
         limit: data.limit,
         isLoading: false
       });
+
+      // Mostrar notificações baseadas no uso
+      if (data.remainingUses <= 10 && data.remainingUses > 0) {
+        toast({
+          title: "Aviso de limite",
+          description: `Você tem apenas ${data.remainingUses} requisições restantes no seu plano.`,
+          variant: "destructive"
+        });
+      }
     } catch (error) {
       console.error('Erro ao verificar assinatura:', error);
       setStatus(prev => ({ ...prev, isLoading: false }));
@@ -91,11 +100,31 @@ export const useSubscription = () => {
         remainingUses: Math.max(0, prev.remainingUses - 1)
       }));
       
-      // Se o usuário está quase no limite, mostrar aviso
-      if (status.remainingUses <= 10) {
+      // Notificações de limite de uso
+      const newRemainingUses = status.remainingUses - 1;
+      
+      if (newRemainingUses === 0) {
         toast({
-          title: "Aviso de limite",
-          description: `Você tem apenas ${status.remainingUses} requisições restantes no seu plano.`,
+          title: "Limite atingido",
+          description: "Você utilizou todas as requisições disponíveis no seu plano.",
+          variant: "destructive"
+        });
+      } else if (newRemainingUses <= 5) {
+        toast({
+          title: "Aviso crítico",
+          description: `Atenção! Restam apenas ${newRemainingUses} requisições no seu plano.`,
+          variant: "destructive"
+        });
+      } else if (newRemainingUses <= 10) {
+        toast({
+          title: "Aviso importante",
+          description: `Você tem apenas ${newRemainingUses} requisições restantes.`,
+          variant: "destructive"
+        });
+      } else if (newRemainingUses <= 20) {
+        toast({
+          title: "Aviso",
+          description: `Seu plano está com ${newRemainingUses} requisições restantes.`,
           variant: "destructive"
         });
       }

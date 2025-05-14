@@ -14,6 +14,12 @@ const SUCCESS_URL = "https://mkranker.com/payment-success";
 // URL de retorno em caso de cancelamento ou falha
 const FAILURE_URL = "https://mkranker.com/subscribe";
 
+// Helper logging function for enhanced debugging
+const logStep = (step: string, details?: any) => {
+  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
+  console.log(`[MERCADO-PAGO] ${step}${detailsStr}`);
+};
+
 serve(async (req) => {
   // Lidando com requisições OPTIONS (CORS preflight)
   if (req.method === "OPTIONS") {
@@ -23,6 +29,8 @@ serve(async (req) => {
   try {
     const url = new URL(req.url);
     const path = url.pathname.split("/").pop();
+    
+    logStep(`Request received for path: ${path}`, { method: req.method });
 
     // Inicializa o cliente Supabase
     const supabaseClient = createClient(
@@ -35,12 +43,26 @@ serve(async (req) => {
       }
     );
 
+    // Inicializa o cliente Supabase com role de serviço para operações de admin
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
     // Verifica a sessão do usuário para obter o ID
-    const {
-      data: { session },
-    } = await supabaseClient.auth.getSession();
+    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+
+    if (sessionError) {
+      logStep("Session Error", { error: sessionError.message });
+      return new Response(
+        JSON.stringify({ error: "Erro ao obter sessão: " + sessionError.message }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     if (!session) {
+      logStep("User not authenticated");
       return new Response(
         JSON.stringify({ error: "Usuário não autenticado" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -48,9 +70,12 @@ serve(async (req) => {
     }
 
     const userId = session.user.id;
+    const userEmail = session.user.email;
+    logStep("User authenticated", { userId, userEmail });
 
     // Endpoint para criar um link de pagamento
     if (req.method === "POST" && path === "create-payment") {
+      logStep("Creating payment link");
       // Obtém o token de acesso do Mercado Pago
       const mpAccessToken = Deno.env.get("MERCADO_PAGO_ACCESS_TOKEN");
       if (!mpAccessToken) {
@@ -60,14 +85,25 @@ serve(async (req) => {
         );
       }
 
+      // Determinar se é uma renovação baseado na assinatura atual
+      const { data: subscription } = await supabaseClient
+        .from("subscriptions")
+        .select("is_active, current_period_end")
+        .eq("user_id", userId)
+        .single();
+      
+      const isRenewal = subscription?.is_active || false;
+      logStep("Subscription check", { isRenewal, subscription });
+
       // Criando objeto de preferência de pagamento
       const preference = {
         items: [
           {
-            title: "Assinatura MKRanker - Plano Mensal",
+            title: isRenewal ? "Renovação MKRanker - Plano Mensal" : "Assinatura MKRanker - Plano Mensal",
             unit_price: 97.00,
             quantity: 1,
             currency_id: "BRL",
+            description: isRenewal ? "Renovação de assinatura com reset de limite de uso" : "Nova assinatura com 80 requisições"
           },
         ],
         back_urls: {
@@ -113,10 +149,12 @@ serve(async (req) => {
         console.error("Erro ao registrar transação:", dbError);
       }
 
+      logStep("Payment link created", { preferenceId: mpData.id, url: mpData.init_point });
       return new Response(
         JSON.stringify({ 
           payment_url: mpData.init_point,
-          preference_id: mpData.id 
+          preference_id: mpData.id,
+          is_renewal: isRenewal
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -126,7 +164,7 @@ serve(async (req) => {
     else if (req.method === "POST" && path === "webhook") {
       // Parse do corpo da requisição
       const requestData = await req.json();
-      console.log("Webhook recebido:", JSON.stringify(requestData));
+      logStep("Webhook received", requestData);
 
       // Verificamos se é uma notificação de pagamento
       if (requestData.type === "payment" && requestData.data && requestData.data.id) {
@@ -146,14 +184,16 @@ serve(async (req) => {
           const externalReference = paymentData.external_reference; // ID do usuário
           const status = paymentData.status; // 'approved', 'pending', 'rejected', etc.
           
+          logStep("Payment details retrieved", { status, userId: externalReference });
+          
           // Atualizar a transação no banco de dados
-          const { error: updateTxError } = await supabaseClient
+          const { error: updateTxError } = await supabaseAdmin
             .from("payment_transactions")
             .update({ 
               status: status,
               updated_at: new Date().toISOString()
             })
-            .eq("payment_id", paymentData.id);
+            .eq("payment_id", paymentId);
           
           if (updateTxError) {
             console.error("Erro ao atualizar transação:", updateTxError);
@@ -161,13 +201,15 @@ serve(async (req) => {
           
           // Se o pagamento foi aprovado, ativamos a assinatura
           if (status === "approved") {
+            logStep("Payment approved, updating subscription");
+            
             // Calcular data de fim do período (30 dias)
             const currentDate = new Date();
             const endDate = new Date(currentDate);
             endDate.setDate(currentDate.getDate() + 30);
             
             // Atualizar ou criar assinatura
-            const { error: subError } = await supabaseClient
+            const { error: subError } = await supabaseAdmin
               .from("subscriptions")
               .upsert({
                 user_id: externalReference,
@@ -176,6 +218,8 @@ serve(async (req) => {
                 current_period_start: currentDate.toISOString(),
                 current_period_end: endDate.toISOString(),
                 updated_at: currentDate.toISOString()
+              }, {
+                onConflict: 'user_id'
               });
               
             if (subError) {
@@ -183,10 +227,18 @@ serve(async (req) => {
             }
             
             // Resetar o contador de uso global
-            await supabaseClient.rpc("admin_reset_user_usage", {
-              user_email: paymentData.payer.email,
-              reset_all: true
-            });
+            const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(externalReference);
+            
+            if (userError) {
+              console.error("Erro ao obter dados do usuário:", userError);
+            } else if (userData.user?.email) {
+              logStep("Resetting usage counter", { email: userData.user.email });
+              await supabaseAdmin.rpc("admin_reset_user_usage", {
+                user_email: userData.user.email,
+                reset_all: true
+              });
+              logStep("Usage counter reset successful");
+            }
           }
         } else {
           console.error("Erro ao obter detalhes do pagamento:", paymentData);
@@ -202,6 +254,7 @@ serve(async (req) => {
     
     // Endpoint para verificar status de assinatura
     else if (req.method === "GET" && path === "subscription-status") {
+      logStep("Checking subscription status");
       const { data: subscription, error: subError } = await supabaseClient
         .from("subscriptions")
         .select("is_active, current_period_end, plan_type")
@@ -209,6 +262,7 @@ serve(async (req) => {
         .single();
         
       if (subError) {
+        logStep("No subscription found", { error: subError.message });
         return new Response(
           JSON.stringify({ active: false, message: "Sem assinatura ativa" }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -224,6 +278,13 @@ serve(async (req) => {
         
       const usageCount = usage ? usage.total_usage : 0;
       const remainingUses = Math.max(0, 80 - usageCount);
+      
+      logStep("Subscription status checked", { 
+        active: subscription?.is_active, 
+        endsAt: subscription?.current_period_end,
+        usageCount,
+        remainingUses
+      });
       
       return new Response(
         JSON.stringify({
