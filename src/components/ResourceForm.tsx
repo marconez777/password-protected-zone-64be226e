@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useResourceLimits } from '@/hooks/useResourceLimits';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceFormProps } from '@/types/resource';
 import { useUsageData } from '@/hooks/useUsageData';
 import { usePlanData } from '@/hooks/usePlanData';
 import { Link } from 'react-router-dom';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 /**
  * A reusable component that wraps forms for resources that have usage limits
@@ -27,18 +28,50 @@ export function ResourceForm({
   const { reload: reloadUsageData } = useUsageData();
   
   // Verifique se o usuário tem um plano ativo
-  const { planData } = usePlanData();
+  const { planData, isLoading: planIsLoading } = usePlanData();
+  
+  // Get plan limits to check if the specific resource has a limit of 0
+  const { planLimits } = useUsageData();
+  
+  // Determine if the resource is blocked by checking plan and limit
+  const isPlanActive = planData?.is_active && planData?.plan_type;
+  const resourceLimit = planLimits ? planLimits[`${resourceType}_limit`] : null;
+  const isResourceBlocked = !isPlanActive || resourceLimit === 0;
 
-  if (!planData || !planData.plan_type) {
+  if (planIsLoading) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-600 text-lg mb-4">Você precisa ativar um plano para utilizar esta funcionalidade.</p>
-        <Link to="/subscribe">
-          <Button className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
-            Ver Planos
-          </Button>
-        </Link>
+      <div className="flex justify-center items-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
       </div>
+    );
+  }
+
+  if (isResourceBlocked) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Alert className="bg-yellow-50 border border-yellow-200">
+            <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            <AlertDescription className="text-yellow-800">
+              {!isPlanActive 
+                ? "Você precisa ativar um plano para utilizar esta funcionalidade."
+                : "Seu plano atual não permite o uso desta funcionalidade."}
+            </AlertDescription>
+          </Alert>
+          
+          <div className="mt-6 text-center">
+            <Link to="/subscribe">
+              <Button className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
+                Ver Planos
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
