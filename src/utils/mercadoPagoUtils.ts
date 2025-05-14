@@ -1,9 +1,9 @@
 
-import { supabaseClient } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 
 export async function createMercadoPagoCheckout(planType: string, userId: string, successUrl?: string, failureUrl?: string) {
   try {
-    const { data, error } = await supabaseClient.functions.invoke('mercado-pago', {
+    const { data, error } = await supabase.functions.invoke('mercado-pago', {
       body: {
         planType,
         userId,
