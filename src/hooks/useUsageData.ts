@@ -31,11 +31,10 @@ export function useUsageData() {
       if (subscriptionData) {
         setSubscription(subscriptionData);
 
-        // Load usage data
+        // Load usage data with modified fetchUsageData that will handle null
         const usageData = await fetchUsageData(user.id);
-        if (usageData) {
-          setUsage(usageData);
-        }
+        // Always set usage data - if null is returned, we'll use a default object with zeros
+        setUsage(usageData || createDefaultUsage(user.id));
 
         // Load plan limits
         const planLimitsData = await fetchPlanLimits(subscriptionData.plan_type);
@@ -51,14 +50,36 @@ export function useUsageData() {
         if (defaultPlanLimits) {
           setPlanLimits(defaultPlanLimits);
         }
+        
+        // Ensure we have usage data even without subscription
+        const usageData = await fetchUsageData(user.id);
+        setUsage(usageData || createDefaultUsage(user.id));
       }
     } catch (err) {
       console.error("Erro ao carregar dados:", err);
       setError("Erro ao carregar dados de uso e assinatura");
+      // Set default usage data to prevent UI errors even if there was an error
+      setUsage(createDefaultUsage(user.id));
     } finally {
       setLoading(false);
     }
   }, [user]);
+
+  // Create a default usage object with zero counts
+  const createDefaultUsage = (userId: string): Usage => {
+    return {
+      id: 'default',
+      user_id: userId,
+      keyword_count: 0,
+      market_research_count: 0,
+      search_funnel_count: 0,
+      seo_text_count: 0,
+      topic_research_count: 0,
+      metadata_generation_count: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+  };
 
   // Load data on component mount and when user changes
   useEffect(() => {

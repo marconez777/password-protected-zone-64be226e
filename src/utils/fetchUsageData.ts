@@ -14,8 +14,14 @@ export async function fetchUsageData(userId: string): Promise<Usage | null> {
     .eq("user_id", userId)
     .single();
 
-  if (usageError && usageError.code !== 'PGRST116') {
-    console.error("Erro ao carregar dados de uso:", usageError);
+  if (usageError) {
+    if (usageError.code === 'PGRST116') {
+      // PGRST116 means no data found - this is expected for new users
+      console.log("Nenhum registro de uso encontrado para o usuário. Isto é normal para novos usuários.");
+    } else {
+      // Log other errors
+      console.error("Erro ao carregar dados de uso:", usageError);
+    }
     return null;
   }
 
