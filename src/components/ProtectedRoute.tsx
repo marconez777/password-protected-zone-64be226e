@@ -1,7 +1,10 @@
 
 import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProtectedRouteProps {
   redirectTo?: string;
@@ -11,13 +14,52 @@ export const ProtectedRoute = ({
   redirectTo = "/login"
 }: ProtectedRouteProps) => {
   const { user, isLoading: authLoading } = useAuth();
-  const { active, isLoading: subLoading, remainingUses } = useSubscription();
+  const { active, isLoading: subLoading, remainingUses, checkSubscription } = useSubscription();
+  const [verifyingAccess, setVerifyingAccess] = useState(false);
+  const [accessVerified, setAccessVerified] = useState(false);
+  const { toast } = useToast();
+  
+  // Server-side access verification
+  useEffect(() => {
+    const verifyAccess = async () => {
+      if (!user || authLoading || subLoading) return;
+      
+      setVerifyingAccess(true);
+      try {
+        // Server-side verification of access rights
+        const { data, error } = await supabase.rpc('verify_user_access');
+        
+        if (error) {
+          console.error("Failed to verify access:", error);
+          toast({
+            title: "Erro de verificação",
+            description: "Não foi possível verificar seu acesso.",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        // If server reports unusual activity, force refresh subscription status
+        if (data && data.needs_refresh) {
+          await checkSubscription();
+        }
+        
+        setAccessVerified(true);
+      } catch (error) {
+        console.error("Access verification error:", error);
+      } finally {
+        setVerifyingAccess(false);
+      }
+    };
+    
+    verifyAccess();
+  }, [user, authLoading, subLoading]);
   
   // Mostrar loading enquanto verifica autenticação e assinatura
-  if (authLoading || subLoading) {
+  if (authLoading || subLoading || verifyingAccess) {
     return <div className="flex justify-center items-center h-screen">
       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-      <span className="ml-2">Carregando...</span>
+      <span className="ml-2">Verificando acesso...</span>
     </div>;
   }
   
