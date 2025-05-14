@@ -1,12 +1,14 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check, AlertTriangle, LogOut } from 'lucide-react';
 import { usePlanContext } from '@/contexts/PlanContext';
 import { useAuth } from '@/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/sonner';
+import { useNavigate } from 'react-router-dom';
 
 // Use a consistent color for the check icons
 const Feature = ({ children }: { children: React.ReactNode }) => {
@@ -78,6 +80,7 @@ export default function Subscribe() {
   const { user } = useAuth();
   const { subscription, loading, reload } = usePlanContext();
   const [debugMode, setDebugMode] = useState(false);
+  const navigate = useNavigate();
 
   // Recarregar dados quando a página for montada
   useEffect(() => {
@@ -90,6 +93,17 @@ export default function Subscribe() {
     console.log(`Plano selecionado: ${planType}`);
     // Implementar seleção do plano - para desenvolvimento ainda sem integração de pagamento
     alert(`Plano ${planType} selecionado! (Implementar integração de pagamento)`);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.success("Logout realizado com sucesso");
+      navigate('/login');
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      toast.error("Erro ao fazer logout");
+    }
   };
 
   // Determine o plano ativo
@@ -131,6 +145,20 @@ export default function Subscribe() {
   return (
     <div className="container py-10">
       <div className="text-center mb-10">
+        <div className="flex justify-end mb-4">
+          {user && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleLogout}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          )}
+        </div>
+        
         <h1 className="text-3xl font-bold tracking-tight">Escolha o Plano Ideal para Você</h1>
         <p className="text-muted-foreground mt-2">
           Escale seu marketing digital com nossos planos completos. Todos incluem acesso às melhores ferramentas de SEO com IA.
