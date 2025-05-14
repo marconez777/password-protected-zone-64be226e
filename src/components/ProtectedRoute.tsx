@@ -1,6 +1,5 @@
 
 import { Navigate, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
 interface ProtectedRouteProps {
@@ -10,10 +9,10 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ 
   redirectTo = "/login"
 }: ProtectedRouteProps) => {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading } = useAuth();
   
   // Show loading while checking authentication
-  if (authLoading) {
+  if (isLoading) {
     return <div className="flex justify-center items-center h-screen">
       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
       <span className="ml-2">Verificando acesso...</span>

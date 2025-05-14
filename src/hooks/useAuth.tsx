@@ -30,47 +30,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(data.session);
         setUser(data.session?.user ?? null);
       } else {
-        console.error('Error refreshing session:', error);
-        // If refresh fails, we should clear the session
         setSession(null);
         setUser(null);
       }
     } catch (error) {
       console.error('Exception refreshing session:', error);
+      setSession(null);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const setData = async () => {
+    // Set up auth state change listener FIRST
+    const { data } = supabase.auth.onAuthStateChange((event, updatedSession) => {
+      console.log('Auth state changed:', event);
+      setSession(updatedSession);
+      setUser(updatedSession?.user ?? null);
+      setIsLoading(false);
+    });
+    
+    const subscription = data.subscription;
+
+    // THEN check for existing session
+    const getInitialSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-        setUser(session?.user ?? null);
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        setSession(initialSession);
+        setUser(initialSession?.user ?? null);
       } catch (error) {
-        console.error('Error getting session:', error);
+        console.error('Error getting initial session:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    let subscription;
-    
-    try {
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      });
-      
-      subscription = data.subscription;
-    } catch (error) {
-      console.error('Error setting up auth state change listener:', error);
-      setIsLoading(false);
-    }
-
-    setData();
+    getInitialSession();
 
     return () => {
       if (subscription) {

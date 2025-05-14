@@ -7,7 +7,6 @@ export const useSupabaseClient = () => {
   const { user } = useAuth();
   
   useEffect(() => {
-    // Log authentication state for debugging
     if (user) {
       console.log('User authenticated:', user.id);
     } else {
@@ -18,5 +17,4 @@ export const useSupabaseClient = () => {
   return supabase;
 };
 
-// Export the client directly for use in the auth context
 export { supabase };

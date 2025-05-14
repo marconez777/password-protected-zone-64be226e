@@ -21,12 +21,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Se já estiver autenticado, redirecionar para o dashboard
+  // If already authenticated, redirect to dashboard
   useEffect(() => {
     if (user) {
       navigate("/dashboard");
@@ -38,10 +37,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Primeiro, vamos tentar fazer o logout para garantir uma sessão limpa
-      await supabase.auth.signOut();
-      
-      // Agora vamos fazer o login
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -71,8 +66,9 @@ const Login = () => {
     }
   };
 
-  if (redirectToLogin) {
-    return <Navigate to="/login" />;
+  // If already authenticated, redirect to dashboard
+  if (user) {
+    return <Navigate to="/dashboard" />;
   }
 
   return (
