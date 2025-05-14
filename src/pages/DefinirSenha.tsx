@@ -21,7 +21,8 @@ const DefinirSenha = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [redirectTimer, setRedirectTimer] = useState<number | null>(null);
+  // Fix: Change the type to NodeJS.Timeout | null to match setTimeout's return type
+  const [redirectTimer, setRedirectTimer] = useState<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
