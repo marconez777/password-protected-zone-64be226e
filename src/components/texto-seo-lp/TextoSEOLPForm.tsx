@@ -47,7 +47,6 @@ export function TextoSEOLPForm() {
         <TabsContent value="formulario">
           <FormProvider {...methods}>
             <ResourceForm
-              resourceType="texto_seo_lp"
               title=""
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado"
               onSubmit={handleFormSubmit}

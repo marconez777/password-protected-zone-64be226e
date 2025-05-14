@@ -54,7 +54,6 @@ export function MetaDadosForm() {
         <TabsContent value="formulario">
           <FormProvider {...methods}>
             <ResourceForm
-              resourceType="metadata_generation"
               title="Geração de Meta Dados"
               description="Preencha as informações abaixo para gerar meta dados otimizados"
               onSubmit={handleFormSubmit}

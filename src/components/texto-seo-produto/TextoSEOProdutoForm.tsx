@@ -53,7 +53,6 @@ export function TextoSEOProdutoForm() {
         <TabsContent value="formulario">
           <FormProvider {...methods}>
             <ResourceForm
-              resourceType="texto_seo_produto"
               title=""
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado para produto"
               onSubmit={handleFormSubmit}

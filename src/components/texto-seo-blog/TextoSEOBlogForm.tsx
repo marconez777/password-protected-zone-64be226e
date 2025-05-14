@@ -59,7 +59,6 @@ export function TextoSEOBlogForm() {
         <TabsContent value="formulario">
           <FormProvider {...methods}>
             <ResourceForm
-              resourceType="texto_seo_blog"
               title="Texto SEO para Blog"
               description="Preencha as informações abaixo e clique em gerar seu texto otimizado para blog"
               onSubmit={handleFormSubmit}

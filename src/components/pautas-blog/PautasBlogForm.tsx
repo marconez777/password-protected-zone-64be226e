@@ -54,7 +54,6 @@ export function PautasBlogForm() {
         <TabsContent value="formulario">
           <FormProvider {...methods}>
             <ResourceForm
-              resourceType="pautas_blog"
               title="Ideias de Pautas para Blog"
               description="Digite uma palavra-chave para gerar ideias de pautas para seu blog"
               onSubmit={handleFormSubmit}
