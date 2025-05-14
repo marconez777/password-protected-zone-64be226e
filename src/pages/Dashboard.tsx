@@ -29,11 +29,10 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout 
-      title="Dashboard" 
-      userName={user?.user_metadata?.full_name || "Usuário"}
+      title="Dashboard"
     >
       <div className="bg-white p-6 rounded-lg shadow mb-6">
-        <h2 className="text-2xl font-medium text-gray-800 mb-4">Bem-vindo, {user?.user_metadata?.full_name || "Usuário"}!</h2>
+        <h2 className="text-2xl font-medium text-gray-800 mb-4">Bem-vindo!</h2>
         <p className="text-gray-600 mb-4">
           Use o painel lateral para acessar todas as funcionalidades disponíveis.
         </p>

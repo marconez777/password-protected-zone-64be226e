@@ -20,7 +20,7 @@ export const FeatureCards = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card 
         className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-        onClick={() => handleCardClick('/funil-de-busca')}
+        onClick={() => handleCardClick('/search-funnel')}
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-500">Funil de Busca</CardTitle>
@@ -35,6 +35,7 @@ export const FeatureCards = () => {
       
       <Card 
         className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+        onClick={() => handleCardClick('/market-and-target')}
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-500">Mercado e Público</CardTitle>
@@ -49,6 +50,7 @@ export const FeatureCards = () => {
       
       <Card 
         className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+        onClick={() => handleCardClick('/keywords')}
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-500">Palavras Chaves</CardTitle>
@@ -63,6 +65,7 @@ export const FeatureCards = () => {
       
       <Card 
         className="border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+        onClick={() => handleCardClick('/texto-seo-lp')}
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-500">Texto SEO para LP</CardTitle>

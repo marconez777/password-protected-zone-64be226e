@@ -3,21 +3,19 @@ import { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { User as UserIcon, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface DashboardLayoutProps {
   children: ReactNode;
   title: string;
   subtitle?: string;
-  userName: string | null;
 }
 
 export const DashboardLayout = ({ 
   children, 
   title, 
-  subtitle, 
-  userName 
+  subtitle
 }: DashboardLayoutProps) => {
   return (
     <SidebarProvider>
@@ -33,12 +31,6 @@ export const DashboardLayout = ({
             <div className="flex items-center gap-4">
               <SidebarTrigger className="block md:hidden" />
               <div className="hidden md:flex items-center gap-2">
-                <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">
-                  <Link to="/dashboard">
-                    <UserIcon className="w-4 h-4 mr-2" />
-                    Meu Perfil
-                  </Link>
-                </Button>
                 <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">
                   <Link to="/dashboard">
                     <Settings className="w-4 h-4 mr-2" />

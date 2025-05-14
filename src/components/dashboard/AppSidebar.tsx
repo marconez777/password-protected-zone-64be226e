@@ -24,7 +24,6 @@ import {
   X
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { SubscriptionNotification } from '@/components/ui/sidebar/SubscriptionNotification';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -52,8 +51,6 @@ export function AppSidebar() {
           <X className="h-4 w-4" />
         </Button>
       </SidebarHeader>
-      
-      <SubscriptionNotification />
       
       <SidebarContent>
         <SidebarGroup>
