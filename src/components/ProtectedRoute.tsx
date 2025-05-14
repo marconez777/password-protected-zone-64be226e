@@ -1,6 +1,7 @@
 
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface ProtectedRouteProps {
   redirectTo?: string;
@@ -9,22 +10,35 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ 
   redirectTo = "/login"
 }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
+  const { active, isLoading: subLoading, remainingUses } = useSubscription();
   
-  // Show loading state when waiting for authentication
-  if (isLoading) {
+  // Mostrar loading enquanto verifica autenticação e assinatura
+  if (authLoading || subLoading) {
     return <div className="flex justify-center items-center h-screen">
       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
       <span className="ml-2">Carregando...</span>
     </div>;
   }
   
-  // Redirect to login if not authenticated
+  // Redirecionar para login se não autenticado
   if (!user) {
     console.log("ProtectedRoute: Redirecionando para login - usuário não autenticado");
     return <Navigate to={redirectTo} replace />;
   }
   
-  // User is authenticated, allow access
+  // Redirecionar para página de assinatura se não tiver assinatura ativa
+  if (!active) {
+    console.log("ProtectedRoute: Redirecionando para assinatura - assinatura inativa");
+    return <Navigate to="/subscribe" replace />;
+  }
+  
+  // Redirecionar se o limite de uso foi atingido
+  if (remainingUses <= 0) {
+    console.log("ProtectedRoute: Redirecionando para limite - limite atingido");
+    return <Navigate to="/usage-limit" replace />;
+  }
+  
+  // Usuário autenticado e com assinatura ativa, permitir acesso
   return <Outlet />;
 };

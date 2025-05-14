@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      payment_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          payment_id: string | null
+          payment_method: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          payment_id?: string | null
+          payment_method?: string | null
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_id?: string | null
+          payment_method?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plan_limits: {
         Row: {
           created_at: string
@@ -142,6 +175,7 @@ export type Database = {
           search_funnel_count: number
           seo_text_count: number
           topic_research_count: number
+          total_usage: number
           updated_at: string
           user_id: string
         }
@@ -154,6 +188,7 @@ export type Database = {
           search_funnel_count?: number
           seo_text_count?: number
           topic_research_count?: number
+          total_usage?: number
           updated_at?: string
           user_id: string
         }
@@ -166,6 +201,7 @@ export type Database = {
           search_funnel_count?: number
           seo_text_count?: number
           topic_research_count?: number
+          total_usage?: number
           updated_at?: string
           user_id?: string
         }
@@ -222,11 +258,19 @@ export type Database = {
         }
         Returns: string
       }
+      increment_global_usage: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       increment_user_usage: {
         Args:
           | { resource_type: string }
           | { resource_type: string; target_user_id?: string }
         Returns: undefined
+      }
+      user_has_exceeded_global_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       user_has_exceeded_limit: {
         Args:

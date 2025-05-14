@@ -1,5 +1,5 @@
 
-// App.tsx with subscription and payment logic removed
+// App.tsx with subscription and payment system
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +23,9 @@ import TextoSEOProduto from "./pages/TextoSEOProduto";
 import TextoSEOBlog from "./pages/TextoSEOBlog";
 import PautasBlog from "./pages/PautasBlog";
 import MetaDados from "./pages/MetaDados";
+import Subscribe from "./pages/Subscribe";
+import UsageLimit from "./pages/UsageLimit";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +44,11 @@ const App = () => (
             <Route path="/register-success" element={<RegisterSuccess />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/subscribe" element={<Subscribe />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/usage-limit" element={<UsageLimit />} />
             
-            {/* Todas as rotas protegidas agora só precisam de autenticação */}
+            {/* Todas as rotas protegidas agora verificam autenticação e assinatura */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/funil-de-busca" element={<SearchFunnel />} />
