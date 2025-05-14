@@ -3,16 +3,10 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { SubscriptionStatus, SubscriptionNotificationState } from '@/types/subscription';
+import { displayUsageNotifications, displayExpiryNotification, handleUsageIncrement } from '@/utils/subscriptionUtils';
 
-export interface SubscriptionStatus {
-  active: boolean;
-  endsAt: string | null;
-  planType: string | null;
-  usage: number;
-  remainingUses: number;
-  limit: number;
-  isLoading: boolean;
-}
+export type { SubscriptionStatus } from '@/types/subscription';
 
 export const useSubscription = () => {
   const { user } = useAuth();
@@ -28,8 +22,10 @@ export const useSubscription = () => {
   });
   
   // Track notification states
-  const [has90PercentNotification, setHas90PercentNotification] = useState(false);
-  const [has75PercentNotification, setHas75PercentNotification] = useState(false);
+  const [notificationState, setNotificationState] = useState<SubscriptionNotificationState>({
+    has90PercentNotification: false,
+    has75PercentNotification: false
+  });
 
   const checkSubscription = async () => {
     if (!user) {
@@ -46,7 +42,7 @@ export const useSubscription = () => {
         return;
       }
       
-      setStatus({
+      const updatedStatus: SubscriptionStatus = {
         active: data.active,
         endsAt: data.endsAt,
         planType: 'mensal', // Simplified to a single plan
@@ -54,41 +50,21 @@ export const useSubscription = () => {
         remainingUses: data.remainingUses,
         limit: 80, // Fixed limit for all users
         isLoading: false
-      });
+      };
+      
+      setStatus(updatedStatus);
 
-      // Display notifications based on usage thresholds
-      const usagePercentage = (data.usage / 80) * 100;
-
-      if (usagePercentage >= 75 && usagePercentage < 90 && data.remainingUses > 0 && !has75PercentNotification) {
-        toast({
-          title: "Aviso de uso",
-          description: `Você já utilizou 75% do seu limite. Restam ${data.remainingUses} requisições.`,
-          variant: "default"
-        });
-        setHas75PercentNotification(true);
-      } else if (usagePercentage >= 90 && data.remainingUses > 0 && !has90PercentNotification) {
-        toast({
-          title: "Aviso crítico",
-          description: `Atenção! Você está com apenas ${data.remainingUses} requisições restantes!`,
-          variant: "destructive"
-        });
-        setHas90PercentNotification(true);
-      }
-
-      // Check if subscription is about to expire (less than 7 days)
-      if (data.active && data.endsAt) {
-        const expiryDate = new Date(data.endsAt);
-        const currentDate = new Date();
-        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-        
-        if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
-          toast({
-            title: "Assinatura a vencer",
-            description: `Sua assinatura irá expirar em ${daysUntilExpiry} ${daysUntilExpiry === 1 ? 'dia' : 'dias'}.`,
-            variant: "default"
-          });
-        }
-      }
+      // Display notifications based on subscription status
+      displayUsageNotifications(
+        updatedStatus,
+        notificationState,
+        toast,
+        (value) => setNotificationState(prev => ({ ...prev, has75PercentNotification: value })),
+        (value) => setNotificationState(prev => ({ ...prev, has90PercentNotification: value }))
+      );
+      
+      // Check for subscription expiry
+      displayExpiryNotification(updatedStatus, toast);
     } catch (error) {
       console.error('Erro ao verificar assinatura:', error);
       setStatus(prev => ({ ...prev, isLoading: false }));
@@ -129,36 +105,22 @@ export const useSubscription = () => {
         remainingUses: Math.max(0, prev.remainingUses - 1)
       }));
       
-      // Update usage notifications
-      const newRemainingUses = status.remainingUses - 1;
-      const newUsagePercentage = ((status.usage + 1) / status.limit) * 100;
+      // Handle notifications based on new usage
+      const shouldUpdateNotifications = handleUsageIncrement(
+        status,
+        notificationState,
+        toast
+      );
       
-      if (newRemainingUses === 0) {
-        toast({
-          title: "Limite atingido",
-          description: "Você utilizou todas as requisições disponíveis no seu plano.",
-          variant: "destructive"
-        });
-      } else if (newRemainingUses <= 5) {
-        toast({
-          title: "Aviso crítico",
-          description: `Atenção! Restam apenas ${newRemainingUses} requisições no seu plano.`,
-          variant: "destructive"
-        });
-      } else if (newUsagePercentage >= 90 && !has90PercentNotification) {
-        toast({
-          title: "Aviso importante",
-          description: `Você já utilizou 90% do seu limite de requisições.`,
-          variant: "destructive"
-        });
-        setHas90PercentNotification(true);
-      } else if (newUsagePercentage >= 75 && !has75PercentNotification) {
-        toast({
-          title: "Aviso",
-          description: `Você já utilizou 75% do seu limite de requisições.`,
-          variant: "default"
-        });
-        setHas75PercentNotification(true);
+      // Update notification states if needed
+      if (shouldUpdateNotifications) {
+        const newUsagePercentage = ((status.usage + 1) / status.limit) * 100;
+        
+        if (newUsagePercentage >= 90) {
+          setNotificationState(prev => ({ ...prev, has90PercentNotification: true }));
+        } else if (newUsagePercentage >= 75) {
+          setNotificationState(prev => ({ ...prev, has75PercentNotification: true }));
+        }
       }
       
       return true;
