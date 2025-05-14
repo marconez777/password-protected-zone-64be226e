@@ -7,6 +7,8 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ResourceFormProps } from '@/types/resource';
 import { useUsageData } from '@/hooks/useUsageData';
+import { usePlanData } from '@/hooks/usePlanData';
+import { Link } from 'react-router-dom';
 
 /**
  * A reusable component that wraps forms for resources that have usage limits
@@ -23,6 +25,22 @@ export function ResourceForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
+  
+  // Verifique se o usuário tem um plano ativo
+  const { planData } = usePlanData();
+
+  if (!planData || !planData.plan_type) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600 text-lg mb-4">Você precisa ativar um plano para utilizar esta funcionalidade.</p>
+        <Link to="/subscribe">
+          <Button className="bg-mkranker-purple hover:bg-mkranker-dark-purple">
+            Ver Planos
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
