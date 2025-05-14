@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { SubscriptionStatus, SubscriptionNotificationState } from '@/types/subscription';
-import { displayUsageNotifications, displayExpiryNotification, handleUsageIncrement } from '@/utils/subscriptionUtils';
 
 export type { SubscriptionStatus } from '@/types/subscription';
 
@@ -12,11 +11,11 @@ export const useSubscription = () => {
   const { user, refreshSession } = useAuth();
   const { toast } = useToast();
   const [status, setStatus] = useState<SubscriptionStatus>({
-    active: false,
+    active: true, // Default to active since we're removing payment requirements
     endsAt: null,
-    planType: null,
+    planType: 'basic',
     usage: 0,
-    remainingUses: 0,
+    remainingUses: 80, // Start with full 80 requests
     limit: 80,
     isLoading: true
   });
@@ -37,64 +36,67 @@ export const useSubscription = () => {
       // First ensure we have a valid session by refreshing it
       await refreshSession();
       
-      // Get the current session
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData?.session?.access_token;
-      
-      if (!accessToken) {
-        console.error('No access token available');
-        setStatus(prev => ({ ...prev, isLoading: false }));
-        return;
-      }
-
-      // Definir cabeçalhos CORS para todas as solicitações
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      };
-
-      // Usar supabase.functions.invoke para chamar a função Edge
-      const { data, error } = await supabase.functions.invoke('mercado-pago/subscription-status', requestOptions);
+      // Get usage data for the user
+      const { data, error } = await supabase
+        .from("user_usage")
+        .select("total_usage")
+        .eq("user_id", user.id)
+        .single();
       
       if (error) {
-        console.error('Erro ao verificar assinatura:', error);
+        console.error('Error checking usage:', error);
         toast({
           title: "Erro de verificação",
-          description: "Não foi possível verificar seu status de assinatura. Tente novamente após relogar.",
+          description: "Não foi possível verificar seu uso atual.",
           variant: "destructive"
         });
+        
         setStatus(prev => ({ ...prev, isLoading: false }));
         return;
       }
       
-      // Se chegou até aqui, temos uma resposta válida da função Edge
+      // Calculate usage and remaining
+      const usage = data?.total_usage || 0;
+      const remainingUses = Math.max(0, 80 - usage);
+      
+      // Set status
       const updatedStatus: SubscriptionStatus = {
-        active: data.active,
-        endsAt: data.endsAt,
-        planType: 'mensal', // Simplificado para um único plano
-        usage: data.usage,
-        remainingUses: data.remainingUses,
-        limit: 80, // Limite fixo para todos os usuários
+        active: true, // Always active in this simplified version
+        endsAt: null,
+        planType: 'basic', 
+        usage: usage,
+        remainingUses: remainingUses,
+        limit: 80, 
         isLoading: false
       };
       
       setStatus(updatedStatus);
 
-      // Display notifications based on subscription status
-      displayUsageNotifications(
-        updatedStatus,
-        notificationState,
-        toast,
-        (value) => setNotificationState(prev => ({ ...prev, has75PercentNotification: value })),
-        (value) => setNotificationState(prev => ({ ...prev, has90PercentNotification: value }))
-      );
+      // Show notifications based on usage percentage
+      const usagePercentage = (usage / 80) * 100;
       
-      // Check for subscription expiry
-      displayExpiryNotification(updatedStatus, toast);
+      // 75% warning
+      if (usagePercentage >= 75 && !notificationState.has75PercentNotification) {
+        toast({
+          title: "Aviso de uso",
+          description: `Você já utilizou 75% do seu limite de requisições (${remainingUses} restantes)`,
+          variant: "destructive"
+        });
+        setNotificationState(prev => ({ ...prev, has75PercentNotification: true }));
+      }
+      
+      // 90% critical warning
+      if (usagePercentage >= 90 && !notificationState.has90PercentNotification) {
+        toast({
+          title: "Alerta crítico de uso",
+          description: `Você já utilizou 90% do seu limite de requisições (${remainingUses} restantes)`,
+          variant: "destructive" 
+        });
+        setNotificationState(prev => ({ ...prev, has90PercentNotification: true }));
+      }
+      
     } catch (error) {
-      console.error('Erro ao verificar assinatura:', error);
+      console.error('Erro ao verificar uso:', error);
       setStatus(prev => ({ ...prev, isLoading: false }));
     }
   };
@@ -107,7 +109,7 @@ export const useSubscription = () => {
       if (status.remainingUses <= 0) {
         toast({
           title: "Limite de uso atingido",
-          description: "Você atingiu o limite de 80 requisições do seu plano.",
+          description: "Você atingiu o limite de 80 requisições.",
           variant: "destructive"
         });
         return false;
@@ -136,22 +138,24 @@ export const useSubscription = () => {
         remainingUses: Math.max(0, prev.remainingUses - 1)
       }));
       
-      // Handle notifications based on new usage
-      const shouldUpdateNotifications = handleUsageIncrement(
-        status,
-        notificationState,
-        toast
-      );
+      // Update notification states based on new percentage
+      const newUsagePercentage = ((status.usage + 1) / status.limit) * 100;
       
-      // Update notification states if needed
-      if (shouldUpdateNotifications) {
-        const newUsagePercentage = ((status.usage + 1) / status.limit) * 100;
-        
-        if (newUsagePercentage >= 90) {
-          setNotificationState(prev => ({ ...prev, has90PercentNotification: true }));
-        } else if (newUsagePercentage >= 75) {
-          setNotificationState(prev => ({ ...prev, has75PercentNotification: true }));
-        }
+      if (newUsagePercentage >= 90 && !notificationState.has90PercentNotification) {
+        toast({
+          title: "Alerta crítico de uso",
+          description: `Você está com poucas requisições restantes (${status.remainingUses - 1})!`,
+          variant: "destructive"
+        });
+        setNotificationState(prev => ({ ...prev, has90PercentNotification: true }));
+      }
+      else if (newUsagePercentage >= 75 && !notificationState.has75PercentNotification) {
+        toast({
+          title: "Aviso de uso",
+          description: `Você já utilizou mais de 75% das suas requisições (${status.remainingUses - 1} restantes)`,
+          variant: "destructive"
+        });
+        setNotificationState(prev => ({ ...prev, has75PercentNotification: true }));
       }
       
       return true;
@@ -164,7 +168,7 @@ export const useSubscription = () => {
   useEffect(() => {
     checkSubscription();
     
-    // Check subscription status every 10 minutes or when user changes
+    // Check usage every 10 minutes or when user changes
     const interval = setInterval(checkSubscription, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, [user]);

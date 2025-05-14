@@ -24,21 +24,6 @@ export const useUsageTracking = (redirectOnLimitExceeded = true) => {
     setIsTrackingUsage(true);
     
     try {
-      // Check if user can proceed
-      if (!active) {
-        toast({
-          title: "Assinatura inativa",
-          description: "Você precisa ter uma assinatura ativa para usar este recurso.",
-          variant: "destructive"
-        });
-        
-        if (redirectOnLimitExceeded) {
-          navigate('/subscribe');
-        }
-        
-        return false;
-      }
-      
       if (remainingUses <= 0) {
         toast({
           title: "Limite atingido",
@@ -66,7 +51,7 @@ export const useUsageTracking = (redirectOnLimitExceeded = true) => {
   };
   
   return {
-    canUseResource: active && remainingUses > 0 && !isLoading,
+    canUseResource: remainingUses > 0 && !isLoading,
     isLoading,
     remainingUses,
     usagePercentage: limit > 0 ? (usage / limit) * 100 : 0,

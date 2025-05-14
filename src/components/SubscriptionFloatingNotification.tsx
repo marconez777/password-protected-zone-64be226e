@@ -1,16 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSubscription } from '@/hooks/useSubscription';
-import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 export const SubscriptionFloatingNotification = () => {
-  const { active, remainingUses, limit } = useSubscription();
+  const { remainingUses, limit } = useSubscription();
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
   
   const usagePercentage = limit ? (limit - remainingUses) / limit * 100 : 0;
-  const shouldDisplay = active && usagePercentage >= 75 && !isDismissed;
+  const shouldDisplay = usagePercentage >= 75 && !isDismissed;
   
   useEffect(() => {
     if (shouldDisplay) {
@@ -49,16 +48,6 @@ export const SubscriptionFloatingNotification = () => {
             style={{ width: `${usagePercentage}%` }}
           ></div>
         </div>
-        <Link 
-          to="/subscription-management"
-          className={`mt-2 text-xs font-medium block text-center py-1 px-3 rounded ${
-            usagePercentage >= 90 
-            ? 'bg-red-100 text-red-700 hover:bg-red-200' 
-            : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
-          }`}
-        >
-          Renovar agora
-        </Link>
       </div>
     </div>
   );

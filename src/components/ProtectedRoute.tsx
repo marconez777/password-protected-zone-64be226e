@@ -14,9 +14,8 @@ export const ProtectedRoute = ({
   redirectTo = "/login"
 }: ProtectedRouteProps) => {
   const { user, isLoading: authLoading } = useAuth();
-  const { active, isLoading: subLoading, remainingUses, checkSubscription } = useSubscription();
+  const { isLoading: subLoading, remainingUses, checkSubscription } = useSubscription();
   const [verifyingAccess, setVerifyingAccess] = useState(false);
-  const [accessVerified, setAccessVerified] = useState(false);
   const { toast } = useToast();
   
   // Server-side access verification
@@ -49,8 +48,6 @@ export const ProtectedRoute = ({
         if (needsRefresh) {
           await checkSubscription();
         }
-        
-        setAccessVerified(true);
       } catch (error) {
         console.error("Access verification error:", error);
       } finally {
@@ -61,7 +58,7 @@ export const ProtectedRoute = ({
     verifyAccess();
   }, [user, authLoading, subLoading]);
   
-  // Mostrar loading enquanto verifica autenticação e assinatura
+  // Mostrar loading enquanto verifica autenticação e uso
   if (authLoading || subLoading || verifyingAccess) {
     return <div className="flex justify-center items-center h-screen">
       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
@@ -75,18 +72,12 @@ export const ProtectedRoute = ({
     return <Navigate to={redirectTo} replace />;
   }
   
-  // Redirecionar para página de assinatura se não tiver assinatura ativa
-  if (!active) {
-    console.log("ProtectedRoute: Redirecionando para assinatura - assinatura inativa");
-    return <Navigate to="/subscribe" replace />;
-  }
-  
   // Redirecionar se o limite de uso foi atingido
   if (remainingUses <= 0) {
     console.log("ProtectedRoute: Redirecionando para limite - limite atingido");
     return <Navigate to="/usage-limit" replace />;
   }
   
-  // Usuário autenticado e com assinatura ativa, permitir acesso
+  // Usuário autenticado e com requisições disponíveis, permitir acesso
   return <Outlet />;
 };
