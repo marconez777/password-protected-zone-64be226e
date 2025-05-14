@@ -1,161 +1,177 @@
-
-import { useNavigate } from 'react-router-dom';
-import { 
-  BarChart3, 
-  FileText, 
-  Home, 
-  LogOut, 
-  Search,
-  Users,
-  Key,
-  BookText
-} from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { SidebarCloseButton } from "@/components/ui/sidebar";
+import { Logo } from "@/components/ui/logo";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton
+  SidebarNav,
+  SidebarNavHeader,
+  SidebarNavHeaderTitle,
+  SidebarNavLink,
+  SidebarNavLinkIcon,
+  SidebarNavLinkText,
+  SidebarNavMain,
+  SidebarNavSection,
+  SidebarNavSectionContent,
+  SidebarNavSectionHeader,
+  SidebarNavSectionTitle,
 } from "@/components/ui/sidebar";
+import {
+  CreditCard,
+  Home,
+  SearchCheck,
+  KeyRound,
+  Target,
+  FileText,
+  BookText,
+  FileQuestion,
+  ScrollText,
+  LogOut,
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { SubscriptionNotification } from '@/components/ui/sidebar/SubscriptionNotification';
+import { useSubscription } from '@/hooks/useSubscription';
 
-export const AppSidebar = () => {
-  const navigate = useNavigate();
-  const currentPath = window.location.pathname;
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/login");
-  };
-
+export function AppSidebar() {
+  const { signOut } = useAuth();
+  const { active, remainingUses, limit } = useSubscription();
+  
   return (
-    <Sidebar className="bg-mkranker-sidebar-bg border-r border-gray-200">
-      <SidebarHeader className="flex items-center px-6 py-5 border-b border-gray-200">
-        <div className="flex items-center gap-2">
-          <div className="rounded-md bg-mkranker-purple w-8 h-8 flex items-center justify-center text-white font-bold">
-            M
-          </div>
-          <span className="text-lg font-medium text-gray-800">MKRanker</span>
-        </div>
-      </SidebarHeader>
+    <SidebarNav className="w-72 border-r px-2 py-2 flex flex-col overflow-hidden">
+      <SidebarNavHeader>
+        <Logo className="h-8 w-8 text-mkranker-purple" />
+        <SidebarNavHeaderTitle>MK Ranker</SidebarNavHeaderTitle>
+        <SidebarCloseButton className="w-8 h-8 absolute top-3 right-2 md:hidden" />
+      </SidebarNavHeader>
       
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-mkranker-sidebar-text">GERAL</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                isActive={currentPath === '/dashboard'} 
-                className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active data-[active=true]:bg-mkranker-purple/10"
-                onClick={() => navigate('/dashboard')}
-              >
-                <Home className="text-mkranker-sidebar-text data-[active=true]:text-mkranker-sidebar-active" />
-                <span>Dashboard</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
+      <SubscriptionNotification />
+      
+      <SidebarNavMain>
+        <SidebarNavSection>
+          <SidebarNavSectionHeader>
+            <SidebarNavSectionTitle>Principal</SidebarNavSectionTitle>
+          </SidebarNavSectionHeader>
+          <SidebarNavSectionContent>
+            <SidebarNavLink to="/dashboard">
+              <SidebarNavLinkIcon>
+                <Home className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Dashboard</SidebarNavLinkText>
+            </SidebarNavLink>
+            
+            {active && (
+              <SidebarNavLink to="/subscription-management">
+                <SidebarNavLinkIcon>
+                  <CreditCard className="h-4 w-4" />
+                </SidebarNavLinkIcon>
+                <SidebarNavLinkText>
+                  Assinatura
+                  <span className="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-200 text-gray-700">
+                    {remainingUses}/{limit}
+                  </span>
+                </SidebarNavLinkText>
+              </SidebarNavLink>
+            )}
+          </SidebarNavSectionContent>
+        </SidebarNavSection>
         
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-mkranker-sidebar-text">APPS</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/mercado-publico-alvo')}
-                isActive={currentPath === '/mercado-publico-alvo'}
-              >
-                <Users className="text-mkranker-sidebar-text" />
-                <span>Mercado e Público Alvo</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                isActive={currentPath === '/funil-de-busca'}
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/funil-de-busca')}
-              >
-                <Search className="text-mkranker-sidebar-text" />
-                <span>Funil de Busca</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                isActive={currentPath === '/palavras-chave'}
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/palavras-chave')}
-              >
-                <Key className="text-mkranker-sidebar-text" />
-                <span>Palavras Chaves</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/texto-seo-lp')}
-                isActive={currentPath === '/texto-seo-lp'}
-              >
-                <FileText className="text-mkranker-sidebar-text" />
-                <span>Texto SEO para LP</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/texto-seo-produto')}
-                isActive={currentPath === '/texto-seo-produto'}
-              >
-                <FileText className="text-mkranker-sidebar-text" />
-                <span>Texto SEO para Produto</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/texto-seo-blog')}
-                isActive={currentPath === '/texto-seo-blog'}
-              >
-                <FileText className="text-mkranker-sidebar-text" />
-                <span>Texto SEO para Blog</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/pautas-blog')}
-                isActive={currentPath === '/pautas-blog'}
-              >
-                <BookText className="text-mkranker-sidebar-text" />
-                <span>Pautas para Blog</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton 
-                className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-                onClick={() => navigate('/meta-dados')}
-                isActive={currentPath === '/meta-dados'}
-              >
-                <BarChart3 className="text-mkranker-sidebar-text" />
-                <span>Meta Dados</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-      
-      <SidebarFooter className="mt-auto border-t border-gray-200 p-4">
-        <SidebarMenuButton 
-          onClick={handleLogout} 
-          className="text-mkranker-sidebar-text hover:text-mkranker-sidebar-active hover:bg-mkranker-purple/10"
-        >
-          <LogOut />
-          <span>Sair</span>
-        </SidebarMenuButton>
-      </SidebarFooter>
-    </Sidebar>
+        <SidebarNavSection>
+          <SidebarNavSectionHeader>
+            <SidebarNavSectionTitle>Ferramentas</SidebarNavSectionTitle>
+          </SidebarNavSectionHeader>
+          <SidebarNavSectionContent>
+            <SidebarNavLink to="/search-funnel">
+              <SidebarNavLinkIcon>
+                <SearchCheck className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Funil de Busca</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/keywords">
+              <SidebarNavLinkIcon>
+                <KeyRound className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Palavras-chave</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/market-and-target">
+              <SidebarNavLinkIcon>
+                <Target className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Mercado e Público-alvo</SidebarNavLinkText>
+            </SidebarNavLink>
+          </SidebarNavSectionContent>
+        </SidebarNavSection>
+        
+        <SidebarNavSection>
+          <SidebarNavSectionHeader>
+            <SidebarNavSectionTitle>Conteúdo SEO</SidebarNavSectionTitle>
+          </SidebarNavSectionHeader>
+          <SidebarNavSectionContent>
+            <SidebarNavLink to="/texto-seo-lp">
+              <SidebarNavLinkIcon>
+                <FileText className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Texto SEO para LP</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/texto-seo-produto">
+              <SidebarNavLinkIcon>
+                <FileText className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Texto SEO para Produto</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/texto-seo-blog">
+              <SidebarNavLinkIcon>
+                <FileText className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Texto SEO para Blog</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/pautas-blog">
+              <SidebarNavLinkIcon>
+                <BookText className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Pautas para Blog</SidebarNavLinkText>
+            </SidebarNavLink>
+            <SidebarNavLink to="/meta-dados">
+              <SidebarNavLinkIcon>
+                <ScrollText className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Meta Dados</SidebarNavLinkText>
+            </SidebarNavLink>
+          </SidebarNavSectionContent>
+        </SidebarNavSection>
+        
+        <SidebarNavSection>
+          <SidebarNavSectionHeader>
+            <SidebarNavSectionTitle>Ajuda</SidebarNavSectionTitle>
+          </SidebarNavSectionHeader>
+          <SidebarNavSectionContent>
+            <SidebarNavLink to="/docs">
+              <SidebarNavLinkIcon>
+                <FileQuestion className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Documentação</SidebarNavLinkText>
+            </SidebarNavLink>
+          </SidebarNavSectionContent>
+        </SidebarNavSection>
+        
+        <SidebarNavSection>
+          <SidebarNavSectionHeader>
+            <SidebarNavSectionTitle>Conta</SidebarNavSectionTitle>
+          </SidebarNavSectionHeader>
+          <SidebarNavSectionContent>
+            {!active && (
+              <SidebarNavLink to="/subscribe">
+                <SidebarNavLinkIcon>
+                  <CreditCard className="h-4 w-4" />
+                </SidebarNavLinkIcon>
+                <SidebarNavLinkText>Assinar</SidebarNavLinkText>
+              </SidebarNavLink>
+            )}
+            <SidebarNavLink onClick={signOut} to="#">
+              <SidebarNavLinkIcon>
+                <LogOut className="h-4 w-4" />
+              </SidebarNavLinkIcon>
+              <SidebarNavLinkText>Sair</SidebarNavLinkText>
+            </SidebarNavLink>
+          </SidebarNavSectionContent>
+        </SidebarNavSection>
+      </SidebarNavMain>
+    </SidebarNav>
   );
-};
+}

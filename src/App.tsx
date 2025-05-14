@@ -1,6 +1,8 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/toaster";
+import { SubscriptionFloatingNotification } from "@/components/SubscriptionFloatingNotification";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -52,6 +54,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
+        <SubscriptionFloatingNotification />
       </BrowserRouter>
     </AuthProvider>
   );

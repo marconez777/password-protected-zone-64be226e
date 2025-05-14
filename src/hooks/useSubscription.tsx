@@ -52,13 +52,36 @@ export const useSubscription = () => {
         isLoading: false
       });
 
-      // Mostrar notificações baseadas no uso
-      if (data.remainingUses <= 10 && data.remainingUses > 0) {
+      // Display notifications based on usage thresholds
+      const usagePercentage = (data.usage / data.limit) * 100;
+
+      if (usagePercentage >= 75 && usagePercentage < 90 && data.remainingUses > 0) {
         toast({
-          title: "Aviso de limite",
-          description: `Você tem apenas ${data.remainingUses} requisições restantes no seu plano.`,
+          title: "Aviso de uso",
+          description: `Você já utilizou 75% do seu limite. Restam ${data.remainingUses} requisições.`,
+          variant: "default"
+        });
+      } else if (usagePercentage >= 90 && data.remainingUses > 0) {
+        toast({
+          title: "Aviso crítico",
+          description: `Atenção! Você está com apenas ${data.remainingUses} requisições restantes!`,
           variant: "destructive"
         });
+      }
+
+      // Check if subscription is about to expire (less than 7 days)
+      if (data.active && data.endsAt) {
+        const expiryDate = new Date(data.endsAt);
+        const currentDate = new Date();
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
+          toast({
+            title: "Assinatura a vencer",
+            description: `Sua assinatura irá expirar em ${daysUntilExpiry} ${daysUntilExpiry === 1 ? 'dia' : 'dias'}.`,
+            variant: "default"
+          });
+        }
       }
     } catch (error) {
       console.error('Erro ao verificar assinatura:', error);
@@ -70,7 +93,7 @@ export const useSubscription = () => {
     if (!user) return false;
     
     try {
-      // Verificar limite antes de incrementar
+      // Check limit before incrementing
       if (status.remainingUses <= 0) {
         toast({
           title: "Limite de uso atingido",
@@ -80,7 +103,7 @@ export const useSubscription = () => {
         return false;
       }
       
-      // Chamar função para incrementar o uso
+      // Call function to increment usage
       const { error } = await supabase.rpc('increment_global_usage');
       
       if (error) {
@@ -93,15 +116,16 @@ export const useSubscription = () => {
         return false;
       }
       
-      // Atualiza o estado local
+      // Update local state
       setStatus(prev => ({
         ...prev,
         usage: prev.usage + 1,
         remainingUses: Math.max(0, prev.remainingUses - 1)
       }));
       
-      // Notificações de limite de uso
+      // Update usage notifications
       const newRemainingUses = status.remainingUses - 1;
+      const newUsagePercentage = ((status.usage + 1) / status.limit) * 100;
       
       if (newRemainingUses === 0) {
         toast({
@@ -115,18 +139,20 @@ export const useSubscription = () => {
           description: `Atenção! Restam apenas ${newRemainingUses} requisições no seu plano.`,
           variant: "destructive"
         });
-      } else if (newRemainingUses <= 10) {
+      } else if (newUsagePercentage >= 90 && !toast.has90PercentNotification) {
         toast({
           title: "Aviso importante",
-          description: `Você tem apenas ${newRemainingUses} requisições restantes.`,
+          description: `Você já utilizou 90% do seu limite de requisições.`,
           variant: "destructive"
         });
-      } else if (newRemainingUses <= 20) {
+        toast.has90PercentNotification = true;
+      } else if (newUsagePercentage >= 75 && !toast.has75PercentNotification) {
         toast({
           title: "Aviso",
-          description: `Seu plano está com ${newRemainingUses} requisições restantes.`,
-          variant: "destructive"
+          description: `Você já utilizou 75% do seu limite de requisições.`,
+          variant: "default"
         });
+        toast.has75PercentNotification = true;
       }
       
       return true;
@@ -139,7 +165,7 @@ export const useSubscription = () => {
   useEffect(() => {
     checkSubscription();
     
-    // Verificar novamente a cada 10 minutos ou quando o usuário mudar
+    // Check subscription status every 10 minutes or when user changes
     const interval = setInterval(checkSubscription, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, [user]);
