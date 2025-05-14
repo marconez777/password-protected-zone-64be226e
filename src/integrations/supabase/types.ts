@@ -76,6 +76,7 @@ export type Database = {
         Row: {
           created_at: string
           current_period_end: string | null
+          current_period_start: string | null
           id: string
           is_active: boolean
           plan_type: Database["public"]["Enums"]["plan_type"]
@@ -85,6 +86,7 @@ export type Database = {
         Insert: {
           created_at?: string
           current_period_end?: string | null
+          current_period_start?: string | null
           id?: string
           is_active?: boolean
           plan_type?: Database["public"]["Enums"]["plan_type"]
@@ -94,6 +96,7 @@ export type Database = {
         Update: {
           created_at?: string
           current_period_end?: string | null
+          current_period_start?: string | null
           id?: string
           is_active?: boolean
           plan_type?: Database["public"]["Enums"]["plan_type"]
@@ -221,7 +224,7 @@ export type Database = {
       }
       increment_user_usage: {
         Args: { resource_type: string }
-        Returns: boolean
+        Returns: undefined
       }
       user_has_exceeded_limit: {
         Args: { resource_type: string }
