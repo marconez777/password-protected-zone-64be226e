@@ -2,23 +2,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useUsageData } from "@/hooks/useUsageData";
 
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { SubscriptionCard } from "@/components/dashboard/SubscriptionCard";
-import { ResourceUsageCard } from "@/components/dashboard/resource-usage/ResourceUsageCard";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
 
 const Dashboard = () => {
   const { session, user } = useAuth();
   const navigate = useNavigate();
-  const { 
-    subscription, 
-    usage, 
-    planLimits, 
-    loading,
-    reload 
-  } = useUsageData();
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -27,33 +17,8 @@ const Dashboard = () => {
       return;
     }
   }, [session, navigate]);
-  
-  // Separate effect to reload data - ensuring it runs when the component mounts
-  // and isn't skipped due to early return in the previous effect
-  useEffect(() => {
-    if (session) {
-      // Força um reload toda vez que o dashboard é mostrado
-      console.log("Dashboard montado - forçando reload dos dados de uso");
-      reload();
-    }
-  }, [session, reload]);
 
-  // Add an interval to periodically refresh usage data while dashboard is open
-  useEffect(() => {
-    // Skip if not authenticated
-    if (!session) return;
-    
-    // Periodic refresh every 30 seconds to keep data current
-    const intervalId = setInterval(() => {
-      console.log("Atualizando dados de uso periodicamente");
-      reload();
-    }, 20000); // 20 seconds
-    
-    // Clean up interval on unmount
-    return () => clearInterval(intervalId);
-  }, [session, reload]);
-
-  if (!user || loading) {
+  if (!user) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -66,15 +31,12 @@ const Dashboard = () => {
       title="Dashboard" 
       userName={user?.user_metadata?.full_name || "Usuário"}
     >
-      <SubscriptionCard 
-        subscription={subscription}
-        userName={user?.user_metadata?.full_name || "Usuário"} 
-      />
-      
-      <ResourceUsageCard 
-        usage={usage} 
-        planLimits={planLimits} 
-      />
+      <div className="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 className="text-2xl font-medium text-gray-800 mb-4">Bem-vindo, {user?.user_metadata?.full_name || "Usuário"}!</h2>
+        <p className="text-gray-600">
+          Use o painel lateral para acessar todas as funcionalidades disponíveis.
+        </p>
+      </div>
       
       <FeatureCards />
     </DashboardLayout>

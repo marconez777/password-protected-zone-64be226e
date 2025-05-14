@@ -7,5 +7,4 @@ export interface ResourceFormProps {
   children: ReactNode;
   onSubmit: () => Promise<boolean>;
   resultComponent?: ReactNode;
-  resourceType?: string; // Kept for backwards compatibility
 }
