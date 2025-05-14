@@ -25,8 +25,6 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     reload();
   }, [reload]);
 
-  const isActive = subscription?.is_active === true;
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -36,6 +34,8 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   // Verificação mais segura para plano ativo
+  const isActive = subscription?.is_active === true;
+
   if (!isActive) {
     console.log('ProtectedRoute - Redirecionando para /subscribe - Plano não ativo');
     return <Navigate to="/subscribe" state={{ from: location }} replace />;

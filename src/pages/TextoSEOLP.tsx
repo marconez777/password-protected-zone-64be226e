@@ -1,10 +1,18 @@
 
+import { useEffect } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { TextoSEOLPForm } from "@/components/texto-seo-lp/TextoSEOLPForm";
 import { useAuth } from "@/hooks/useAuth";
+import { usePlanContext } from "@/contexts/PlanContext";
 
 const TextoSEOLP = () => {
   const { user } = useAuth();
+  const { reload } = usePlanContext();
+  
+  // Recarregar dados de assinatura ao acessar esta página
+  useEffect(() => {
+    reload();
+  }, [reload]);
   
   return (
     <DashboardLayout 
