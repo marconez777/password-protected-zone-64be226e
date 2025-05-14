@@ -45,11 +45,8 @@ export function useUsageData() {
           setError("Não foi possível carregar os limites do plano");
         }
       } else {
-        // Se não tem assinatura, considerar plano "solo" como padrão
-        const defaultPlanLimits = await fetchPlanLimits('solo');
-        if (defaultPlanLimits) {
-          setPlanLimits(defaultPlanLimits);
-        }
+        // Se não tem assinatura, o usuário não deve ter limites disponíveis
+        setPlanLimits(null);
         
         // Ensure we have usage data even without subscription
         const usageData = await fetchUsageData(user.id);
