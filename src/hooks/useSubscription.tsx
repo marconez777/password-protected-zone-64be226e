@@ -26,6 +26,10 @@ export const useSubscription = () => {
     limit: 80,
     isLoading: true
   });
+  
+  // Track notification states
+  const [has90PercentNotification, setHas90PercentNotification] = useState(false);
+  const [has75PercentNotification, setHas75PercentNotification] = useState(false);
 
   const checkSubscription = async () => {
     if (!user) {
@@ -55,18 +59,20 @@ export const useSubscription = () => {
       // Display notifications based on usage thresholds
       const usagePercentage = (data.usage / data.limit) * 100;
 
-      if (usagePercentage >= 75 && usagePercentage < 90 && data.remainingUses > 0) {
+      if (usagePercentage >= 75 && usagePercentage < 90 && data.remainingUses > 0 && !has75PercentNotification) {
         toast({
           title: "Aviso de uso",
           description: `Você já utilizou 75% do seu limite. Restam ${data.remainingUses} requisições.`,
           variant: "default"
         });
-      } else if (usagePercentage >= 90 && data.remainingUses > 0) {
+        setHas75PercentNotification(true);
+      } else if (usagePercentage >= 90 && data.remainingUses > 0 && !has90PercentNotification) {
         toast({
           title: "Aviso crítico",
           description: `Atenção! Você está com apenas ${data.remainingUses} requisições restantes!`,
           variant: "destructive"
         });
+        setHas90PercentNotification(true);
       }
 
       // Check if subscription is about to expire (less than 7 days)
@@ -139,20 +145,20 @@ export const useSubscription = () => {
           description: `Atenção! Restam apenas ${newRemainingUses} requisições no seu plano.`,
           variant: "destructive"
         });
-      } else if (newUsagePercentage >= 90 && !toast.has90PercentNotification) {
+      } else if (newUsagePercentage >= 90 && !has90PercentNotification) {
         toast({
           title: "Aviso importante",
           description: `Você já utilizou 90% do seu limite de requisições.`,
           variant: "destructive"
         });
-        toast.has90PercentNotification = true;
-      } else if (newUsagePercentage >= 75 && !toast.has75PercentNotification) {
+        setHas90PercentNotification(true);
+      } else if (newUsagePercentage >= 75 && !has75PercentNotification) {
         toast({
           title: "Aviso",
           description: `Você já utilizou 75% do seu limite de requisições.`,
           variant: "default"
         });
-        toast.has75PercentNotification = true;
+        setHas75PercentNotification(true);
       }
       
       return true;

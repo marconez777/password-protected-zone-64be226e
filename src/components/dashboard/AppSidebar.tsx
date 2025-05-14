@@ -1,18 +1,16 @@
-import { SidebarCloseButton } from "@/components/ui/sidebar";
-import { Logo } from "@/components/ui/logo";
-import {
-  SidebarNav,
-  SidebarNavHeader,
-  SidebarNavHeaderTitle,
-  SidebarNavLink,
-  SidebarNavLinkIcon,
-  SidebarNavLinkText,
-  SidebarNavMain,
-  SidebarNavSection,
-  SidebarNavSectionContent,
-  SidebarNavSectionHeader,
-  SidebarNavSectionTitle,
+
+import { 
+  Sidebar, 
+  SidebarHeader, 
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent
 } from "@/components/ui/sidebar";
+import { Logo } from "@/components/ui/logo";
 import {
   CreditCard,
   Home,
@@ -24,154 +22,197 @@ import {
   FileQuestion,
   ScrollText,
   LogOut,
+  X
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { SubscriptionNotification } from '@/components/ui/sidebar/SubscriptionNotification';
 import { useSubscription } from '@/hooks/useSubscription';
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export function AppSidebar() {
-  const { signOut } = useAuth();
+  const { user } = useAuth();
   const { active, remainingUses, limit } = useSubscription();
   
+  const handleSignOut = () => {
+    // This is a safe fallback since signOut might not be available
+    if (localStorage) {
+      localStorage.removeItem('supabase.auth.token');
+      window.location.href = '/login';
+    }
+  };
+  
   return (
-    <SidebarNav className="w-72 border-r px-2 py-2 flex flex-col overflow-hidden">
-      <SidebarNavHeader>
-        <Logo className="h-8 w-8 text-mkranker-purple" />
-        <SidebarNavHeaderTitle>MK Ranker</SidebarNavHeaderTitle>
-        <SidebarCloseButton className="w-8 h-8 absolute top-3 right-2 md:hidden" />
-      </SidebarNavHeader>
+    <Sidebar className="border-r">
+      <SidebarHeader className="flex items-center px-4 py-2">
+        <Logo className="h-8 w-8 text-primary mr-2" />
+        <h1 className="font-bold text-lg">MK Ranker</h1>
+        <Button 
+          variant="ghost" 
+          size="icon"
+          className="ml-auto md:hidden"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </SidebarHeader>
       
       <SubscriptionNotification />
       
-      <SidebarNavMain>
-        <SidebarNavSection>
-          <SidebarNavSectionHeader>
-            <SidebarNavSectionTitle>Principal</SidebarNavSectionTitle>
-          </SidebarNavSectionHeader>
-          <SidebarNavSectionContent>
-            <SidebarNavLink to="/dashboard">
-              <SidebarNavLinkIcon>
-                <Home className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Dashboard</SidebarNavLinkText>
-            </SidebarNavLink>
-            
-            {active && (
-              <SidebarNavLink to="/subscription-management">
-                <SidebarNavLinkIcon>
-                  <CreditCard className="h-4 w-4" />
-                </SidebarNavLinkIcon>
-                <SidebarNavLinkText>
-                  Assinatura
-                  <span className="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-200 text-gray-700">
-                    {remainingUses}/{limit}
-                  </span>
-                </SidebarNavLinkText>
-              </SidebarNavLink>
-            )}
-          </SidebarNavSectionContent>
-        </SidebarNavSection>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Principal</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/dashboard">
+                    <Home className="h-4 w-4 mr-2" />
+                    <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              {active && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/subscription-management">
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      <span>
+                        Assinatura
+                        <span className="ml-2 text-xs py-0.5 px-1.5 rounded-full bg-gray-200 text-gray-700">
+                          {remainingUses}/{limit}
+                        </span>
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         
-        <SidebarNavSection>
-          <SidebarNavSectionHeader>
-            <SidebarNavSectionTitle>Ferramentas</SidebarNavSectionTitle>
-          </SidebarNavSectionHeader>
-          <SidebarNavSectionContent>
-            <SidebarNavLink to="/search-funnel">
-              <SidebarNavLinkIcon>
-                <SearchCheck className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Funil de Busca</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/keywords">
-              <SidebarNavLinkIcon>
-                <KeyRound className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Palavras-chave</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/market-and-target">
-              <SidebarNavLinkIcon>
-                <Target className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Mercado e Público-alvo</SidebarNavLinkText>
-            </SidebarNavLink>
-          </SidebarNavSectionContent>
-        </SidebarNavSection>
+        <SidebarGroup>
+          <SidebarGroupLabel>Ferramentas</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/search-funnel">
+                    <SearchCheck className="h-4 w-4 mr-2" />
+                    <span>Funil de Busca</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/keywords">
+                    <KeyRound className="h-4 w-4 mr-2" />
+                    <span>Palavras-chave</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/market-and-target">
+                    <Target className="h-4 w-4 mr-2" />
+                    <span>Mercado e Público-alvo</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         
-        <SidebarNavSection>
-          <SidebarNavSectionHeader>
-            <SidebarNavSectionTitle>Conteúdo SEO</SidebarNavSectionTitle>
-          </SidebarNavSectionHeader>
-          <SidebarNavSectionContent>
-            <SidebarNavLink to="/texto-seo-lp">
-              <SidebarNavLinkIcon>
-                <FileText className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Texto SEO para LP</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/texto-seo-produto">
-              <SidebarNavLinkIcon>
-                <FileText className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Texto SEO para Produto</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/texto-seo-blog">
-              <SidebarNavLinkIcon>
-                <FileText className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Texto SEO para Blog</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/pautas-blog">
-              <SidebarNavLinkIcon>
-                <BookText className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Pautas para Blog</SidebarNavLinkText>
-            </SidebarNavLink>
-            <SidebarNavLink to="/meta-dados">
-              <SidebarNavLinkIcon>
-                <ScrollText className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Meta Dados</SidebarNavLinkText>
-            </SidebarNavLink>
-          </SidebarNavSectionContent>
-        </SidebarNavSection>
+        <SidebarGroup>
+          <SidebarGroupLabel>Conteúdo SEO</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/texto-seo-lp">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span>Texto SEO para LP</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/texto-seo-produto">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span>Texto SEO para Produto</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/texto-seo-blog">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span>Texto SEO para Blog</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/pautas-blog">
+                    <BookText className="h-4 w-4 mr-2" />
+                    <span>Pautas para Blog</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/meta-dados">
+                    <ScrollText className="h-4 w-4 mr-2" />
+                    <span>Meta Dados</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         
-        <SidebarNavSection>
-          <SidebarNavSectionHeader>
-            <SidebarNavSectionTitle>Ajuda</SidebarNavSectionTitle>
-          </SidebarNavSectionHeader>
-          <SidebarNavSectionContent>
-            <SidebarNavLink to="/docs">
-              <SidebarNavLinkIcon>
-                <FileQuestion className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Documentação</SidebarNavLinkText>
-            </SidebarNavLink>
-          </SidebarNavSectionContent>
-        </SidebarNavSection>
+        <SidebarGroup>
+          <SidebarGroupLabel>Ajuda</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/docs">
+                    <FileQuestion className="h-4 w-4 mr-2" />
+                    <span>Documentação</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         
-        <SidebarNavSection>
-          <SidebarNavSectionHeader>
-            <SidebarNavSectionTitle>Conta</SidebarNavSectionTitle>
-          </SidebarNavSectionHeader>
-          <SidebarNavSectionContent>
-            {!active && (
-              <SidebarNavLink to="/subscribe">
-                <SidebarNavLinkIcon>
-                  <CreditCard className="h-4 w-4" />
-                </SidebarNavLinkIcon>
-                <SidebarNavLinkText>Assinar</SidebarNavLinkText>
-              </SidebarNavLink>
-            )}
-            <SidebarNavLink onClick={signOut} to="#">
-              <SidebarNavLinkIcon>
-                <LogOut className="h-4 w-4" />
-              </SidebarNavLinkIcon>
-              <SidebarNavLinkText>Sair</SidebarNavLinkText>
-            </SidebarNavLink>
-          </SidebarNavSectionContent>
-        </SidebarNavSection>
-      </SidebarNavMain>
-    </SidebarNav>
+        <SidebarGroup>
+          <SidebarGroupLabel>Conta</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {!active && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/subscribe">
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      <span>Assinar</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild onClick={handleSignOut}>
+                  <Link to="#">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    <span>Sair</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }
