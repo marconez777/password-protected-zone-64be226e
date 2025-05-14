@@ -17,9 +17,17 @@ export const useSubscription = () => {
     return true;
   };
 
+  // Adding these properties to fix TypeScript errors in components that use this hook
+  const active = true; // Always active since we removed subscription checks
+  const remainingUses = 999; // Large number since we removed usage limits
+  const limit = 1000; // Large number since we removed usage limits
+
   return {
     isLoading,
     checkSubscription,
-    incrementUsage
+    incrementUsage,
+    active,
+    remainingUses,
+    limit
   };
 };

@@ -6,9 +6,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
-// Security constants
+// Security constants - these can be kept but aren't enforced anymore
 export const USAGE_LIMIT_CONFIG = {
-  GLOBAL_USAGE_LIMIT: 80,
+  GLOBAL_USAGE_LIMIT: 1000, // Increased since we removed limits
   WARNING_THRESHOLD_PERCENT: 75,
   CRITICAL_THRESHOLD_PERCENT: 90
 };
@@ -16,7 +16,7 @@ export const USAGE_LIMIT_CONFIG = {
 // Define the security event structure to help TypeScript
 interface SecurityEvent {
   user_id: string;
-  action_type: 'usage' | 'payment' | 'auth' | 'system';
+  action_type: 'usage' | 'auth' | 'system';
   ip_address: string;
   device_info: string;
   status: 'success' | 'warning' | 'blocked' | 'error';
@@ -32,7 +32,7 @@ export const useSecurityCheck = () => {
 
   // Log security events for audit purposes
   const logSecurityEvent = async (
-    action: 'usage' | 'payment' | 'auth' | 'system',
+    action: 'usage' | 'auth' | 'system',
     status: 'success' | 'warning' | 'blocked' | 'error',
     details: string
   ) => {
@@ -64,7 +64,7 @@ export const useSecurityCheck = () => {
     }
   };
 
-  // Comprehensive access check with protection against bypass attempts
+  // Simplified access check that always returns true
   const verifyResourceAccess = async (resourceType: string): Promise<boolean> => {
     if (checkingAccess || isLoading) return false;
     setCheckingAccess(true);
@@ -80,45 +80,6 @@ export const useSecurityCheck = () => {
         return false;
       }
 
-      if (!active) {
-        toast({
-          title: "Assinatura requerida",
-          description: "Você precisa ter uma assinatura ativa para acessar este recurso.",
-          variant: "destructive"
-        });
-        navigate('/subscribe');
-        return false;
-      }
-
-      if (remainingUses <= 0) {
-        // Double-check with direct database query to prevent tampering
-        const { data, error } = await supabase
-          .from("user_usage")
-          .select("total_usage")
-          .eq("user_id", user.id)
-          .single();
-        
-        const hasAccess = data && data.total_usage < USAGE_LIMIT_CONFIG.GLOBAL_USAGE_LIMIT;
-        
-        if (error || !hasAccess) {
-          toast({
-            title: "Limite atingido",
-            description: "Você atingiu o limite de requisições do seu plano.",
-            variant: "destructive"
-          });
-          
-          // Log blocked access attempt
-          await logSecurityEvent(
-            'usage',
-            'blocked',
-            `Tentativa de acesso quando limite atingido: ${resourceType}`
-          );
-          
-          navigate('/usage-limit');
-          return false;
-        }
-      }
-      
       // Log successful access
       await logSecurityEvent(
         'usage',
@@ -140,54 +101,9 @@ export const useSecurityCheck = () => {
     }
   };
 
-  // Detect suspicious activity
+  // Simplified suspicious activity check that always returns false
   const detectSuspiciousActivity = async (): Promise<boolean> => {
-    if (!user) return false;
-    
-    try {
-      // Calculate time 2 hours ago
-      const twoHoursAgo = new Date();
-      twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
-      const twoHoursAgoStr = twoHoursAgo.toISOString();
-      
-      // Count recent access events - using "as any" to bypass type checking for security_events table
-      const { data, error, count } = await supabase
-        .from('security_events' as any)
-        .select('*', { count: 'exact' })
-        .eq("user_id", user.id)
-        .eq("action_type", "usage")
-        .gte("created_at", twoHoursAgoStr);
-      
-      if (error) {
-        console.error('Error checking for suspicious activity:', error);
-        return false;
-      }
-      
-      // Use the array length as count (compatible with all Supabase versions)
-      const eventCount = count || (data ? data.length : 0);
-      const isSuspicious = eventCount > 30; // Many accesses in 2 hours is suspicious
-      
-      if (isSuspicious) {
-        // Log suspicious activity
-        await logSecurityEvent(
-          'system',
-          'warning',
-          `Atividade suspeita detectada: Múltiplos acessos em curto período`
-        );
-        
-        toast({
-          title: "Alerta de segurança",
-          description: "Detectamos um padrão incomum de uso. Por favor, contate o suporte se você está tendo problemas.",
-          variant: "destructive"
-        });
-        return true;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('Error in suspicious activity detection:', error);
-      return false;
-    }
+    return false;
   };
 
   return {
