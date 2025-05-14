@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { ResourceType } from '@/hooks/useResourceLimits';
+import { ResourceType, useResourceLimits } from '@/hooks/useResourceLimits';
 import { useUsageData } from '@/hooks/useUsageData';
 
 /**
@@ -18,6 +18,7 @@ export function useWebhookSubmission(
   const { user } = useAuth();
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
+  const { checkAndIncrementResource } = useResourceLimits();
 
   const submitToWebhook = async (formData: any): Promise<any> => {
     if (!user) {
@@ -40,7 +41,15 @@ export function useWebhookSubmission(
 
     setIsLoading(true);
     
+    // 1. Primeiro verificar/incrementar limite (ANTES de enviar o webhook)
     try {
+      const canProceed = await checkAndIncrementResource(resourceType);
+      if (!canProceed) {
+        setIsLoading(false);
+        return null;
+      }
+      
+      // 2. Agora, enviar a requisição para o webhook
       console.log(`Enviando dados para o webhook: ${webhookUrl}`);
       console.log("Dados:", JSON.stringify(formData));
       
@@ -53,6 +62,8 @@ export function useWebhookSubmission(
       });
 
       if (!response.ok) {
+        // Se falhou, aqui poderíamos adicionar código para decrementar o contador
+        // Isso exigiria uma nova função no banco de dados
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -62,7 +73,7 @@ export function useWebhookSubmission(
       // Set the result immediately after receiving it
       setResult(resultData);
       
-      // Save to database
+      // 3. Se tudo deu certo, salvar no banco
       try {
         await saveResultToDatabase(resourceType, formData, resultData);
         
