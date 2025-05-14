@@ -60,8 +60,6 @@ export function useResourceLimits() {
     setIsChecking(true);
     
     try {
-      // Removida verificação desnecessária da sessão
-      
       // Mapear o tipo de recurso corretamente
       const mappedResourceType = RESOURCE_TYPE_MAPPING[resourceType] || resourceType;
       console.log('Mapped Resource Type:', mappedResourceType);

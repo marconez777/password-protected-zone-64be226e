@@ -26,7 +26,7 @@ export function ResourceForm({
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
   
-  // Removemos a verificação de plano aqui, já que useResourceLimits já faz isso
+  // Removed redundant plan check - useResourceLimits already does this
   const { planLimits } = useUsageData();
   
   const loading = isChecking || isSubmitting;
