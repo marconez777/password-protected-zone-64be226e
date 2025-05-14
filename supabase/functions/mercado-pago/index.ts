@@ -16,7 +16,7 @@ serve(async (req) => {
   const url = new URL(req.url);
   
   try {
-    // Handle webhook requests
+    // Handle webhook requests - webhooks don't need authentication
     if (url.searchParams.get("webhook") === "true") {
       return await handleWebhook(req);
     }
