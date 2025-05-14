@@ -6,7 +6,6 @@ import { useToast } from '@/hooks/use-toast';
 
 export const useUsageTracking = (redirectOnLimitExceeded = true) => {
   const { 
-    active, 
     isLoading, 
     remainingUses, 
     limit, 

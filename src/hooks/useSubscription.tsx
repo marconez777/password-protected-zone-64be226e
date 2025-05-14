@@ -11,9 +11,7 @@ export const useSubscription = () => {
   const { user, refreshSession } = useAuth();
   const { toast } = useToast();
   const [status, setStatus] = useState<SubscriptionStatus>({
-    active: true, // Default to active since we're removing payment requirements
-    endsAt: null,
-    planType: 'basic',
+    active: true,
     usage: 0,
     remainingUses: 80, // Start with full 80 requests
     limit: 80,
@@ -61,9 +59,7 @@ export const useSubscription = () => {
       
       // Set status
       const updatedStatus: SubscriptionStatus = {
-        active: true, // Always active in this simplified version
-        endsAt: null,
-        planType: 'basic', 
+        active: true,
         usage: usage,
         remainingUses: remainingUses,
         limit: 80, 

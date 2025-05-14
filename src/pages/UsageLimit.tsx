@@ -34,8 +34,7 @@ const UsageLimit = () => {
                 <div className="flex items-start">
                   <InfoIcon className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
                   <p>
-                    Você atingiu seu limite de requisições. Por favor, entre em contato com o administrador
-                    para solicitar mais requisições ou aguarde até que seu limite seja reiniciado.
+                    Você atingiu seu limite de requisições. Por favor, aguarde até que seu limite seja reiniciado.
                   </p>
                 </div>
               </div>

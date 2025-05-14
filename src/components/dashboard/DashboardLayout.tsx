@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { User as UserIcon, CreditCard, Settings } from "lucide-react";
+import { User as UserIcon, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 
@@ -20,12 +20,7 @@ export const DashboardLayout = ({
   subtitle, 
   userName 
 }: DashboardLayoutProps) => {
-  const { remainingUses, limit, endsAt } = useSubscription();
-  
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return '';
-    return new Date(dateStr).toLocaleDateString('pt-BR');
-  };
+  const { remainingUses, limit } = useSubscription();
   
   const usagePercentage = limit > 0 ? ((limit - remainingUses) / limit) * 100 : 0;
   
@@ -57,15 +52,15 @@ export const DashboardLayout = ({
               <SidebarTrigger className="block md:hidden" />
               <div className="hidden md:flex items-center gap-2">
                 <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">
-                  <Link to="/subscription-management">
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    {endsAt ? `Assinatura até ${formatDate(endsAt)}` : "Assinar"}
+                  <Link to="/dashboard">
+                    <UserIcon className="w-4 h-4 mr-2" />
+                    Meu Perfil
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">
-                  <Link to="/subscription-management">
+                  <Link to="/dashboard">
                     <Settings className="w-4 h-4 mr-2" />
-                    Gerenciar Assinatura
+                    Configurações
                   </Link>
                 </Button>
               </div>

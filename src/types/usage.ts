@@ -1,5 +1,5 @@
 
-// Enhanced usage types with security-related fields
+// Enhanced usage types without subscription-related fields
 export interface Usage {
   id: string;
   user_id: string;
@@ -8,22 +8,10 @@ export interface Usage {
   usage_count: number;
 }
 
-export interface PlanLimit {
-  id: string;
-  max_usage: number;
-}
-
-export interface Subscription {
-  id: string;
-  user_id: string;
-  payment_id?: string;
-  payment_verified: boolean;
-}
-
 // Security related interfaces
 export interface SecurityLog {
   user_id: string;
-  action_type: 'usage' | 'payment' | 'auth' | 'system';
+  action_type: 'usage' | 'auth' | 'system';
   ip_address?: string;
   device_info?: string;
   status: 'success' | 'warning' | 'blocked' | 'error';

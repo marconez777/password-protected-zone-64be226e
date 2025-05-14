@@ -52,25 +52,19 @@ export const ResourceWrapper = ({
       <div className="border rounded-lg p-6 bg-amber-50 border-amber-200 text-center">
         <AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-amber-800 mb-2">
-          {remainingUses <= 0 ? "Limite de uso atingido" : "Assinatura necessária"}
+          {remainingUses <= 0 ? "Limite de uso atingido" : "Sem permissão de acesso"}
         </h3>
         <p className="text-amber-700 mb-4">
           {remainingUses <= 0 
-            ? "Você atingiu o limite de 80 requisições do seu plano." 
-            : "Você precisa ter uma assinatura ativa para usar este recurso."}
+            ? "Você atingiu o limite de 80 requisições." 
+            : "Você não tem permissão para acessar este recurso."}
         </p>
         <div className="flex justify-center gap-4">
           <Button 
-            onClick={() => navigate(remainingUses <= 0 ? '/usage-limit' : '/subscribe')}
+            onClick={() => navigate(remainingUses <= 0 ? '/usage-limit' : '/dashboard')}
             className="bg-amber-600 hover:bg-amber-700"
           >
-            {remainingUses <= 0 ? "Ver detalhes" : "Assinar agora"}
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/dashboard')}
-          >
-            Voltar ao Dashboard
+            {remainingUses <= 0 ? "Ver detalhes" : "Voltar ao Dashboard"}
           </Button>
         </div>
       </div>
@@ -94,7 +88,7 @@ export const ResourceWrapper = ({
           onClick={handleContinue}
           className="bg-mkranker-purple hover:bg-mkranker-dark-purple"
         >
-          Continuar com Segurança
+          Continuar
         </Button>
       </div>
     );

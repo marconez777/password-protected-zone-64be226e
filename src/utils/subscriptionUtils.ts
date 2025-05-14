@@ -28,25 +28,6 @@ export const displayUsageNotifications = (
   }
 };
 
-export const displayExpiryNotification = (
-  status: SubscriptionStatus,
-  toast: ReturnType<typeof useToast>["toast"]
-) => {
-  if (status.active && status.endsAt) {
-    const expiryDate = new Date(status.endsAt);
-    const currentDate = new Date();
-    const daysUntilExpiry = Math.ceil((expiryDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
-      toast({
-        title: "Assinatura a vencer",
-        description: `Sua assinatura irá expirar em ${daysUntilExpiry} ${daysUntilExpiry === 1 ? 'dia' : 'dias'}.`,
-        variant: "default"
-      });
-    }
-  }
-};
-
 export const handleUsageIncrement = (
   status: SubscriptionStatus,
   notificationState: { has75PercentNotification: boolean; has90PercentNotification: boolean },
@@ -58,13 +39,13 @@ export const handleUsageIncrement = (
   if (newRemainingUses === 0) {
     toast({
       title: "Limite atingido",
-      description: "Você utilizou todas as requisições disponíveis no seu plano.",
+      description: "Você utilizou todas as requisições disponíveis.",
       variant: "destructive"
     });
   } else if (newRemainingUses <= 5) {
     toast({
       title: "Aviso crítico",
-      description: `Atenção! Restam apenas ${newRemainingUses} requisições no seu plano.`,
+      description: `Atenção! Restam apenas ${newRemainingUses} requisições.`,
       variant: "destructive"
     });
   } else if (newUsagePercentage >= 90 && !notificationState.has90PercentNotification) {
