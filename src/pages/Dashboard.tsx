@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -21,15 +20,35 @@ const Dashboard = () => {
   } = useUsageData();
 
   useEffect(() => {
-    // Se não autenticado, redirecionar para login
+    // Redirect to login if not authenticated
     if (!session) {
       navigate("/login");
       return;
     }
+  }, [session, navigate]);
+  
+  // Separate effect to reload data - ensuring it runs when the component mounts
+  // and isn't skipped due to early return in the previous effect
+  useEffect(() => {
+    if (session) {
+      // Reload data when the dashboard page is shown
+      reload();
+    }
+  }, [session, reload]);
+
+  // Add an interval to periodically refresh usage data while dashboard is open
+  useEffect(() => {
+    // Skip if not authenticated
+    if (!session) return;
     
-    // Recarregar dados quando a página do dashboard é mostrada
-    reload();
-  }, [session, navigate, reload]);
+    // Periodic refresh every 30 seconds to keep data current
+    const intervalId = setInterval(() => {
+      reload();
+    }, 30000); // 30 seconds
+    
+    // Clean up interval on unmount
+    return () => clearInterval(intervalId);
+  }, [session, reload]);
 
   if (!user || loading) {
     return (

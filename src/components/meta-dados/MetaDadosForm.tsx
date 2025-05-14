@@ -29,6 +29,8 @@ export function MetaDadosForm() {
       const values = methods.getValues();
       console.log("Enviando dados para webhook:", values);
       
+      // submitToWebhook agora cuida de verificar, enviar para o webhook, 
+      // salvar no banco e incrementar o contador (nesta ordem)
       const response = await submitToWebhook(values);
       if (response) {
         methods.reset();

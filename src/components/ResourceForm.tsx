@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +20,7 @@ export function ResourceForm({
   children,
   resultComponent,
 }: ResourceFormProps) {
-  const { checkAndIncrementResource, isChecking } = useResourceLimits();
+  const { checkResourceLimit, isChecking } = useResourceLimits();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
@@ -69,8 +68,9 @@ export function ResourceForm({
     setIsSubmitting(true);
 
     try {
-      // Check if the user has exceeded their limit
-      const canProceed = await checkAndIncrementResource(resourceType);
+      // Check if the user has exceeded their limit, but don't increment yet
+      // The actual increment will happen in useWebhookSubmission after success
+      const canProceed = await checkResourceLimit(resourceType);
 
       if (canProceed) {
         // Run the onSubmit function provided by the parent component
@@ -83,6 +83,8 @@ export function ResourceForm({
           });
           
           // Reload usage data to update the dashboard counts
+          // This will be redundant since useWebhookSubmission also reloads,
+          // but keeping it as a fallback
           reloadUsageData();
         }
       }

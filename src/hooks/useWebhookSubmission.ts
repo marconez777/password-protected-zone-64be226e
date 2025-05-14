@@ -18,7 +18,7 @@ export function useWebhookSubmission(
   const { user } = useAuth();
   const { toast } = useToast();
   const { reload: reloadUsageData } = useUsageData();
-  const { checkAndIncrementResource } = useResourceLimits();
+  const { checkResourceLimit, incrementResourceUsage } = useResourceLimits();
 
   const submitToWebhook = async (formData: any): Promise<any> => {
     if (!user) {
@@ -41,9 +41,9 @@ export function useWebhookSubmission(
 
     setIsLoading(true);
     
-    // 1. Primeiro verificar/incrementar limite (ANTES de enviar o webhook)
+    // 1. Primeiro APENAS verificar se o usuário pode proceder (sem incrementar o contador)
     try {
-      const canProceed = await checkAndIncrementResource(resourceType);
+      const canProceed = await checkResourceLimit(resourceType);
       if (!canProceed) {
         setIsLoading(false);
         return null;
@@ -62,8 +62,6 @@ export function useWebhookSubmission(
       });
 
       if (!response.ok) {
-        // Se falhou, aqui poderíamos adicionar código para decrementar o contador
-        // Isso exigiria uma nova função no banco de dados
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -77,7 +75,10 @@ export function useWebhookSubmission(
       try {
         await saveResultToDatabase(resourceType, formData, resultData);
         
-        // Reload usage data to update the dashboard counts
+        // 4. Somente AGORA incrementar o contador de uso (depois do sucesso)
+        await incrementResourceUsage(resourceType);
+        
+        // 5. Reload usage data to update the dashboard counts
         reloadUsageData();
       } catch (error) {
         console.error('Error saving result to database:', error);

@@ -1,5 +1,5 @@
 
-// Hook corrigido para useResourceLimits
+// Hook for useResourceLimits with improved logic
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,8 +19,9 @@ export type ResourceType =
   | 'texto_seo_blog'
   | 'pautas_blog';
 
-// Mapeamento correto dos tipos de recursos
+// Corrected mapping for resource types
 const RESOURCE_TYPE_MAPPING: Record<ResourceType, string> = {
+  // Each resource should have its own unique mapping to avoid accounting issues
   'market_target': 'market_research',
   'market_research': 'market_research',
   'search_funnel': 'search_funnel',
@@ -29,7 +30,7 @@ const RESOURCE_TYPE_MAPPING: Record<ResourceType, string> = {
   'topic_research': 'topic_research',
   'metadata_generation': 'metadata_generation',
   'texto_seo_lp': 'seo_text',
-  'texto_seo_produto': 'seo_text',
+  'texto_seo_produto': 'seo_text', 
   'texto_seo_blog': 'seo_text',
   'pautas_blog': 'topic_research'
 };
@@ -40,12 +41,16 @@ export function useResourceLimits() {
   const { planData } = usePlanData();
   const navigate = useNavigate();
   
-  const checkAndIncrementResource = async (resourceType: ResourceType): Promise<boolean> => {
+  /**
+   * Only checks if a user has exceeded their resource limit without incrementing.
+   * Use this for UI validation before attempting operations.
+   */
+  const checkResourceLimit = async (resourceType: ResourceType): Promise<boolean> => {
     console.log('=== CHECKING RESOURCE LIMIT ===');
     console.log('Resource Type:', resourceType);
     console.log('Plan Data:', planData);
     
-    // Verificar se o usuário tem plano ativo
+    // Verify user has active plan
     if (!planData || !planData.is_active || !planData.plan_type) {
       console.log('No active plan, redirecting to subscribe');
       toast({
@@ -60,11 +65,11 @@ export function useResourceLimits() {
     setIsChecking(true);
     
     try {
-      // Mapear o tipo de recurso corretamente
+      // Map resource type correctly
       const mappedResourceType = RESOURCE_TYPE_MAPPING[resourceType] || resourceType;
       console.log('Mapped Resource Type:', mappedResourceType);
       
-      // Verificar limite
+      // Check limit without incrementing
       const { data: hasExceeded, error: checkError } = await supabase
         .rpc('user_has_exceeded_limit', { 
           resource_type: mappedResourceType 
@@ -86,19 +91,6 @@ export function useResourceLimits() {
         return false;
       }
 
-      // Incrementar uso
-      const { error: incrementError } = await supabase
-        .rpc('increment_user_usage', { 
-          resource_type: mappedResourceType 
-        });
-
-      console.log('Increment result:', { incrementError });
-      
-      if (incrementError) {
-        console.error('Error incrementing resource usage:', incrementError);
-        throw incrementError;
-      }
-
       console.log('Resource limit check successful');
       return true;
       
@@ -115,8 +107,41 @@ export function useResourceLimits() {
     }
   };
 
+  /**
+   * Increments the usage count for a resource type.
+   * This should only be called AFTER the operation has successfully completed.
+   */
+  const incrementResourceUsage = async (resourceType: ResourceType): Promise<boolean> => {
+    console.log('=== INCREMENTING RESOURCE USAGE ===');
+    console.log('Resource Type:', resourceType);
+    
+    try {
+      // Map resource type correctly
+      const mappedResourceType = RESOURCE_TYPE_MAPPING[resourceType] || resourceType;
+      
+      // Increment usage
+      const { error: incrementError } = await supabase
+        .rpc('increment_user_usage', { 
+          resource_type: mappedResourceType 
+        });
+      
+      console.log('Increment result:', { incrementError });
+      
+      if (incrementError) {
+        console.error('Error incrementing resource usage:', incrementError);
+        throw incrementError;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error incrementing resource usage:', error);
+      return false;
+    }
+  };
+
   return {
-    checkAndIncrementResource,
+    checkResourceLimit,
+    incrementResourceUsage,
     isChecking
   };
 }
