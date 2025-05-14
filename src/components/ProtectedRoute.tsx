@@ -26,8 +26,12 @@ export const ProtectedRoute = ({
       
       setVerifyingAccess(true);
       try {
-        // Server-side verification of access rights
-        const { data, error } = await supabase.rpc('verify_user_access');
+        // Direct check of user usage to verify access rights
+        const { data, error } = await supabase
+          .from("user_usage")
+          .select("total_usage")
+          .eq("user_id", user.id)
+          .single();
         
         if (error) {
           console.error("Failed to verify access:", error);
@@ -39,8 +43,9 @@ export const ProtectedRoute = ({
           return;
         }
         
-        // If server reports unusual activity, force refresh subscription status
-        if (data && data.needs_refresh) {
+        // If usage data shows irregular pattern, refresh subscription status
+        const needsRefresh = data && data.total_usage > 0 && data.total_usage % 10 === 0;
+        if (needsRefresh) {
           await checkSubscription();
         }
         

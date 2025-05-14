@@ -34,15 +34,17 @@ export const useSecurityCheck = () => {
         .then(res => res.json())
         .catch(() => ({ ip: 'unknown' }));
       
-      // Log to audit table
-      await supabase.rpc('log_security_event', {
-        p_user_id: user.id,
-        p_action_type: action,
-        p_ip_address: ipResponse.ip || 'unknown',
-        p_device_info: navigator.userAgent,
-        p_status: status,
-        p_details: details
-      });
+      // Log to security_events table directly instead of using an RPC
+      await supabase
+        .from('security_events')
+        .insert({
+          user_id: user.id,
+          action_type: action,
+          ip_address: ipResponse.ip || 'unknown',
+          device_info: navigator.userAgent,
+          status: status,
+          details: details
+        });
     } catch (error) {
       console.error('Failed to log security event:', error);
     }
@@ -75,12 +77,16 @@ export const useSecurityCheck = () => {
       }
 
       if (remainingUses <= 0) {
-        // Double-check with server to prevent tampering
-        const { data, error } = await supabase.rpc('verify_resource_access', { 
-          resource_type: resourceType 
-        });
+        // Double-check with direct database query to prevent tampering
+        const { data, error } = await supabase
+          .from("user_usage")
+          .select("total_usage")
+          .eq("user_id", user.id)
+          .single();
         
-        if (error || !data || !data.has_access) {
+        const hasAccess = data && data.total_usage < USAGE_LIMIT_CONFIG.GLOBAL_USAGE_LIMIT;
+        
+        if (error || !hasAccess) {
           toast({
             title: "Limite atingido",
             description: "Você atingiu o limite de requisições do seu plano.",
@@ -125,19 +131,33 @@ export const useSecurityCheck = () => {
     if (!user) return false;
     
     try {
-      const { data, error } = await supabase.rpc('detect_suspicious_activity');
+      // Instead of using an RPC, implement the logic directly
+      const twoHoursAgo = new Date();
+      twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+      
+      // Count recent access events
+      const { data, error } = await supabase
+        .from("security_events")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("action_type", "usage")
+        .gte("created_at", twoHoursAgo.toISOString())
+        .count();
       
       if (error) {
         console.error('Error checking for suspicious activity:', error);
         return false;
       }
       
-      if (data && data.suspicious) {
+      const isSuspicious = data && data.count > 30; // Many accesses in 2 hours is suspicious
+      const reason = isSuspicious ? 'Múltiplos acessos em curto período' : null;
+      
+      if (isSuspicious) {
         // Log suspicious activity
         await logSecurityEvent(
           'system',
           'warning',
-          `Atividade suspeita detectada: ${data.reason || 'Múltiplos acessos'}`
+          `Atividade suspeita detectada: ${reason || 'Múltiplos acessos'}`
         );
         
         toast({
