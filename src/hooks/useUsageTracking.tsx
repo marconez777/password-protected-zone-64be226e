@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
@@ -42,7 +42,7 @@ export const useUsageTracking = (redirectOnLimitExceeded = true) => {
       if (remainingUses <= 0) {
         toast({
           title: "Limite atingido",
-          description: `Você já utilizou todas as ${limit} requisições disponíveis.`,
+          description: `Você já utilizou todas as 80 requisições disponíveis.`,
           variant: "destructive"
         });
         

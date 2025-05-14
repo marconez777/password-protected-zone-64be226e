@@ -49,15 +49,15 @@ export const useSubscription = () => {
       setStatus({
         active: data.active,
         endsAt: data.endsAt,
-        planType: data.planType,
+        planType: 'mensal', // Simplified to a single plan
         usage: data.usage,
         remainingUses: data.remainingUses,
-        limit: data.limit,
+        limit: 80, // Fixed limit for all users
         isLoading: false
       });
 
       // Display notifications based on usage thresholds
-      const usagePercentage = (data.usage / data.limit) * 100;
+      const usagePercentage = (data.usage / 80) * 100;
 
       if (usagePercentage >= 75 && usagePercentage < 90 && data.remainingUses > 0 && !has75PercentNotification) {
         toast({

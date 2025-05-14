@@ -70,7 +70,7 @@ const Subscribe = () => {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-700">Plano:</span>
-                  <span className="font-medium">Mensal</span>
+                  <span className="font-medium">Mensal - R$ 97,00</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-700">Requisições restantes:</span>
