@@ -96,7 +96,7 @@ export const useSubscription = () => {
         toast({
           title: "Aviso de limite",
           description: `Você tem apenas ${status.remainingUses} requisições restantes no seu plano.`,
-          variant: "destructive"  // Changed from "warning" to "destructive" to match allowed variants
+          variant: "destructive"
         });
       }
       
