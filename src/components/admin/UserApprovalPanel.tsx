@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserApproval } from '@/hooks/useUserApproval';
 import { 
   Table, 
@@ -13,12 +13,19 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle2, XCircle, RefreshCw } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const UserApprovalPanel = () => {
   const { loading, users, fetchUsersPendingApproval, approveUser, rejectUser } = useUserApproval();
+  const [actionInProgress, setActionInProgress] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchUsersPendingApproval();
+    fetchUsersPendingApproval().catch(err => {
+      setError("Erro ao carregar usuários pendentes. Por favor, tente novamente.");
+      console.error(err);
+    });
   }, []);
 
   // Formatar a data
@@ -31,12 +38,42 @@ export const UserApprovalPanel = () => {
     }
   };
 
+  // Handlers para aprovar e rejeitar usuários com melhor feedback
+  const handleApprove = async (userId: string) => {
+    setActionInProgress(userId);
+    setError(null);
+    try {
+      await approveUser(userId);
+    } catch (err) {
+      setError("Falha ao aprovar usuário. Por favor, tente novamente.");
+      console.error(err);
+    } finally {
+      setActionInProgress(null);
+    }
+  };
+
+  const handleReject = async (userId: string) => {
+    setActionInProgress(userId);
+    setError(null);
+    try {
+      await rejectUser(userId);
+    } catch (err) {
+      setError("Falha ao rejeitar usuário. Por favor, tente novamente.");
+      console.error(err);
+    } finally {
+      setActionInProgress(null);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Aprovação de Usuários</h2>
         <Button 
-          onClick={() => fetchUsersPendingApproval()}
+          onClick={() => {
+            setError(null);
+            fetchUsersPendingApproval();
+          }}
           variant="outline"
           disabled={loading}
         >
@@ -45,7 +82,22 @@ export const UserApprovalPanel = () => {
         </Button>
       </div>
 
-      {users.length === 0 ? (
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTitle>Erro</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      {loading ? (
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex items-center space-x-4">
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ))}
+        </div>
+      ) : users.length === 0 ? (
         <div className="text-center py-8 bg-muted/20 rounded-md">
           <p className="text-muted-foreground">Nenhum usuário pendente de aprovação</p>
         </div>
@@ -71,20 +123,28 @@ export const UserApprovalPanel = () => {
                       variant="outline"
                       size="sm"
                       className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                      onClick={() => approveUser(user.user_id)}
-                      disabled={loading}
+                      onClick={() => handleApprove(user.user_id)}
+                      disabled={loading || actionInProgress === user.user_id}
                     >
-                      <CheckCircle2 className="h-4 w-4 mr-1" />
+                      {actionInProgress === user.user_id ? (
+                        <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                      ) : (
+                        <CheckCircle2 className="h-4 w-4 mr-1" />
+                      )}
                       Aprovar
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => rejectUser(user.user_id)}
-                      disabled={loading}
+                      onClick={() => handleReject(user.user_id)}
+                      disabled={loading || actionInProgress === user.user_id}
                     >
-                      <XCircle className="h-4 w-4 mr-1" />
+                      {actionInProgress === user.user_id ? (
+                        <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
+                      ) : (
+                        <XCircle className="h-4 w-4 mr-1" />
+                      )}
                       Rejeitar
                     </Button>
                   </div>

@@ -234,6 +234,10 @@ export type Database = {
         }
         Returns: string
       }
+      count_pending_users: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       increment_global_usage: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -245,6 +249,10 @@ export type Database = {
         Returns: undefined
       }
       is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_admin_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }

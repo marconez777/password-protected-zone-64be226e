@@ -9,6 +9,7 @@ interface AuthContextType {
   session: Session | null;
   user: User | null;
   isApproved: boolean;
+  isAdmin: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
   isApproved: false,
+  isAdmin: false,
   loading: true,
   signOut: async () => {},
 });
@@ -25,15 +27,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   // Função para verificar o status do usuário
   const checkUserStatus = async (userId: string) => {
     try {
-      // Apenas verificar o status do usuário na tabela user_status
+      // Verificar o status do usuário na tabela user_status
       const { data, error } = await supabase
         .from('user_status')
-        .select('approved')
+        .select('approved, is_admin')
         .eq('user_id', userId)
         .single();
 
@@ -42,24 +45,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Se for o usuário admin, consideramos aprovado por padrão
         if (session?.user?.email === 'contato@mkart.com.br') {
-          return { approved: true };
+          return { approved: true, is_admin: true };
         }
         
-        return { approved: false };
+        return { approved: false, is_admin: false };
       }
 
       return { 
-        approved: data?.approved ?? false
+        approved: data?.approved ?? false,
+        is_admin: data?.is_admin ?? false
       };
     } catch (err) {
       console.error("Erro ao verificar status do usuário:", err);
       
       // Se for o usuário admin, consideramos aprovado por padrão
       if (session?.user?.email === 'contato@mkart.com.br') {
-        return { approved: true };
+        return { approved: true, is_admin: true };
       }
       
-      return { approved: false };
+      return { approved: false, is_admin: false };
     }
   };
 
@@ -74,6 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Tratamento especial para o email de administrador
           if (currentSession.user.email === 'contato@mkart.com.br') {
             setIsApproved(true);
+            setIsAdmin(true);
             setLoading(false);
             return;
           }
@@ -81,6 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Para outros usuários, verificar normalmente
           const status = await checkUserStatus(currentSession.user.id);
           setIsApproved(status.approved);
+          setIsAdmin(status.is_admin);
           
           // Se não estiver aprovado, fazer logout
           if (!status.approved) {
@@ -89,6 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           setIsApproved(false);
+          setIsAdmin(false);
         }
         
         setLoading(false);
@@ -104,6 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Tratamento especial para o email de administrador
         if (currentSession.user.email === 'contato@mkart.com.br') {
           setIsApproved(true);
+          setIsAdmin(true);
           setLoading(false);
           return;
         }
@@ -111,6 +119,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Para outros usuários, verificar normalmente
         const status = await checkUserStatus(currentSession.user.id);
         setIsApproved(status.approved);
+        setIsAdmin(status.is_admin);
         
         // Se não estiver aprovado, fazer logout
         if (!status.approved) {
@@ -135,6 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     user,
     isApproved,
+    isAdmin,
     loading,
     signOut,
   };
