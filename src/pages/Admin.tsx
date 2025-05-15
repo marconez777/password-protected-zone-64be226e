@@ -37,18 +37,18 @@ const Admin = () => {
     // Verificar se o usuário é administrador
     const checkAdminStatus = async () => {
       try {
-        // Buscar a contagem de usuários pendentes diretamente da tabela
-        const { count, error } = await supabase
-          .from('user_status')
-          .select('*', { count: 'exact', head: true })
-          .eq('approved', false);
+        setLoading(true);
+        
+        // Buscar a contagem de usuários pendentes diretamente através da função RPC
+        const { data, error } = await supabase
+          .rpc('count_pending_users');
         
         if (error) {
           console.error("Erro ao verificar usuários pendentes:", error);
           throw error;
         }
         
-        setPendingCount(count || 0);
+        setPendingCount(data || 0);
       } catch (error) {
         console.error("Erro ao verificar usuários pendentes:", error);
         toast.error("Não foi possível carregar a contagem de usuários pendentes");
