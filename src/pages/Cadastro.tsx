@@ -40,11 +40,8 @@ const Cadastro = () => {
     setErrorMessage(null);
     
     try {
-      // Verificar se o email já está cadastrado - removendo a implementação problemática
-      // Em vez de tentar verificar pelo listUsers, vamos prosseguir com o cadastro e deixar
-      // o próprio Supabase informar se o email já existe
-      
       // Registrar o usuário no Supabase Auth
+      // Note: O trigger init_user_status criará automaticamente o registro na tabela user_status
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -59,32 +56,18 @@ const Cadastro = () => {
         throw error;
       }
       
-      // Se o usuário é o admin, definimos como aprovado automaticamente
-      if (data.email === 'contato@mkart.com.br') {
-        // Para o admin, já aprovamos automaticamente (embora isso também esteja no trigger)
-        const { error: updateError } = await supabase
-          .from('user_status')
-          .update({ approved: true })
-          .eq('user_id', authData?.user?.id || '');
-          
-        if (updateError) {
-          console.error("Erro ao aprovar admin:", updateError);
-          // Não interrompemos o fluxo por causa deste erro
-        }
-      }
-      
       toast.success("Cadastro realizado com sucesso!");
       navigate("/cadastro-enviado");
     } catch (error: any) {
       console.error("Erro ao cadastrar:", error);
       
-      if (error.message.includes("already registered") || error.message.includes("já está cadastrado")) {
+      if (error.message && error.message.includes("already registered")) {
         setErrorMessage("Este email já está cadastrado.");
         toast.error("Este email já está cadastrado.");
-      } else if (error.message.includes("Database error saving new user")) {
-        // Se for o erro específico que estamos enfrentando
-        setErrorMessage("Erro ao salvar os dados do usuário. Por favor, tente novamente ou contate o suporte.");
-        toast.error("Erro ao salvar os dados do usuário.");
+      } else if (error.message && error.message.includes("Database error saving new user")) {
+        // Em vez de mostrar o erro técnico, damos uma mensagem mais amigável
+        setErrorMessage("Não foi possível completar o cadastro. Por favor, tente novamente ou use outro email.");
+        toast.error("Erro ao criar usuário. Tente novamente.");
       } else {
         setErrorMessage(error.error_description || error.message || "Erro ao realizar cadastro. Tente novamente.");
         toast.error("Erro ao realizar cadastro. Tente novamente.");
