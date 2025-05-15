@@ -21,18 +21,11 @@ export function useUserApproval() {
     try {
       console.log('Iniciando busca de usuários pendentes...');
       
-      // Utilizar uma consulta direta ao invés de RPC para testar
+      // Criar uma consulta com joins entre user_status e auth.users
+      // Usando SELECT * para simplificar e evitar o erro de ambiguidade
       const { data, error } = await supabase
         .from('user_status')
-        .select(`
-          user_id,
-          approved,
-          auth.users!inner (
-            email,
-            raw_user_meta_data->nome,
-            created_at
-          )
-        `)
+        .select('*, auth.users!inner(*)')
         .eq('approved', false);
       
       if (error) {
@@ -42,7 +35,7 @@ export function useUserApproval() {
         throw error;
       }
       
-      console.log('Resposta da consulta direta:', data);
+      console.log('Resposta da consulta simplificada:', data);
       
       if (!data || !Array.isArray(data) || data.length === 0) {
         console.log('Nenhum usuário pendente encontrado');
@@ -55,7 +48,7 @@ export function useUserApproval() {
         user_id: item.user_id,
         approved: item.approved,
         email: item.users?.email || 'N/A',
-        name: item.users?.nome || 'N/A',
+        name: item.users?.raw_user_meta_data?.nome || 'N/A',
         created_at: item.users?.created_at
       }));
       
