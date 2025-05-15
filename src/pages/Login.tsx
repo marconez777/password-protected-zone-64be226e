@@ -31,6 +31,9 @@ const Login = () => {
     setPendingApproval(false);
 
     try {
+      // Verificar se é o email de administrador
+      const isAdminEmail = email === 'contato@mkart.com.br';
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -41,27 +44,53 @@ const Login = () => {
       }
 
       if (data.user) {
-        // Verificar se o usuário está aprovado
-        const { data: statusData, error: statusError } = await supabase
-          .from('user_status')
-          .select('approved')
-          .eq('user_id', data.user.id)
-          .single();
-          
-        if (statusError) {
-          throw statusError;
+        // Tratamento especial para o administrador
+        if (isAdminEmail) {
+          toast.success("Login de administrador realizado com sucesso!");
+          navigate("/admin");
+          return;
         }
         
-        // Se o usuário não estiver aprovado, mostrar mensagem
-        if (!statusData.approved) {
-          // Fazer logout imediatamente
-          await supabase.auth.signOut();
-          setPendingApproval(true);
-          throw new Error("Sua conta está pendente de aprovação pelo administrador.");
-        }
+        // Para outros usuários, verificar aprovação
+        try {
+          const { data: statusData, error: statusError } = await supabase
+            .from('user_status')
+            .select('approved')
+            .eq('user_id', data.user.id)
+            .single();
+            
+          if (statusError) {
+            // Se houver erro na verificação, verificar se não é o admin
+            if (data.user.email === 'contato@mkart.com.br') {
+              toast.success("Login de administrador realizado com sucesso!");
+              navigate("/admin");
+              return;
+            }
+            throw statusError;
+          }
+          
+          // Se o usuário não estiver aprovado, mostrar mensagem
+          if (!statusData.approved) {
+            // Fazer logout imediatamente
+            await supabase.auth.signOut();
+            setPendingApproval(true);
+            throw new Error("Sua conta está pendente de aprovação pelo administrador.");
+          }
 
-        toast.success("Login realizado com sucesso!");
-        navigate("/dashboard");
+          toast.success("Login realizado com sucesso!");
+          navigate("/dashboard");
+        } catch (statusCheckError) {
+          // Se for o admin e houver erro na verificação de status, permitir acesso
+          if (data.user.email === 'contato@mkart.com.br') {
+            toast.success("Login de administrador realizado com sucesso!");
+            navigate("/admin");
+            return;
+          }
+          
+          console.error("Erro ao verificar status:", statusCheckError);
+          toast.error("Não foi possível verificar o status da sua conta");
+          await supabase.auth.signOut();
+        }
       }
     } catch (error: any) {
       console.error("Erro no login:", error);
@@ -74,6 +103,10 @@ const Login = () => {
 
   // If already authenticated, redirect to dashboard
   if (user) {
+    // Redirecionar admins para a página de admin
+    if (user.email === 'contato@mkart.com.br') {
+      return <Navigate to="/admin" />;
+    }
     return <Navigate to="/dashboard" />;
   }
 

@@ -5,10 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
-interface UserStatus {
-  approved: boolean;
-}
-
 interface AuthContextType {
   session: Session | null;
   user: User | null;
@@ -34,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Função para verificar o status do usuário
   const checkUserStatus = async (userId: string) => {
     try {
+      // Apenas verificar o status do usuário na tabela user_status
       const { data, error } = await supabase
         .from('user_status')
         .select('approved')
@@ -42,6 +39,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (error) {
         console.error("Erro ao verificar status do usuário:", error);
+        
+        // Se for o usuário admin, consideramos aprovado por padrão
+        if (session?.user?.email === 'contato@mkart.com.br') {
+          return { approved: true };
+        }
+        
         return { approved: false };
       }
 
@@ -50,6 +53,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
     } catch (err) {
       console.error("Erro ao verificar status do usuário:", err);
+      
+      // Se for o usuário admin, consideramos aprovado por padrão
+      if (session?.user?.email === 'contato@mkart.com.br') {
+        return { approved: true };
+      }
+      
       return { approved: false };
     }
   };
@@ -62,6 +71,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(currentSession?.user ?? null);
         
         if (currentSession?.user) {
+          // Tratamento especial para o email de administrador
+          if (currentSession.user.email === 'contato@mkart.com.br') {
+            setIsApproved(true);
+            setLoading(false);
+            return;
+          }
+          
+          // Para outros usuários, verificar normalmente
           const status = await checkUserStatus(currentSession.user.id);
           setIsApproved(status.approved);
           
@@ -84,6 +101,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(currentSession?.user ?? null);
       
       if (currentSession?.user) {
+        // Tratamento especial para o email de administrador
+        if (currentSession.user.email === 'contato@mkart.com.br') {
+          setIsApproved(true);
+          setLoading(false);
+          return;
+        }
+        
+        // Para outros usuários, verificar normalmente
         const status = await checkUserStatus(currentSession.user.id);
         setIsApproved(status.approved);
         
