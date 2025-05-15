@@ -17,6 +17,7 @@ import TextoSEOBlog from "@/pages/TextoSEOBlog";
 import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
 import NotFound from "@/pages/NotFound";
+import Aguarde from "@/pages/Aguarde";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/definir-senha" element={<DefinirSenha />} />
+          <Route path="/aguarde" element={<Aguarde />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
