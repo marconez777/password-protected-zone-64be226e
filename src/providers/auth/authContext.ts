@@ -8,7 +8,7 @@ export interface AuthContextType {
   isApproved: boolean;
   isAdmin: boolean;
   loading: boolean;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<{ success: boolean; error?: any }>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -17,5 +17,5 @@ export const AuthContext = createContext<AuthContextType>({
   isApproved: false,
   isAdmin: false,
   loading: true,
-  signOut: async () => {},
+  signOut: async () => ({ success: true }),
 });
