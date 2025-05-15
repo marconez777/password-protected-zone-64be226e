@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,22 +22,24 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [pendingApproval, setPendingApproval] = useState(false);
-  const { user } = useAuth();
+  const { user, isApproved, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Log para debug
-    console.log("Login - user:", user);
-  }, [user]);
+    console.log("Login - user:", !!user, "isApproved:", isApproved, "isAdmin:", isAdmin);
+  }, [user, isApproved, isAdmin]);
 
-  // If already authenticated, redirect to dashboard
+  // If already authenticated, redirect to appropriate page
   if (user) {
     console.log("Usuário já autenticado, redirecionando...");
+    
     // Redirecionar admins para a página de admin
-    if (user.email === 'contato@mkart.com.br') {
+    if (isAdmin) {
       console.log("Redirecionando admin para /admin");
       return <Navigate to="/admin" />;
     }
+    
     console.log("Redirecionando usuário para /dashboard");
     return <Navigate to="/dashboard" />;
   }
@@ -48,8 +51,6 @@ const Login = () => {
 
     try {
       console.log("Tentando login com email:", email);
-      // Verificar se é o email de administrador
-      const isAdminEmail = email === 'contato@mkart.com.br';
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -62,69 +63,19 @@ const Login = () => {
       }
 
       console.log("Login bem-sucedido:", data);
-      if (data.user) {
-        // Tratamento especial para o administrador
-        if (isAdminEmail) {
-          console.log("Login admin bem-sucedido");
-          toast.success("Login de administrador realizado com sucesso!");
-          navigate("/admin");
-          return;
-        }
-        
-        // Para outros usuários, verificar aprovação
-        try {
-          console.log("Verificando aprovação do usuário:", data.user.id);
-          const { data: statusData, error: statusError } = await supabase
-            .from('user_status')
-            .select('approved')
-            .eq('user_id', data.user.id)
-            .single();
-            
-          if (statusError) {
-            console.error("Erro ao verificar status:", statusError);
-            // Se houver erro na verificação, verificar se não é o admin
-            if (data.user.email === 'contato@mkart.com.br') {
-              console.log("Erro na verificação, mas é admin");
-              toast.success("Login de administrador realizado com sucesso!");
-              navigate("/admin");
-              return;
-            }
-            throw statusError;
-          }
-          
-          console.log("Status de aprovação:", statusData);
-          // Se o usuário não estiver aprovado, mostrar mensagem
-          if (!statusData.approved) {
-            console.log("Usuário não aprovado");
-            // Fazer logout imediatamente
-            await supabase.auth.signOut();
-            setPendingApproval(true);
-            throw new Error("Sua conta está pendente de aprovação pelo administrador.");
-          }
-
-          console.log("Usuário aprovado, redirecionando para dashboard");
-          toast.success("Login realizado com sucesso!");
-          navigate("/dashboard");
-        } catch (statusCheckError) {
-          console.error("Erro ao verificar status:", statusCheckError);
-          // Se for o admin e houver erro na verificação de status, permitir acesso
-          if (data.user.email === 'contato@mkart.com.br') {
-            console.log("Erro na verificação, mas é admin (catch)");
-            toast.success("Login de administrador realizado com sucesso!");
-            navigate("/admin");
-            return;
-          }
-          
-          console.error("Erro ao verificar status:", statusCheckError);
-          toast.error("Não foi possível verificar o status da sua conta");
-          await supabase.auth.signOut();
-        }
-      }
+      // AuthProvider vai lidar com a verificação de aprovação e redirecionamento
+      
     } catch (error: any) {
       console.error("Erro no login:", error);
       
-      toast.error("Erro no login: " + (error.error_description || error.message || "Verifique suas credenciais e tente novamente"));
-    } finally {
+      if (error.message?.includes("Email not confirmed")) {
+        toast.error("Por favor, confirme seu email antes de fazer login");
+      } else if (error.message?.includes("Invalid login credentials")) {
+        toast.error("Email ou senha inválidos");
+      } else {
+        toast.error("Erro no login: " + (error.error_description || error.message || "Verifique suas credenciais e tente novamente"));
+      }
+      
       setLoading(false);
     }
   };

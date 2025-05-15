@@ -21,7 +21,7 @@ export function useUserApproval() {
     try {
       console.log('Iniciando busca de usuários pendentes...');
       
-      // Usar a função RPC get_pending_users que é mais segura e evita problemas de permissão
+      // Usar a função RPC get_pending_users que foi ajustada para usar is_current_admin()
       const { data, error } = await supabase
         .rpc('get_pending_users');
       

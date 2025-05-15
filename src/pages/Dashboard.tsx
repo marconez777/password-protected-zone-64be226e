@@ -2,22 +2,18 @@
 import { useAuth } from "@/providers/AuthProvider";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 const Dashboard = () => {
-  const { user, loading } = useAuth();
-  const [pageLoading, setPageLoading] = useState(true);
-
+  const { user, isAdmin, loading } = useAuth();
+  
   useEffect(() => {
-    // Simples verificação para garantir que temos dados do usuário
-    if (!loading) {
-      // Usuário já foi carregado pelo AuthProvider
-      setPageLoading(false);
-    }
-  }, [loading, user]);
+    // Log para debug
+    console.log("Dashboard - user:", !!user, "isAdmin:", isAdmin, "loading:", loading);
+  }, [user, isAdmin, loading]);
 
   // Mostrar um loading enquanto verifica autenticação
-  if (pageLoading || loading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -36,6 +32,14 @@ const Dashboard = () => {
         <p className="text-gray-600 mb-4">
           Use o painel lateral para acessar todas as funcionalidades disponíveis.
         </p>
+        
+        {isAdmin && (
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-md mt-2">
+            <p className="text-blue-800">
+              Você está logado como administrador e tem acesso a recursos adicionais.
+            </p>
+          </div>
+        )}
       </div>
       
       <FeatureCards />

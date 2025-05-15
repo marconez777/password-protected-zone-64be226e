@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
 const Admin = () => {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
@@ -27,10 +27,19 @@ const Admin = () => {
   };
 
   useEffect(() => {
+    // Log para debug
+    console.log("Admin - user:", !!user, "isAdmin:", isAdmin, "authLoading:", authLoading);
+    
     // Verificamos se o usuário tem permissão de administrador
-    if (!user) {
+    if (!authLoading && !user) {
       toast.error('Você precisa estar logado para acessar esta página');
       navigate('/login');
+      return;
+    }
+    
+    if (!authLoading && !isAdmin) {
+      toast.error('Você não tem permissão para acessar esta página');
+      navigate('/dashboard');
       return;
     }
     
@@ -39,7 +48,7 @@ const Admin = () => {
       try {
         setLoading(true);
         
-        // Buscar a contagem de usuários pendentes diretamente através da função RPC
+        // Buscar a contagem de usuários pendentes através da função RPC
         const { data, error } = await supabase
           .rpc('count_pending_users');
         
@@ -48,6 +57,7 @@ const Admin = () => {
           throw error;
         }
         
+        console.log("Contagem de usuários pendentes:", data);
         setPendingCount(data || 0);
       } catch (error) {
         console.error("Erro ao verificar usuários pendentes:", error);
@@ -57,26 +67,22 @@ const Admin = () => {
       }
     };
 
-    if (user) {
+    if (!authLoading && user && isAdmin) {
       checkAdminStatus();
     }
-  }, [user, navigate, isAdmin]);
-
-  // Redireciona se não for admin, após verificação completa
-  useEffect(() => {
-    if (!loading && !isAdmin) {
-      toast.error('Você não tem permissão para acessar esta página');
-      navigate('/dashboard');
-    }
-  }, [loading, isAdmin, navigate]);
+  }, [user, navigate, isAdmin, authLoading]);
 
   // Só renderiza o conteúdo após verificação e se for admin
-  if (loading || !isAdmin) {
+  if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-16 h-16 border-4 border-t-transparent border-primary rounded-full animate-spin"></div>
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return null; // Não renderiza nada se não for admin (redirecionamento já está sendo feito no useEffect)
   }
 
   return (
