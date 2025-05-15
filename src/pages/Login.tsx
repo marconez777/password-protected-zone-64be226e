@@ -11,10 +11,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/providers/auth";
 import { useLoginForm } from "@/hooks/useLoginForm";
+import { Logo } from "@/components/ui/logo";
 
 const Login = () => {
   const { 
@@ -63,8 +64,8 @@ const Login = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-mkranker-purple">MKRanker</h1>
+        <div className="text-center flex flex-col items-center">
+          <Logo className="mb-4" showText={true} />
           <p className="mt-2 text-gray-600">
             Faça login para acessar sua conta
           </p>
@@ -131,6 +132,11 @@ const Login = () => {
                     "Entrar"
                   )}
                 </Button>
+                <div className="text-center w-full">
+                  <Link to="/cadastro" className="text-mkranker-purple hover:underline">
+                    Ainda não tem uma conta? Cadastre-se
+                  </Link>
+                </div>
               </CardFooter>
             </form>
           )}

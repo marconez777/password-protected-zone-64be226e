@@ -7,7 +7,6 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarFooter
 } from "@/components/ui/sidebar";
@@ -19,7 +18,6 @@ import {
   Target,
   FileText,
   BookText,
-  FileQuestion,
   ScrollText,
   LogOut,
   X,
@@ -57,7 +55,6 @@ export function AppSidebar() {
       <SidebarContent>
         {user && (
           <SidebarGroup>
-            <SidebarGroupLabel>Usuário</SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="px-4 py-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -70,7 +67,6 @@ export function AppSidebar() {
         )}
         
         <SidebarGroup>
-          <SidebarGroupLabel>Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
@@ -81,14 +77,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Ferramentas</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/search-funnel">
@@ -97,6 +86,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/keywords">
@@ -105,6 +95,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/market-and-target">
@@ -113,14 +104,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Conteúdo SEO</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/texto-seo-lp">
@@ -129,6 +113,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/texto-seo-produto">
@@ -137,6 +122,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/texto-seo-blog">
@@ -145,6 +131,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/pautas-blog">
@@ -153,27 +140,12 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link to="/meta-dados">
                     <ScrollText className="h-4 w-4 mr-2" />
                     <span>Meta Dados</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>Ajuda</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/docs">
-                    <FileQuestion className="h-4 w-4 mr-2" />
-                    <span>Documentação</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

@@ -4,6 +4,7 @@ import { LogIn, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/providers/AuthProvider";
+import { Logo } from "@/components/ui/logo";
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -19,12 +20,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="flex items-center justify-center mb-6">
-          <div className="rounded-md bg-mkranker-purple w-16 h-16 flex items-center justify-center text-white font-bold text-3xl">
-            M
-          </div>
+        <div className="flex flex-col items-center justify-center mb-6">
+          <Logo className="mb-4" showText={true} />
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-800">MKRanker</h1>
         <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
           Sistema de análise e otimização de palavras-chave.
         </p>
@@ -50,13 +48,18 @@ const Index = () => {
               <CardTitle className="text-xl">Acesso restrito</CardTitle>
               <CardDescription>Digite suas credenciais para acessar o sistema</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <Button asChild className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
                 <Link to="/login">
                   <LogIn className="mr-2 h-4 w-4" />
                   Fazer Login
                 </Link>
               </Button>
+              <div className="text-center">
+                <Link to="/cadastro" className="text-mkranker-purple hover:underline">
+                  Ainda não tem uma conta? Cadastre-se
+                </Link>
+              </div>
             </CardContent>
           </Card>
         )}
