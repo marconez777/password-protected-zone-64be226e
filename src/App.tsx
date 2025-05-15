@@ -18,17 +18,20 @@ import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
 import NotFound from "@/pages/NotFound";
 import Aguarde from "@/pages/Aguarde";
+import Erro from "@/pages/Erro";
 
 const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/definir-senha" element={<DefinirSenha />} />
           <Route path="/aguarde" element={<Aguarde />} />
+          <Route path="/erro" element={<Erro />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
