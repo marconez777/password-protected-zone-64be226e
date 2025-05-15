@@ -9,13 +9,74 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      user_results: {
+        Row: {
+          data_criacao: string
+          id: string
+          input_original: Json
+          output_gerado: Json
+          tipo_recurso: string
+          user_id: string
+        }
+        Insert: {
+          data_criacao?: string
+          id?: string
+          input_original: Json
+          output_gerado: Json
+          tipo_recurso: string
+          user_id: string
+        }
+        Update: {
+          data_criacao?: string
+          id?: string
+          input_original?: Json
+          output_gerado?: Json
+          tipo_recurso?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_status: {
+        Row: {
+          approved: boolean
+          is_admin: boolean
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          is_admin?: boolean
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          is_admin?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      count_pending_users: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      get_pending_users: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          approved: boolean
+          email: string
+          name: string
+          created_at: string
+        }[]
+      }
+      is_admin_user: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
