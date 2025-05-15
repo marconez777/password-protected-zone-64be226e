@@ -27,16 +27,16 @@ const Login = () => {
     handleSignIn 
   } = useLoginForm();
   
-  const { user, isApproved, isAdmin } = useAuth();
+  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
 
   useEffect(() => {
     // Log para debug
-    console.log("Login - user:", !!user, "isApproved:", isApproved, "isAdmin:", isAdmin);
-  }, [user, isApproved, isAdmin]);
+    console.log("Login - user:", !!user, "isApproved:", isApproved, "isAdmin:", isAdmin, "authLoading:", authLoading);
+  }, [user, isApproved, isAdmin, authLoading]);
 
   // If already authenticated, redirect to appropriate page
-  if (user) {
-    console.log("Usuário já autenticado, redirecionando...");
+  if (user && isApproved) {
+    console.log("Usuário já autenticado e aprovado, redirecionando...");
     
     // Redirecionar admins para a página de admin
     if (isAdmin) {
@@ -47,6 +47,18 @@ const Login = () => {
     console.log("Redirecionando usuário para /dashboard");
     return <Navigate to="/dashboard" />;
   }
+
+  // Show loading state if auth is still being checked
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Show pending approval message if user is logged in but not approved
+  const showPendingApproval = pendingApproval || (user && !isApproved);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
@@ -66,7 +78,7 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           
-          {pendingApproval ? (
+          {showPendingApproval ? (
             <CardContent className="space-y-4">
               <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                 <h3 className="font-medium text-yellow-800">Conta em análise</h3>

@@ -11,36 +11,67 @@ export const useAuthState = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
-  // Function to check user status
+  // Function to check user status with improved debugging
   const checkUserStatus = async (userId: string) => {
     try {
-      console.log("Verificando status para usuário:", userId);
+      console.log("[AuthProvider] Verificando status para usuário:", userId);
       
-      // Check for admin email as a special case
+      // Special case for admin email
       if (session?.user?.email === 'contato@mkart.com.br') {
-        console.log("Usuário admin detectado, aprovando automaticamente");
+        console.log("[AuthProvider] Email de admin detectado, aprovando automaticamente");
         return { approved: true, is_admin: true };
       }
 
-      // Check user status in the database
-      const { data, error } = await supabase
+      // Check user status with detailed debugging
+      const { data, error, count } = await supabase
         .from('user_status')
-        .select('approved, is_admin')
+        .select('approved, is_admin', { count: 'exact' })
         .eq('user_id', userId)
         .maybeSingle();
 
+      console.log('[AuthProvider] checkUserStatus - userId:', userId);
+      console.log('[AuthProvider] checkUserStatus - data:', data);
+      console.log('[AuthProvider] checkUserStatus - error:', error);
+      console.log('[AuthProvider] checkUserStatus - count:', count);
+
       if (error) {
-        console.error("Erro ao verificar status do usuário:", error);
+        console.error("[AuthProvider] Erro DIRETO ao verificar status do usuário:", error);
         return { approved: false, is_admin: false };
       }
 
-      console.log("Status do usuário recebido:", data);
-      return { 
+      if (!data) {
+        console.warn("[AuthProvider] Nenhum registro encontrado em user_status para o userId:", userId);
+        
+        // Create a status record if one doesn't exist - this helps recover from data inconsistencies
+        try {
+          console.log("[AuthProvider] Tentando criar registro em user_status para:", userId);
+          const { error: insertError } = await supabase
+            .from('user_status')
+            .insert([{ 
+              user_id: userId, 
+              approved: false, 
+              is_admin: false 
+            }]);
+          
+          if (insertError) {
+            console.error("[AuthProvider] Erro ao criar registro de status:", insertError);
+          } else {
+            console.log("[AuthProvider] Registro de status criado com sucesso");
+          }
+        } catch (insertErr) {
+          console.error("[AuthProvider] Exceção ao criar registro de status:", insertErr);
+        }
+      }
+
+      const finalStatus = {
         approved: data?.approved ?? false,
         is_admin: data?.is_admin ?? false
       };
+      
+      console.log('[AuthProvider] checkUserStatus - finalStatus:', finalStatus);
+      return finalStatus;
     } catch (err) {
-      console.error("Erro ao verificar status do usuário:", err);
+      console.error("[AuthProvider] Exceção ao verificar status do usuário:", err);
       
       // Special case for admin email
       if (session?.user?.email === 'contato@mkart.com.br') {
@@ -86,6 +117,8 @@ export const useAuthState = () => {
             
             // Check status for other users
             const status = await checkUserStatus(currentSession.user.id);
+            console.log("Status do usuário após verificação:", status);
+            
             setIsApproved(status.approved);
             setIsAdmin(status.is_admin);
             
@@ -101,6 +134,7 @@ export const useAuthState = () => {
             setIsAdmin(false);
           }
           
+          // Always ensure loading is set to false
           setLoading(false);
         }
       );
@@ -133,6 +167,7 @@ export const useAuthState = () => {
           // Check status for other users
           const status = await checkUserStatus(currentSession.user.id);
           console.log("Status do usuário na sessão existente:", status);
+          
           setIsApproved(status.approved);
           setIsAdmin(status.is_admin);
           
@@ -152,6 +187,7 @@ export const useAuthState = () => {
       } catch (err) {
         console.error("Erro ao verificar sessão existente:", err);
       } finally {
+        // Always ensure loading is set to false, even if there's an error
         setLoading(false);
       }
     };
