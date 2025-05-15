@@ -54,6 +54,7 @@ export const UserApprovalPanel = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Email</TableHead>
+              <TableHead>Nome</TableHead>
               <TableHead>Data de cadastro</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
@@ -62,6 +63,7 @@ export const UserApprovalPanel = () => {
             {users.map((user) => (
               <TableRow key={user.user_id}>
                 <TableCell>{user.email || 'N/A'}</TableCell>
+                <TableCell>{user.name || 'N/A'}</TableCell>
                 <TableCell>{formatDate(user.created_at)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">

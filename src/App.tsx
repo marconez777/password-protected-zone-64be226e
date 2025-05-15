@@ -1,10 +1,12 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 import { AuthProvider, ProtectedRoute } from "@/providers/AuthProvider";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
+import Cadastro from "@/pages/Cadastro";
+import CadastroEnviado from "@/pages/CadastroEnviado";
 import Dashboard from "@/pages/Dashboard";
 import SearchFunnel from "@/pages/SearchFunnel";
 import Keywords from "@/pages/Keywords";
@@ -25,6 +27,8 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

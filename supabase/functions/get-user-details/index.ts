@@ -59,11 +59,12 @@ serve(async (req) => {
       );
     }
     
-    // Retornar apenas os campos necessários
+    // Retornar os dados do usuário, incluindo os metadados
     return new Response(
       JSON.stringify({
         email: userData.user.email,
-        created_at: userData.user.created_at
+        created_at: userData.user.created_at,
+        user_metadata: userData.user.user_metadata
       }),
       { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );

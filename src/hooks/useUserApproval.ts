@@ -7,12 +7,8 @@ interface UserStatus {
   user_id: string;
   approved: boolean;
   email?: string;
+  name?: string;
   created_at?: string;
-}
-
-interface AuthUser {
-  email: string;
-  created_at: string;
 }
 
 export function useUserApproval() {
@@ -53,6 +49,7 @@ export function useUserApproval() {
             user_id: status.user_id,
             approved: status.approved,
             email: userData.email,
+            name: userData.user_metadata?.nome || '',
             created_at: userData.created_at
           });
         }
