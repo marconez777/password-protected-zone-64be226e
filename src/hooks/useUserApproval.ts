@@ -19,7 +19,7 @@ export function useUserApproval() {
   const fetchUsersPendingApproval = async () => {
     setLoading(true);
     try {
-      // Usar a função RPC do Supabase para buscar usuários pendentes
+      // Usar a função RPC do Supabase que já tem os aliases configurados corretamente
       const { data, error } = await supabase
         .rpc('get_pending_users');
       
