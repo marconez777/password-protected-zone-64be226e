@@ -2,7 +2,7 @@
 -- Drop a função existente para recriá-la com os ajustes necessários
 DROP FUNCTION IF EXISTS public.get_pending_users();
 
--- Recriar a função com aliases explícitos para todas as colunas, especialmente user_id
+-- Recriar a função com qualificadores completos para todas as referências de colunas
 CREATE OR REPLACE FUNCTION public.get_pending_users()
 RETURNS TABLE (
   user_id uuid,
@@ -19,29 +19,29 @@ BEGIN
   -- Verifica se o usuário atual é um administrador
   IF NOT EXISTS (
     SELECT 1 FROM public.user_status 
-    WHERE user_status.user_id = auth.uid() AND is_admin = true
+    WHERE public.user_status.user_id = auth.uid() AND public.user_status.is_admin = true
   ) THEN
     RAISE EXCEPTION 'Acesso negado: apenas administradores podem visualizar usuários pendentes';
   END IF;
   
-  -- Retorna os usuários pendentes de aprovação COM ALIASES EXPLÍCITOS para todas as colunas
+  -- Retorna os usuários pendentes de aprovação COM QUALIFICADORES COMPLETOS
   RETURN QUERY
   SELECT 
-    us.user_id AS user_id,
-    us.approved AS approved,
-    au.email AS email,
-    au.raw_user_meta_data->>'nome' AS name,
-    au.created_at AS created_at
+    public.user_status.user_id AS user_id,
+    public.user_status.approved AS approved,
+    auth.users.email AS email,
+    auth.users.raw_user_meta_data->>'nome' AS name,
+    auth.users.created_at AS created_at
   FROM 
-    public.user_status us
+    public.user_status
   JOIN 
-    auth.users au ON us.user_id = au.id
+    auth.users ON public.user_status.user_id = auth.users.id
   WHERE 
-    us.approved = false;
+    public.user_status.approved = false;
 END;
 $$;
 
--- Atualizar a função count_pending_users para também usar referências explícitas
+-- Atualizar a função count_pending_users para também usar qualificadores completos
 DROP FUNCTION IF EXISTS public.count_pending_users();
 
 CREATE OR REPLACE FUNCTION public.count_pending_users()

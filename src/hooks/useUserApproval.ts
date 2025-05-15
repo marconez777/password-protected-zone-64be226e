@@ -21,9 +21,19 @@ export function useUserApproval() {
     try {
       console.log('Iniciando busca de usuários pendentes...');
       
-      // Chamar a função RPC com aliases explícitos para evitar ambiguidade
+      // Utilizar uma consulta direta ao invés de RPC para testar
       const { data, error } = await supabase
-        .rpc('get_pending_users');
+        .from('user_status')
+        .select(`
+          user_id,
+          approved,
+          auth.users!inner (
+            email,
+            raw_user_meta_data->nome,
+            created_at
+          )
+        `)
+        .eq('approved', false);
       
       if (error) {
         console.error('Erro ao buscar usuários pendentes:', error);
@@ -32,7 +42,7 @@ export function useUserApproval() {
         throw error;
       }
       
-      console.log('Resposta da função get_pending_users:', data);
+      console.log('Resposta da consulta direta:', data);
       
       if (!data || !Array.isArray(data) || data.length === 0) {
         console.log('Nenhum usuário pendente encontrado');
@@ -40,13 +50,13 @@ export function useUserApproval() {
         return [];
       }
       
-      // Garantir que os dados estão no formato esperado
-      const formattedUsers = data.map((user: any) => ({
-        user_id: user.user_id,
-        approved: user.approved,
-        email: user.email || 'N/A',
-        name: user.name || 'N/A',
-        created_at: user.created_at
+      // Formatar os dados para o formato esperado
+      const formattedUsers = data.map((item: any) => ({
+        user_id: item.user_id,
+        approved: item.approved,
+        email: item.users?.email || 'N/A',
+        name: item.users?.nome || 'N/A',
+        created_at: item.users?.created_at
       }));
       
       console.log('Usuários formatados:', formattedUsers);
