@@ -5,7 +5,6 @@ import { AuthProvider, ProtectedRoute } from "@/providers/AuthProvider";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
-import DefinirSenha from "@/pages/DefinirSenha";
 import Dashboard from "@/pages/Dashboard";
 import SearchFunnel from "@/pages/SearchFunnel";
 import Keywords from "@/pages/Keywords";
@@ -25,7 +24,6 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/definir-senha" element={<DefinirSenha />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

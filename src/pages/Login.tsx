@@ -21,8 +21,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resetPassword, setResetPassword] = useState(false);
-  const [resetSent, setResetSent] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -51,34 +49,6 @@ const Login = () => {
     }
   };
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast.error("Por favor, insira seu e-mail para redefinir a senha");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/definir-senha`,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      setResetSent(true);
-      toast.success("E-mail de redefinição de senha enviado! Verifique sua caixa de entrada.");
-    } catch (error: any) {
-      console.error("Erro ao enviar e-mail de redefinição:", error);
-      toast.error("Erro ao enviar e-mail de redefinição: " + (error.message || "Tente novamente mais tarde"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // If already authenticated, redirect to dashboard
   if (user) {
     return <Navigate to="/dashboard" />;
@@ -90,128 +60,62 @@ const Login = () => {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-mkranker-purple">MKRanker</h1>
           <p className="mt-2 text-gray-600">
-            {resetPassword
-              ? "Redefina sua senha para acessar sua conta"
-              : "Faça login para acessar sua conta"}
+            Faça login para acessar sua conta
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>
-              {resetPassword ? "Redefinir Senha" : "Login"}
-            </CardTitle>
+            <CardTitle>Login</CardTitle>
             <CardDescription>
-              {resetPassword
-                ? "Digite seu e-mail para receber instruções de redefinição de senha"
-                : "Entre com seu e-mail e senha para acessar sua conta"}
+              Entre com seu e-mail e senha para acessar sua conta
             </CardDescription>
           </CardHeader>
           
-          {resetPassword ? (
-            <form onSubmit={handleResetPassword}>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="reset-email">Email</Label>
-                  <Input
-                    id="reset-email"
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoComplete="email"
-                  />
-                </div>
-                
-                {resetSent && (
-                  <div className="rounded-md bg-green-50 p-4">
-                    <div className="text-sm text-green-700">
-                      E-mail de redefinição enviado! Verifique sua caixa de entrada e spam.
-                    </div>
-                  </div>
+          <form onSubmit={handleSignIn}>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Senha</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Button
+                type="submit"
+                className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  "Entrar"
                 )}
-              </CardContent>
-              <CardFooter className="flex flex-col space-y-4">
-                <Button
-                  type="submit"
-                  className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Enviando...
-                    </>
-                  ) : (
-                    "Enviar link de redefinição"
-                  )}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => setResetPassword(false)}
-                >
-                  Voltar para o login
-                </Button>
-              </CardFooter>
-            </form>
-          ) : (
-            <form onSubmit={handleSignIn}>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoComplete="email"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Senha</Label>
-                    <button
-                      type="button"
-                      onClick={() => setResetPassword(true)}
-                      className="text-sm text-mkranker-purple hover:text-mkranker-dark-purple"
-                    >
-                      Esqueceu a senha?
-                    </button>
-                  </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    autoComplete="current-password"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-col space-y-4">
-                <Button
-                  type="submit"
-                  className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Entrando...
-                    </>
-                  ) : (
-                    "Entrar"
-                  )}
-                </Button>
-              </CardFooter>
-            </form>
-          )}
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </div>
     </div>
