@@ -1,48 +1,23 @@
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/providers/AuthProvider";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
-import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    const checkUserStatus = async () => {
-      try {
-        setLoading(true);
-        
-        if (!user) {
-          toast.error("Você precisa estar logado para acessar esta página");
-          navigate('/login');
-          return;
-        }
+    // Simples verificação para garantir que temos dados do usuário
+    if (!loading) {
+      // Usuário já foi carregado pelo AuthProvider
+      setPageLoading(false);
+    }
+  }, [loading, user]);
 
-        // Verificar a sessão atual
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          toast.error("Sua sessão expirou. Por favor faça login novamente");
-          navigate('/login');
-          return;
-        }
-        
-      } catch (error) {
-        console.error("Erro ao verificar status do usuário:", error);
-        toast.error("Ocorreu um erro ao verificar seu acesso");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkUserStatus();
-  }, [user, navigate]);
-
-  if (loading) {
+  // Mostrar um loading enquanto verifica autenticação
+  if (pageLoading || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>

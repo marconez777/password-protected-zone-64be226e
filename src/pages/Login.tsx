@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,12 +24,20 @@ const Login = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Log para debug
+    console.log("Login - user:", user);
+  }, [user]);
+
   // If already authenticated, redirect to dashboard
   if (user) {
+    console.log("Usuário já autenticado, redirecionando...");
     // Redirecionar admins para a página de admin
     if (user.email === 'contato@mkart.com.br') {
+      console.log("Redirecionando admin para /admin");
       return <Navigate to="/admin" />;
     }
+    console.log("Redirecionando usuário para /dashboard");
     return <Navigate to="/dashboard" />;
   }
 
@@ -40,6 +47,7 @@ const Login = () => {
     setPendingApproval(false);
 
     try {
+      console.log("Tentando login com email:", email);
       // Verificar se é o email de administrador
       const isAdminEmail = email === 'contato@mkart.com.br';
       
@@ -49,12 +57,15 @@ const Login = () => {
       });
 
       if (error) {
+        console.error("Erro no login:", error);
         throw error;
       }
 
+      console.log("Login bem-sucedido:", data);
       if (data.user) {
         // Tratamento especial para o administrador
         if (isAdminEmail) {
+          console.log("Login admin bem-sucedido");
           toast.success("Login de administrador realizado com sucesso!");
           navigate("/admin");
           return;
@@ -62,6 +73,7 @@ const Login = () => {
         
         // Para outros usuários, verificar aprovação
         try {
+          console.log("Verificando aprovação do usuário:", data.user.id);
           const { data: statusData, error: statusError } = await supabase
             .from('user_status')
             .select('approved')
@@ -69,8 +81,10 @@ const Login = () => {
             .single();
             
           if (statusError) {
+            console.error("Erro ao verificar status:", statusError);
             // Se houver erro na verificação, verificar se não é o admin
             if (data.user.email === 'contato@mkart.com.br') {
+              console.log("Erro na verificação, mas é admin");
               toast.success("Login de administrador realizado com sucesso!");
               navigate("/admin");
               return;
@@ -78,19 +92,24 @@ const Login = () => {
             throw statusError;
           }
           
+          console.log("Status de aprovação:", statusData);
           // Se o usuário não estiver aprovado, mostrar mensagem
           if (!statusData.approved) {
+            console.log("Usuário não aprovado");
             // Fazer logout imediatamente
             await supabase.auth.signOut();
             setPendingApproval(true);
             throw new Error("Sua conta está pendente de aprovação pelo administrador.");
           }
 
+          console.log("Usuário aprovado, redirecionando para dashboard");
           toast.success("Login realizado com sucesso!");
           navigate("/dashboard");
         } catch (statusCheckError) {
+          console.error("Erro ao verificar status:", statusCheckError);
           // Se for o admin e houver erro na verificação de status, permitir acesso
           if (data.user.email === 'contato@mkart.com.br') {
+            console.log("Erro na verificação, mas é admin (catch)");
             toast.success("Login de administrador realizado com sucesso!");
             navigate("/admin");
             return;

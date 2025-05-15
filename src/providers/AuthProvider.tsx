@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Função para verificar o status do usuário
   const checkUserStatus = async (userId: string) => {
     try {
+      console.log("Verificando status para usuário:", userId);
+      
       // Verificar o status do usuário na tabela user_status
       const { data, error } = await supabase
         .from('user_status')
@@ -45,12 +47,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Se for o usuário admin, consideramos aprovado por padrão
         if (session?.user?.email === 'contato@mkart.com.br') {
+          console.log("Usuário admin detectado, aprovando automaticamente");
           return { approved: true, is_admin: true };
         }
         
         return { approved: false, is_admin: false };
       }
 
+      console.log("Status do usuário recebido:", data);
       return { 
         approved: data?.approved ?? false,
         is_admin: data?.is_admin ?? false
@@ -68,15 +72,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    console.log("AuthProvider inicializado");
+    
     // First set up the auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, currentSession) => {
+        console.log("Evento de mudança de autenticação:", _event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
         if (currentSession?.user) {
+          console.log("Usuário autenticado:", currentSession.user.email);
+          
           // Tratamento especial para o email de administrador
           if (currentSession.user.email === 'contato@mkart.com.br') {
+            console.log("Email de administrador detectado");
             setIsApproved(true);
             setIsAdmin(true);
             setLoading(false);
@@ -90,10 +100,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           
           // Se não estiver aprovado, fazer logout
           if (!status.approved) {
+            console.log("Usuário não aprovado, fazendo logout");
             await supabase.auth.signOut();
             toast.error("Sua conta ainda não foi aprovada pelo administrador");
           }
         } else {
+          console.log("Nenhum usuário autenticado");
           setIsApproved(false);
           setIsAdmin(false);
         }
@@ -104,12 +116,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Then check for existing session
     supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
+      console.log("Verificando sessão existente");
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       
       if (currentSession?.user) {
+        console.log("Sessão existente encontrada:", currentSession.user.email);
+        
         // Tratamento especial para o email de administrador
         if (currentSession.user.email === 'contato@mkart.com.br') {
+          console.log("Email de administrador detectado na sessão existente");
           setIsApproved(true);
           setIsAdmin(true);
           setLoading(false);
@@ -118,26 +134,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Para outros usuários, verificar normalmente
         const status = await checkUserStatus(currentSession.user.id);
+        console.log("Status do usuário na sessão existente:", status);
         setIsApproved(status.approved);
         setIsAdmin(status.is_admin);
         
         // Se não estiver aprovado, fazer logout
         if (!status.approved) {
+          console.log("Usuário não aprovado na sessão existente, fazendo logout");
           await supabase.auth.signOut();
           toast.error("Sua conta ainda não foi aprovada pelo administrador");
         }
+      } else {
+        console.log("Nenhuma sessão existente encontrada");
       }
       
       setLoading(false);
     });
 
     return () => {
+      console.log("Limpando AuthProvider");
       subscription.unsubscribe();
     };
   }, []);
 
   const signOut = async () => {
+    console.log("Iniciando logout");
     await supabase.auth.signOut();
+    console.log("Logout concluído");
   };
 
   const value = {
@@ -160,6 +183,8 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isApproved, loading } = useAuth();
   const location = useLocation();
 
+  console.log("ProtectedRoute - loading:", loading, "user:", !!user, "isApproved:", isApproved);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -169,8 +194,10 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
   
   if (!user || !isApproved) {
+    console.log("Redirecionando para login - user:", !!user, "isApproved:", isApproved);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  console.log("Renderizando rota protegida");
   return <>{children}</>;
 };
