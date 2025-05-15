@@ -238,6 +238,16 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      get_pending_users: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          approved: boolean
+          email: string
+          name: string
+          created_at: string
+        }[]
+      }
       increment_global_usage: {
         Args: Record<PropertyKey, never>
         Returns: undefined

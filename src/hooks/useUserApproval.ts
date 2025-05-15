@@ -20,8 +20,9 @@ export function useUserApproval() {
     setLoading(true);
     try {
       // Usar a função RPC do Supabase para buscar usuários pendentes
-      // Esta abordagem é mais segura e evita problemas de permissão
-      const { data: pendingUsers, error } = await supabase.rpc('get_pending_users');
+      // Usando tipagem específica para a chamada do RPC para evitar erros de TypeScript
+      const { data, error } = await supabase
+        .rpc<UserStatus[]>('get_pending_users');
       
       if (error) {
         console.error('Erro ao buscar usuários pendentes:', error);
@@ -30,13 +31,13 @@ export function useUserApproval() {
         throw error;
       }
       
-      if (!pendingUsers || pendingUsers.length === 0) {
+      if (!data || data.length === 0) {
         setUsers([]);
         return [];
       }
       
-      setUsers(pendingUsers);
-      return pendingUsers;
+      setUsers(data as UserStatus[]);
+      return data;
     } catch (error) {
       console.error('Erro ao buscar usuários pendentes:', error);
       toast.error('Falha ao carregar usuários pendentes');
