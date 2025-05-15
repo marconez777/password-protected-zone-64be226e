@@ -10,6 +10,11 @@ interface UserStatus {
   created_at?: string;
 }
 
+interface AuthUser {
+  email: string;
+  created_at: string;
+}
+
 export function useUserApproval() {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserStatus[]>([]);
@@ -18,32 +23,42 @@ export function useUserApproval() {
   const fetchUsersPendingApproval = async () => {
     setLoading(true);
     try {
-      // Consulta especial que junta informações de auth.users com user_status
-      const { data: userStatusData, error } = await supabase
+      // Primeiro, obter os user_status não aprovados
+      const { data: userStatusData, error: statusError } = await supabase
         .from('user_status')
-        .select(`
-          user_id,
-          approved,
-          auth_users:user_id (
-            email,
-            created_at
-          )
-        `)
+        .select('user_id, approved')
         .eq('approved', false);
 
-      if (error) {
-        throw error;
+      if (statusError) {
+        throw statusError;
       }
 
-      // Formatar os dados para uso no componente
-      const formattedUsers = userStatusData?.map(item => ({
-        user_id: item.user_id,
-        approved: item.approved,
-        email: item.auth_users?.email,
-        created_at: item.auth_users?.created_at
-      })) || [];
+      if (!userStatusData || userStatusData.length === 0) {
+        setUsers([]);
+        return;
+      }
 
-      setUsers(formattedUsers);
+      // Depois, para cada user_id, buscar os detalhes do usuário na tabela auth.users
+      // usando a admin API (isso será feito através de uma Edge Function)
+      const userDetails: UserStatus[] = [];
+      
+      for (const status of userStatusData) {
+        // Usar a função para buscar detalhes do usuário
+        const { data: userData, error: userError } = await supabase.functions.invoke('get-user-details', {
+          body: { userId: status.user_id }
+        });
+        
+        if (!userError && userData) {
+          userDetails.push({
+            user_id: status.user_id,
+            approved: status.approved,
+            email: userData.email,
+            created_at: userData.created_at
+          });
+        }
+      }
+
+      setUsers(userDetails);
     } catch (error) {
       console.error('Erro ao buscar usuários pendentes:', error);
       toast.error('Falha ao carregar usuários pendentes');
