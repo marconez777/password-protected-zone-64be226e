@@ -21,12 +21,9 @@ export function useUserApproval() {
     try {
       console.log('Iniciando busca de usuários pendentes...');
       
-      // Buscar diretamente usando joins entre user_status e auth.users
-      // Esta abordagem funciona com as novas RLS policies para admins
+      // Usar a função RPC get_pending_users que é mais segura e evita problemas de permissão
       const { data, error } = await supabase
-        .from('user_status')
-        .select('*, auth.users!inner(*)')
-        .eq('approved', false);
+        .rpc('get_pending_users');
       
       if (error) {
         console.error('Erro ao buscar usuários pendentes:', error);
@@ -35,7 +32,7 @@ export function useUserApproval() {
         throw error;
       }
       
-      console.log('Resposta da consulta:', data);
+      console.log('Resposta da função get_pending_users:', data);
       
       if (!data || !Array.isArray(data) || data.length === 0) {
         console.log('Nenhum usuário pendente encontrado');
@@ -43,18 +40,10 @@ export function useUserApproval() {
         return [];
       }
       
-      // Formatar os dados para o formato esperado
-      const formattedUsers = data.map((item: any) => ({
-        user_id: item.user_id,
-        approved: item.approved,
-        email: item.users?.email || 'N/A',
-        name: item.users?.raw_user_meta_data?.nome || 'N/A',
-        created_at: item.users?.created_at
-      }));
-      
-      console.log('Usuários formatados:', formattedUsers);
-      setUsers(formattedUsers);
-      return formattedUsers;
+      // Os dados já vêm formatados da função RPC
+      console.log('Usuários pendentes encontrados:', data);
+      setUsers(data);
+      return data;
     } catch (error) {
       console.error('Erro ao buscar usuários pendentes:', error);
       toast.error('Falha ao carregar usuários pendentes');
