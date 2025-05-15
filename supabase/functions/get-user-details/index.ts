@@ -1,6 +1,6 @@
 
 // Este endpoint recebe uma solicitação com um userId e retorna os detalhes do usuário
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4'
 
 // Configuração do cliente Supabase com a service role key
 const supabaseAdmin = createClient(

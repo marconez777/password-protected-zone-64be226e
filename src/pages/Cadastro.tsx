@@ -40,20 +40,9 @@ const Cadastro = () => {
     setErrorMessage(null);
     
     try {
-      // Verificar se o email já está cadastrado antes de tentar criar o usuário
-      const { data: existingUsers, error: checkError } = await supabase
-        .from('user_status')
-        .select('user_id')
-        .eq('user_id', (await supabase.auth.admin.listUsers({ email: data.email })).data.users?.[0]?.id || '');
-
-      if (checkError) {
-        console.log("Erro ao verificar usuário existente:", checkError);
-        // Continuamos com o cadastro mesmo se houver erro na verificação
-      }
-
-      if (existingUsers && existingUsers.length > 0) {
-        throw new Error("Este email já está cadastrado.");
-      }
+      // Verificar se o email já está cadastrado - removendo a implementação problemática
+      // Em vez de tentar verificar pelo listUsers, vamos prosseguir com o cadastro e deixar
+      // o próprio Supabase informar se o email já existe
       
       // Registrar o usuário no Supabase Auth
       const { data: authData, error } = await supabase.auth.signUp({
