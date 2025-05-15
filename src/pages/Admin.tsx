@@ -24,14 +24,18 @@ const Admin = () => {
     // Verificar se o usuário é administrador
     const checkAdminStatus = async () => {
       try {
-        // Usar a nova função count_pending_users para obter contagem de usuários pendentes
+        // Usar a função count_pending_users para obter contagem de usuários pendentes
         const { data, error } = await supabase.rpc('count_pending_users');
         
-        if (error) throw error;
+        if (error) {
+          console.error("Erro ao verificar usuários pendentes:", error);
+          throw error;
+        }
         
         setPendingCount(data);
       } catch (error) {
-        console.error("Erro ao verificar status de admin:", error);
+        console.error("Erro ao verificar usuários pendentes:", error);
+        toast.error("Não foi possível carregar a contagem de usuários pendentes");
       } finally {
         setLoading(false);
       }
@@ -64,8 +68,10 @@ const Admin = () => {
       <h1 className="text-3xl font-bold mb-4">Painel de Administração</h1>
       
       {pendingCount !== null && (
-        <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md">
-          <p className="text-amber-800">
+        <div className={`mb-4 p-3 rounded-md ${
+          pendingCount === 0 ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'
+        }`}>
+          <p className={pendingCount === 0 ? 'text-green-800' : 'text-amber-800'}>
             {pendingCount === 0 
               ? 'Não há usuários pendentes de aprovação.' 
               : `Há ${pendingCount} usuário(s) pendente(s) de aprovação.`}

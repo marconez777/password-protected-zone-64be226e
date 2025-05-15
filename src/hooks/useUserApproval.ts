@@ -19,56 +19,28 @@ export function useUserApproval() {
   const fetchUsersPendingApproval = async () => {
     setLoading(true);
     try {
-      // Primeiro, obter os user_status não aprovados
-      const { data: userStatusData, error: statusError } = await supabase
-        .from('user_status')
-        .select('user_id, approved')
-        .eq('approved', false);
-
-      if (statusError) {
-        throw statusError;
+      // Usar a função RPC do Supabase para buscar usuários pendentes
+      // Esta abordagem é mais segura e evita problemas de permissão
+      const { data: pendingUsers, error } = await supabase.rpc('get_pending_users');
+      
+      if (error) {
+        console.error('Erro ao buscar usuários pendentes:', error);
+        toast.error('Falha ao carregar usuários pendentes');
+        setUsers([]);
+        throw error;
       }
-
-      if (!userStatusData || userStatusData.length === 0) {
+      
+      if (!pendingUsers || pendingUsers.length === 0) {
         setUsers([]);
         return [];
       }
-
-      // Depois, para cada user_id, buscar os detalhes do usuário na tabela auth.users
-      // usando a admin API (isso será feito através de uma Edge Function)
-      const userDetails: UserStatus[] = [];
       
-      for (const status of userStatusData) {
-        try {
-          // Usar a função para buscar detalhes do usuário
-          const { data: userData, error: userError } = await supabase.functions.invoke('get-user-details', {
-            body: { userId: status.user_id }
-          });
-          
-          if (userError) {
-            console.error('Erro ao buscar detalhes do usuário:', userError);
-            continue;
-          }
-          
-          if (userData) {
-            userDetails.push({
-              user_id: status.user_id,
-              approved: status.approved,
-              email: userData.email,
-              name: userData.user_metadata?.nome || '',
-              created_at: userData.created_at
-            });
-          }
-        } catch (error) {
-          console.error(`Erro ao processar usuário ${status.user_id}:`, error);
-        }
-      }
-
-      setUsers(userDetails);
-      return userDetails;
+      setUsers(pendingUsers);
+      return pendingUsers;
     } catch (error) {
       console.error('Erro ao buscar usuários pendentes:', error);
       toast.error('Falha ao carregar usuários pendentes');
+      setUsers([]);
       throw error;
     } finally {
       setLoading(false);
@@ -85,6 +57,8 @@ export function useUserApproval() {
         .eq('user_id', userId);
 
       if (error) {
+        console.error('Erro ao aprovar usuário:', error);
+        toast.error('Falha ao aprovar usuário');
         throw error;
       }
 
@@ -110,6 +84,8 @@ export function useUserApproval() {
       });
 
       if (error) {
+        console.error('Erro ao rejeitar usuário:', error);
+        toast.error('Falha ao rejeitar usuário');
         throw error;
       }
 

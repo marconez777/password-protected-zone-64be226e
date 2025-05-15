@@ -20,12 +20,22 @@ export const UserApprovalPanel = () => {
   const { loading, users, fetchUsersPendingApproval, approveUser, rejectUser } = useUserApproval();
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [initialLoadAttempted, setInitialLoadAttempted] = useState(false);
 
   useEffect(() => {
-    fetchUsersPendingApproval().catch(err => {
-      setError("Erro ao carregar usuários pendentes. Por favor, tente novamente.");
-      console.error(err);
-    });
+    const loadUsers = async () => {
+      try {
+        setError(null);
+        await fetchUsersPendingApproval();
+      } catch (err) {
+        console.error("Erro ao carregar usuários pendentes:", err);
+        setError("Falha ao carregar usuários pendentes. Por favor, tente novamente.");
+      } finally {
+        setInitialLoadAttempted(true);
+      }
+    };
+    
+    loadUsers();
   }, []);
 
   // Formatar a data
@@ -46,7 +56,6 @@ export const UserApprovalPanel = () => {
       await approveUser(userId);
     } catch (err) {
       setError("Falha ao aprovar usuário. Por favor, tente novamente.");
-      console.error(err);
     } finally {
       setActionInProgress(null);
     }
@@ -59,10 +68,17 @@ export const UserApprovalPanel = () => {
       await rejectUser(userId);
     } catch (err) {
       setError("Falha ao rejeitar usuário. Por favor, tente novamente.");
-      console.error(err);
     } finally {
       setActionInProgress(null);
     }
+  };
+
+  // Função para atualizar a lista de usuários
+  const handleRefresh = () => {
+    setError(null);
+    fetchUsersPendingApproval().catch(() => {
+      setError("Erro ao atualizar lista de usuários pendentes. Por favor, tente novamente.");
+    });
   };
 
   return (
@@ -70,10 +86,7 @@ export const UserApprovalPanel = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Aprovação de Usuários</h2>
         <Button 
-          onClick={() => {
-            setError(null);
-            fetchUsersPendingApproval();
-          }}
+          onClick={handleRefresh}
           variant="outline"
           disabled={loading}
         >
@@ -89,7 +102,7 @@ export const UserApprovalPanel = () => {
         </Alert>
       )}
 
-      {loading ? (
+      {loading && !initialLoadAttempted ? (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
             <div key={i} className="flex items-center space-x-4">
@@ -99,7 +112,9 @@ export const UserApprovalPanel = () => {
         </div>
       ) : users.length === 0 ? (
         <div className="text-center py-8 bg-muted/20 rounded-md">
-          <p className="text-muted-foreground">Nenhum usuário pendente de aprovação</p>
+          <p className="text-muted-foreground">
+            {initialLoadAttempted && !loading ? "Nenhum usuário pendente de aprovação" : "Carregando usuários..."}
+          </p>
         </div>
       ) : (
         <Table>
