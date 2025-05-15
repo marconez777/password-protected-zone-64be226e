@@ -244,6 +244,10 @@ export type Database = {
           | { resource_type: string; target_user_id?: string }
         Returns: undefined
       }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       user_has_exceeded_global_limit: {
         Args: Record<PropertyKey, never>
         Returns: boolean

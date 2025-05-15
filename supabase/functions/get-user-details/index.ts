@@ -16,7 +16,7 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
-
+  
   try {
     // Criar cliente Supabase com service role
     const supabaseAdmin = createClient(
@@ -39,6 +39,26 @@ serve(async (req) => {
       );
     }
     
+    // Verificar se o usuário tem permissões de admin (usando a função is_admin)
+    // Obter JWT do header de autorização
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Autenticação inválida' }),
+        { status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      );
+    }
+    
+    // Verificar se é o admin pelo email
+    if (user.email !== 'contato@mkart.com.br') {
+      return new Response(
+        JSON.stringify({ error: 'Não autorizado - apenas administradores podem realizar esta ação' }),
+        { status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
+      );
+    }
+    
     // Processar o corpo da requisição
     const { userId } = await req.json() as RequestBody;
     
@@ -49,23 +69,18 @@ serve(async (req) => {
       );
     }
     
-    // Buscar detalhes do usuário usando Admin API
-    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(userId);
-
-    if (userError || !userData.user) {
+    // Buscar os detalhes do usuário
+    const { data: userData, error: userFetchError } = await supabaseAdmin.auth.admin.getUserById(userId);
+    
+    if (userFetchError) {
       return new Response(
-        JSON.stringify({ error: userError ? userError.message : 'Usuário não encontrado' }),
+        JSON.stringify({ error: userFetchError.message }),
         { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
       );
     }
     
-    // Retornar os dados do usuário, incluindo os metadados
     return new Response(
-      JSON.stringify({
-        email: userData.user.email,
-        created_at: userData.user.created_at,
-        user_metadata: userData.user.user_metadata
-      }),
+      JSON.stringify(userData.user),
       { status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
     

@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 interface UserStatus {
   approved: boolean;
-  is_admin: boolean;
 }
 
 interface AuthContextType {
@@ -37,22 +36,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { data, error } = await supabase
         .from('user_status')
-        .select('approved, is_admin')
+        .select('approved')
         .eq('user_id', userId)
         .single();
 
       if (error) {
         console.error("Erro ao verificar status do usuário:", error);
-        return { approved: false, is_admin: false };
+        return { approved: false };
       }
 
       return { 
-        approved: data?.approved ?? false,
-        is_admin: data?.is_admin ?? false
+        approved: data?.approved ?? false
       };
     } catch (err) {
       console.error("Erro ao verificar status do usuário:", err);
-      return { approved: false, is_admin: false };
+      return { approved: false };
     }
   };
 
