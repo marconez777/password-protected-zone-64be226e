@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Navigate, useNavigate, Link } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/AuthProvider";
@@ -209,12 +209,6 @@ const Login = () => {
                     "Entrar"
                   )}
                 </Button>
-                <div className="text-center text-sm">
-                  Não tem uma conta?{" "}
-                  <Link to="/register" className="text-mkranker-purple hover:text-mkranker-dark-purple">
-                    Registre-se
-                  </Link>
-                </div>
               </CardFooter>
             </form>
           )}

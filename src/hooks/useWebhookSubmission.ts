@@ -5,8 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 /**
- * Simplified hook for handling webhook submissions
- * No longer tied to subscription or payment functionality
+ * Hook for handling webhook submissions with user authentication
  */
 export function useWebhookSubmission(
   resourceType: string, 
