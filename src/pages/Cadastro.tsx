@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 
 // Definindo o esquema de validação com Zod
 const cadastroSchema = z.object({
@@ -23,6 +24,7 @@ type CadastroFormData = z.infer<typeof cadastroSchema>;
 const Cadastro = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const form = useForm<CadastroFormData>({
     resolver: zodResolver(cadastroSchema),
@@ -35,8 +37,24 @@ const Cadastro = () => {
   
   const onSubmit = async (data: CadastroFormData) => {
     setLoading(true);
+    setErrorMessage(null);
     
     try {
+      // Verificar se o email já está cadastrado antes de tentar criar o usuário
+      const { data: existingUsers, error: checkError } = await supabase
+        .from('user_status')
+        .select('user_id')
+        .eq('user_id', (await supabase.auth.admin.listUsers({ email: data.email })).data.users?.[0]?.id || '');
+
+      if (checkError) {
+        console.log("Erro ao verificar usuário existente:", checkError);
+        // Continuamos com o cadastro mesmo se houver erro na verificação
+      }
+
+      if (existingUsers && existingUsers.length > 0) {
+        throw new Error("Este email já está cadastrado.");
+      }
+      
       // Registrar o usuário no Supabase Auth
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
@@ -52,14 +70,34 @@ const Cadastro = () => {
         throw error;
       }
       
+      // Se o usuário é o admin, definimos como aprovado automaticamente
+      if (data.email === 'contato@mkart.com.br') {
+        // Para o admin, já aprovamos automaticamente (embora isso também esteja no trigger)
+        const { error: updateError } = await supabase
+          .from('user_status')
+          .update({ approved: true })
+          .eq('user_id', authData?.user?.id || '');
+          
+        if (updateError) {
+          console.error("Erro ao aprovar admin:", updateError);
+          // Não interrompemos o fluxo por causa deste erro
+        }
+      }
+      
       toast.success("Cadastro realizado com sucesso!");
       navigate("/cadastro-enviado");
     } catch (error: any) {
       console.error("Erro ao cadastrar:", error);
       
-      if (error.message.includes("already registered")) {
+      if (error.message.includes("already registered") || error.message.includes("já está cadastrado")) {
+        setErrorMessage("Este email já está cadastrado.");
         toast.error("Este email já está cadastrado.");
+      } else if (error.message.includes("Database error saving new user")) {
+        // Se for o erro específico que estamos enfrentando
+        setErrorMessage("Erro ao salvar os dados do usuário. Por favor, tente novamente ou contate o suporte.");
+        toast.error("Erro ao salvar os dados do usuário.");
       } else {
+        setErrorMessage(error.error_description || error.message || "Erro ao realizar cadastro. Tente novamente.");
         toast.error("Erro ao realizar cadastro. Tente novamente.");
       }
     } finally {
@@ -77,6 +115,12 @@ const Cadastro = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
+              {errorMessage}
+            </div>
+          )}
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -125,7 +169,14 @@ const Cadastro = () => {
               />
               
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Processando..." : "Cadastrar"}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processando...
+                  </>
+                ) : (
+                  "Cadastrar"
+                )}
               </Button>
             </form>
           </Form>
