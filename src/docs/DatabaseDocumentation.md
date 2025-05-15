@@ -32,6 +32,15 @@ Armazena todos os resultados gerados pelos usuários ao utilizar as ferramentas 
 | output_gerado | jsonb | Resultado gerado (formato JSON) | Não | - |
 | data_criacao | timestamp with time zone | Data de criação | Não | now() |
 
+#### `user_status`
+Armazena o status de aprovação e o nível de acesso dos usuários.
+
+| Coluna | Tipo | Descrição | Nullable | Default |
+|--------|------|-----------|----------|---------|
+| user_id | uuid | ID do usuário | Não | - |
+| approved | boolean | Status de aprovação | Não | false |
+| is_admin | boolean | Indica se o usuário é administrador | Sim | false |
+
 #### `subscriptions` (Mantida para estrutura apenas)
 Estrutura para possível implementação de assinaturas futuras.
 
@@ -46,34 +55,22 @@ Estrutura para possível implementação de assinaturas futuras.
 | created_at | timestamp with time zone | Data de criação | Não | now() |
 | updated_at | timestamp with time zone | Data de atualização | Não | now() |
 
-#### `user_usage` (Mantida para estrutura apenas)
-Estrutura para possível monitoramento de uso futuro.
-
-| Coluna | Tipo | Descrição | Nullable | Default |
-|--------|------|-----------|----------|---------|
-| id | uuid | ID do registro de uso | Não | gen_random_uuid() |
-| user_id | uuid | ID do usuário | Não | - |
-| keyword_count | integer | Contagem de uso da ferramenta de palavras-chave | Não | 0 |
-| market_research_count | integer | Contagem de uso da ferramenta de pesquisa de mercado | Não | 0 |
-| search_funnel_count | integer | Contagem de uso da ferramenta de funil de busca | Não | 0 |
-| seo_text_count | integer | Contagem de uso da ferramenta de texto SEO | Não | 0 |
-| topic_research_count | integer | Contagem de uso da ferramenta de pesquisa de tópicos | Não | 0 |
-| metadata_generation_count | integer | Contagem de uso da ferramenta de geração de meta dados | Não | 0 |
-| created_at | timestamp with time zone | Data de criação | Não | now() |
-| updated_at | timestamp with time zone | Data de atualização | Não | now() |
-
 ## 3. Relacionamentos entre Tabelas
 
 - A tabela `user_results` possui uma relação com a tabela `auth.users` através do campo `user_id`.
 - A tabela `profiles` possui uma relação com a tabela `auth.users` através do campo `id`.
+- A tabela `user_status` possui uma relação com a tabela `auth.users` através do campo `user_id`.
 
 ## 4. Funções do Banco de Dados
 
-### `user_has_exceeded_limit(resource_type text, target_user_id uuid DEFAULT NULL::uuid)`
-Esta função está implementada mas não é mais utilizada ativamente no sistema.
+### `get_pending_users()`
+Esta função retorna os usuários pendentes de aprovação, utilizando aliases para evitar ambiguidade nas colunas.
 
-### `increment_user_usage(resource_type text, target_user_id uuid DEFAULT NULL::uuid)`
-Esta função está implementada mas não é mais utilizada ativamente no sistema.
+### `count_pending_users()`
+Esta função retorna a contagem de usuários pendentes de aprovação.
+
+### `is_admin_user()`
+Esta função verifica se o usuário atual é administrador.
 
 ## 5. Segurança e Row-Level Security (RLS)
 
@@ -81,6 +78,7 @@ O banco de dados utiliza policies de Row-Level Security para garantir que usuár
 
 - Usuários só podem visualizar e manipular seus próprios registros em `user_results`
 - Usuários só podem acessar seus próprios dados de perfil em `profiles`
+- Administradores podem visualizar e gerenciar o status de todos os usuários
 
 ## 6. Estrutura da Autenticação
 
