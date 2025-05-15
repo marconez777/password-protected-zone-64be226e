@@ -68,7 +68,7 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <Button asChild variant="outline" className="w-full border-mkranker-purple text-mkranker-purple hover:bg-mkranker-purple/10">
-                  <Link to="/register">
+                  <Link to="/cadastro">
                     <UserPlus className="mr-2 h-4 w-4" />
                     Cadastre-se
                   </Link>
