@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserApprovalPanel } from "@/components/admin/UserApprovalPanel";
@@ -6,12 +5,25 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from '@/providers/AuthProvider';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 const Admin = () => {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success("Logout realizado com sucesso");
+      navigate('/login');
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      toast.error("Erro ao fazer logout");
+    }
+  };
 
   useEffect(() => {
     // Verificamos se o usuário tem permissão de administrador
@@ -68,7 +80,17 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Painel de Administração</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Painel de Administração</h1>
+        <Button 
+          onClick={handleLogout}
+          variant="outline" 
+          className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+        >
+          <LogOut className="h-4 w-4" />
+          Sair
+        </Button>
+      </div>
       
       {pendingCount !== null && (
         <div className={`mb-4 p-3 rounded-md ${
