@@ -1,8 +1,7 @@
 
 // This file is maintained for compatibility with existing code
-// We're now using the AuthProvider directly for authentication
-import { useAuth as useAuthProvider } from "@/providers/AuthProvider";
+import { useAuth as useAuthFromProvider } from "@/providers/auth";
 
-export const useAuth = useAuthProvider;
+export const useAuth = useAuthFromProvider;
 
 export default useAuth;

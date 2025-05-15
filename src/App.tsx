@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
-import { AuthProvider, ProtectedRoute } from "@/providers/AuthProvider";
+import { AuthProvider, ProtectedRoute } from "@/providers/auth";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
