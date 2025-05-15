@@ -19,6 +19,7 @@ export function useUserApproval() {
   const fetchUsersPendingApproval = async () => {
     setLoading(true);
     try {
+      console.log('Iniciando busca de usuários pendentes...');
       // Usar a função RPC do Supabase que já tem os aliases configurados corretamente
       const { data, error } = await supabase
         .rpc('get_pending_users');
@@ -30,13 +31,26 @@ export function useUserApproval() {
         throw error;
       }
       
+      console.log('Resposta da função get_pending_users:', data);
+      
       if (!data || !Array.isArray(data) || data.length === 0) {
+        console.log('Nenhum usuário pendente encontrado');
         setUsers([]);
         return [];
       }
       
-      setUsers(data as UserStatus[]);
-      return data;
+      // Garantir que os dados estão no formato esperado
+      const formattedUsers = data.map((user: any) => ({
+        user_id: user.user_id,
+        approved: user.approved,
+        email: user.email || 'N/A',
+        name: user.name || 'N/A',
+        created_at: user.created_at
+      }));
+      
+      console.log('Usuários formatados:', formattedUsers);
+      setUsers(formattedUsers);
+      return formattedUsers;
     } catch (error) {
       console.error('Erro ao buscar usuários pendentes:', error);
       toast.error('Falha ao carregar usuários pendentes');
@@ -51,6 +65,7 @@ export function useUserApproval() {
   const approveUser = async (userId: string) => {
     setLoading(true);
     try {
+      console.log('Tentando aprovar usuário:', userId);
       const { error } = await supabase
         .from('user_status')
         .update({ approved: true })
@@ -78,6 +93,7 @@ export function useUserApproval() {
   const rejectUser = async (userId: string) => {
     setLoading(true);
     try {
+      console.log('Tentando rejeitar usuário:', userId);
       // Esta operação requer service_role key, então usaremos uma Edge Function
       const { error } = await supabase.functions.invoke('delete-user', {
         body: { userId }
