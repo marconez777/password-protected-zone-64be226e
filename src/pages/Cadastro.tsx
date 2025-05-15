@@ -41,7 +41,6 @@ const Cadastro = () => {
     
     try {
       // Registrar o usuário no Supabase Auth
-      // Note: O trigger init_user_status criará automaticamente o registro na tabela user_status
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
