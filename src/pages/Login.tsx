@@ -25,6 +25,15 @@ const Login = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // If already authenticated, redirect to dashboard
+  if (user) {
+    // Redirecionar admins para a página de admin
+    if (user.email === 'contato@mkart.com.br') {
+      return <Navigate to="/admin" />;
+    }
+    return <Navigate to="/dashboard" />;
+  }
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -100,15 +109,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  // If already authenticated, redirect to dashboard
-  if (user) {
-    // Redirecionar admins para a página de admin
-    if (user.email === 'contato@mkart.com.br') {
-      return <Navigate to="/admin" />;
-    }
-    return <Navigate to="/dashboard" />;
-  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
