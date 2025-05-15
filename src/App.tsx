@@ -5,7 +5,6 @@ import { AuthProvider, ProtectedRoute } from "@/providers/AuthProvider";
 
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
-import Cadastro from "@/pages/Cadastro";
 import DefinirSenha from "@/pages/DefinirSenha";
 import Dashboard from "@/pages/Dashboard";
 import SearchFunnel from "@/pages/SearchFunnel";
@@ -17,8 +16,6 @@ import TextoSEOBlog from "@/pages/TextoSEOBlog";
 import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
 import NotFound from "@/pages/NotFound";
-import Aguarde from "@/pages/Aguarde";
-import Erro from "@/pages/Erro";
 
 const App = () => {
   return (
@@ -28,10 +25,7 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/definir-senha" element={<DefinirSenha />} />
-          <Route path="/aguarde" element={<Aguarde />} />
-          <Route path="/erro" element={<Erro />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

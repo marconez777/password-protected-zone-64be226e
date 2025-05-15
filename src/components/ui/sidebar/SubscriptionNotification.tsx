@@ -1,8 +1,8 @@
 
 import React from 'react';
 
-// This component no longer shows subscription notifications
+// This component is kept for backward compatibility
+// It no longer shows any subscription notifications
 export const SubscriptionNotification = () => {
-  // Empty component that does nothing
   return null;
 };

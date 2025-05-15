@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { LogIn, UserPlus, ArrowRight } from "lucide-react";
+import { LogIn, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/providers/AuthProvider";
@@ -45,37 +45,20 @@ const Index = () => {
             </CardContent>
           </Card>
         ) : (
-          <div className="flex flex-col md:flex-row gap-6 justify-center">
-            <Card className="w-full max-w-xs">
-              <CardHeader>
-                <CardTitle className="text-xl">Já tem uma conta?</CardTitle>
-                <CardDescription>Acesse sua conta para continuar</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
-                  <Link to="/login">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Fazer Login
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full max-w-xs">
-              <CardHeader>
-                <CardTitle className="text-xl">Novo por aqui?</CardTitle>
-                <CardDescription>Crie sua conta e comece agora</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild variant="outline" className="w-full border-mkranker-purple text-mkranker-purple hover:bg-mkranker-purple/10">
-                  <Link to="/cadastro">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Cadastre-se
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="max-w-md mx-auto">
+            <CardHeader>
+              <CardTitle className="text-xl">Acesso restrito</CardTitle>
+              <CardDescription>Digite suas credenciais para acessar o sistema</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full bg-mkranker-purple hover:bg-mkranker-dark-purple">
+                <Link to="/login">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Fazer Login
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

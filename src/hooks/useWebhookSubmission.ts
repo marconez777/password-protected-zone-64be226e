@@ -5,8 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 /**
- * Hook for handling webhook submissions with integrated database saving
- * Simplified version without subscription limitations
+ * Simplified hook for handling webhook submissions
+ * No longer tied to subscription or payment functionality
  */
 export function useWebhookSubmission(
   resourceType: string, 
@@ -39,11 +39,9 @@ export function useWebhookSubmission(
     setIsLoading(true);
     
     try {
-      // Enviar a requisição para o webhook
       console.log(`Enviando dados para o webhook: ${webhookUrl}`);
       console.log("Dados:", JSON.stringify(formData));
       
-      // Adicionar origem para resolver problemas de CORS
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
@@ -52,7 +50,7 @@ export function useWebhookSubmission(
         },
         body: JSON.stringify({
           ...formData,
-          user_id: user.id  // Incluir ID do usuário para rastreabilidade
+          user_id: user.id
         }),
       });
 
@@ -63,23 +61,19 @@ export function useWebhookSubmission(
       const resultData = await response.json();
       console.log("Resposta do webhook:", resultData);
       
-      // Set the result immediately after receiving it
       setResult(resultData);
       
-      // Salvar no banco de dados para histórico
       try {
         await saveResultToDatabase(resourceType, formData, resultData);
       } catch (error) {
         console.error('Error saving result to database:', error);
-        // Even if saving fails, we still have the result displayed
         toast({
           title: "Aviso",
-          description: "O resultado foi gerado mas não pôde ser salvo no histórico. Você pode tentar fazer login novamente.",
+          description: "O resultado foi gerado mas não pôde ser salvo no histórico.",
           variant: "default",
         });
       }
       
-      // Show success toast
       toast({
         title: "Sucesso",
         description: "Conteúdo gerado com sucesso!",
@@ -103,7 +97,6 @@ export function useWebhookSubmission(
     if (!user) return;
     
     try {
-      // Check if session is valid before attempting to save
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
       if (sessionError || !sessionData.session) {
         throw new Error('Session invalid or expired');
@@ -122,7 +115,7 @@ export function useWebhookSubmission(
       }
     } catch (error) {
       console.error('Error saving result to database:', error);
-      throw error; // Let the calling function handle this error
+      throw error;
     }
   };
 

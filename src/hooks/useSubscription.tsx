@@ -1,20 +1,21 @@
 
 import { useState } from 'react';
 
-// This is a simplified version that doesn't track subscriptions
-// but maintains the interface for backward compatibility
+// This hook is maintained for backward compatibility
+// No actual subscription functionality remains
 export const useSubscription = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   
-  // Empty functions that do nothing
+  // Empty functions that always succeed
   const checkSubscription = async () => {
-    setIsLoading(false);
+    return true;
   };
 
   const incrementUsage = async () => {
     return true;
   };
 
+  // Return mock values to avoid breaking existing code
   return {
     isLoading,
     checkSubscription,
