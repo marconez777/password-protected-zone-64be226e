@@ -20,7 +20,6 @@ export function useUserApproval() {
     setLoading(true);
     try {
       // Usar a função RPC do Supabase para buscar usuários pendentes
-      // Usando tipagem específica para a chamada do RPC para evitar erros de TypeScript
       const { data, error } = await supabase
         .rpc('get_pending_users');
       
