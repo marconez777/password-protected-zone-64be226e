@@ -14,6 +14,7 @@ import TextoSEOProduto from "@/pages/TextoSEOProduto";
 import TextoSEOBlog from "@/pages/TextoSEOBlog";
 import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
+import Admin from "@/pages/Admin";
 import NotFound from "@/pages/NotFound";
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/texto-seo-blog" element={<ProtectedRoute><TextoSEOBlog /></ProtectedRoute>} />
           <Route path="/pautas-blog" element={<ProtectedRoute><PautasBlog /></ProtectedRoute>} />
           <Route path="/meta-dados" element={<ProtectedRoute><MetaDados /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

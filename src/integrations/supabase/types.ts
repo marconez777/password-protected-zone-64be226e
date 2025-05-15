@@ -165,6 +165,21 @@ export type Database = {
         }
         Relationships: []
       }
+      user_status: {
+        Row: {
+          approved: boolean
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -3,10 +3,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
+
+interface UserStatus {
+  approved: boolean;
+}
 
 interface AuthContextType {
   session: Session | null;
   user: User | null;
+  isApproved: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -14,6 +20,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
+  isApproved: false,
   loading: true,
   signOut: async () => {},
 });
@@ -21,22 +28,70 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [isApproved, setIsApproved] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+
+  // Função para verificar o status de aprovação do usuário
+  const checkApprovalStatus = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_status')
+        .select('approved')
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error("Erro ao verificar status de aprovação:", error);
+        return false;
+      }
+
+      return data?.approved ?? false;
+    } catch (err) {
+      console.error("Erro ao verificar status de aprovação:", err);
+      return false;
+    }
+  };
 
   useEffect(() => {
     // First set up the auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, currentSession) => {
+      async (_event, currentSession) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+        
+        if (currentSession?.user) {
+          const approved = await checkApprovalStatus(currentSession.user.id);
+          setIsApproved(approved);
+          
+          // Se não estiver aprovado, fazer logout
+          if (!approved) {
+            await supabase.auth.signOut();
+            toast.error("Sua conta ainda não foi aprovada pelo administrador");
+          }
+        } else {
+          setIsApproved(false);
+        }
+        
         setLoading(false);
       }
     );
 
     // Then check for existing session
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+    supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
+      
+      if (currentSession?.user) {
+        const approved = await checkApprovalStatus(currentSession.user.id);
+        setIsApproved(approved);
+        
+        // Se não estiver aprovado, fazer logout
+        if (!approved) {
+          await supabase.auth.signOut();
+          toast.error("Sua conta ainda não foi aprovada pelo administrador");
+        }
+      }
+      
       setLoading(false);
     });
 
@@ -52,6 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const value = {
     session,
     user,
+    isApproved,
     loading,
     signOut,
   };
@@ -64,7 +120,7 @@ export const useAuth = () => {
 };
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { user, isApproved, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -75,7 +131,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
   
-  if (!user) {
+  if (!user || !isApproved) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
