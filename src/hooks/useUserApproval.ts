@@ -21,8 +21,8 @@ export function useUserApproval() {
     try {
       console.log('Iniciando busca de usuários pendentes...');
       
-      // Criar uma consulta com joins entre user_status e auth.users
-      // Usando SELECT * para simplificar e evitar o erro de ambiguidade
+      // Buscar diretamente usando joins entre user_status e auth.users
+      // Esta abordagem funciona com as novas RLS policies para admins
       const { data, error } = await supabase
         .from('user_status')
         .select('*, auth.users!inner(*)')
@@ -35,7 +35,7 @@ export function useUserApproval() {
         throw error;
       }
       
-      console.log('Resposta da consulta simplificada:', data);
+      console.log('Resposta da consulta:', data);
       
       if (!data || !Array.isArray(data) || data.length === 0) {
         console.log('Nenhum usuário pendente encontrado');
