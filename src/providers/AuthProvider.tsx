@@ -7,12 +7,14 @@ import { toast } from "sonner";
 
 interface UserStatus {
   approved: boolean;
+  is_admin: boolean;
 }
 
 interface AuthContextType {
   session: Session | null;
   user: User | null;
   isApproved: boolean;
+  isAdmin: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -21,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
   isApproved: false,
+  isAdmin: false,
   loading: true,
   signOut: async () => {},
 });
@@ -29,26 +32,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
-  // Função para verificar o status de aprovação do usuário
-  const checkApprovalStatus = async (userId: string) => {
+  // Função para verificar o status do usuário
+  const checkUserStatus = async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('user_status')
-        .select('approved')
+        .select('approved, is_admin')
         .eq('user_id', userId)
         .single();
 
       if (error) {
-        console.error("Erro ao verificar status de aprovação:", error);
-        return false;
+        console.error("Erro ao verificar status do usuário:", error);
+        return { approved: false, is_admin: false };
       }
 
-      return data?.approved ?? false;
+      return { 
+        approved: data?.approved ?? false,
+        is_admin: data?.is_admin ?? false
+      };
     } catch (err) {
-      console.error("Erro ao verificar status de aprovação:", err);
-      return false;
+      console.error("Erro ao verificar status do usuário:", err);
+      return { approved: false, is_admin: false };
     }
   };
 
@@ -60,16 +67,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(currentSession?.user ?? null);
         
         if (currentSession?.user) {
-          const approved = await checkApprovalStatus(currentSession.user.id);
-          setIsApproved(approved);
+          const status = await checkUserStatus(currentSession.user.id);
+          setIsApproved(status.approved);
+          setIsAdmin(status.is_admin);
           
           // Se não estiver aprovado, fazer logout
-          if (!approved) {
+          if (!status.approved) {
             await supabase.auth.signOut();
             toast.error("Sua conta ainda não foi aprovada pelo administrador");
           }
         } else {
           setIsApproved(false);
+          setIsAdmin(false);
         }
         
         setLoading(false);
@@ -82,11 +91,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(currentSession?.user ?? null);
       
       if (currentSession?.user) {
-        const approved = await checkApprovalStatus(currentSession.user.id);
-        setIsApproved(approved);
+        const status = await checkUserStatus(currentSession.user.id);
+        setIsApproved(status.approved);
+        setIsAdmin(status.is_admin);
         
         // Se não estiver aprovado, fazer logout
-        if (!approved) {
+        if (!status.approved) {
           await supabase.auth.signOut();
           toast.error("Sua conta ainda não foi aprovada pelo administrador");
         }
@@ -108,6 +118,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     user,
     isApproved,
+    isAdmin,
     loading,
     signOut,
   };

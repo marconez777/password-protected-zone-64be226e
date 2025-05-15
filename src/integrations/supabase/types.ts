@@ -168,14 +168,17 @@ export type Database = {
       user_status: {
         Row: {
           approved: boolean
+          is_admin: boolean | null
           user_id: string
         }
         Insert: {
           approved?: boolean
+          is_admin?: boolean | null
           user_id: string
         }
         Update: {
           approved?: boolean
+          is_admin?: boolean | null
           user_id?: string
         }
         Relationships: []

@@ -6,22 +6,20 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from '@/providers/AuthProvider';
 import { toast } from 'sonner';
 
-const ADMIN_EMAIL = 'admin@seusite.com'; // Email do admin
-
 const Admin = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Verifica se o usuário logado é um admin
-    if (user && user.email !== ADMIN_EMAIL) {
+    if (user && !isAdmin) {
       toast.error('Você não tem permissão para acessar esta página');
       navigate('/dashboard');
     }
-  }, [user, navigate]);
+  }, [user, isAdmin, navigate]);
 
   // Só renderiza o conteúdo se for o admin
-  if (!user || user.email !== ADMIN_EMAIL) {
+  if (!user || !isAdmin) {
     return null;
   }
 
