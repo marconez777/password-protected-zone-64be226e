@@ -14,7 +14,6 @@ interface AuthContextType {
   session: Session | null;
   user: User | null;
   isApproved: boolean;
-  isAdmin: boolean;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -23,7 +22,6 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   user: null,
   isApproved: false,
-  isAdmin: false,
   loading: true,
   signOut: async () => {},
 });
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isApproved, setIsApproved] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   // Função para verificar o status do usuário
@@ -69,7 +66,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (currentSession?.user) {
           const status = await checkUserStatus(currentSession.user.id);
           setIsApproved(status.approved);
-          setIsAdmin(status.is_admin);
           
           // Se não estiver aprovado, fazer logout
           if (!status.approved) {
@@ -78,7 +74,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         } else {
           setIsApproved(false);
-          setIsAdmin(false);
         }
         
         setLoading(false);
@@ -93,7 +88,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (currentSession?.user) {
         const status = await checkUserStatus(currentSession.user.id);
         setIsApproved(status.approved);
-        setIsAdmin(status.is_admin);
         
         // Se não estiver aprovado, fazer logout
         if (!status.approved) {
@@ -118,7 +112,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     user,
     isApproved,
-    isAdmin,
     loading,
     signOut,
   };

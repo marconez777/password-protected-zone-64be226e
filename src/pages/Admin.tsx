@@ -6,20 +6,22 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from '@/providers/AuthProvider';
 import { toast } from 'sonner';
 
+const ADMIN_EMAIL = 'contato@mkart.com.br'; // Email fixo do admin
+
 const Admin = () => {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Verifica se o usuário logado é um admin
-    if (user && !isAdmin) {
+    // Verifica se o usuário logado é o admin pelo email específico
+    if (user && user.email !== ADMIN_EMAIL) {
       toast.error('Você não tem permissão para acessar esta página');
       navigate('/dashboard');
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, navigate]);
 
   // Só renderiza o conteúdo se for o admin
-  if (!user || !isAdmin) {
+  if (!user || user.email !== ADMIN_EMAIL) {
     return null;
   }
 
