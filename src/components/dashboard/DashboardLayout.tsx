@@ -2,9 +2,6 @@
 import { ReactNode } from 'react';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
-import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
-import { Link } from "react-router-dom";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -30,14 +27,6 @@ export const DashboardLayout = ({
             </div>
             <div className="flex items-center gap-4">
               <SidebarTrigger className="block md:hidden" />
-              <div className="hidden md:flex items-center gap-2">
-                <Button asChild variant="outline" size="sm" className="border-gray-200 text-gray-700">
-                  <Link to="/dashboard">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Configurações
-                  </Link>
-                </Button>
-              </div>
             </div>
           </div>
 
