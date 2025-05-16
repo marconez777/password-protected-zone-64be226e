@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -59,7 +60,10 @@ const PricingSection = () => {
               </div>
 
               <div className="mt-auto">
-                <Button className="w-full bg-gray-700 hover:bg-gray-600 text-white">
+                <Button 
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-white"
+                  onClick={() => window.open('https://pay.kiwify.com.br/sZRHsgM', '_blank')}
+                >
                   Começar Agora
                 </Button>
                 <p className="text-center text-xs text-gray-500 mt-3">Oferta por tempo limitado</p>
@@ -122,7 +126,10 @@ const PricingSection = () => {
               </div>
               
               <div className="mt-auto">
-                <Button className="w-full bg-[#805af5] hover:bg-[#6a4ac9] text-white">
+                <Button 
+                  className="w-full bg-[#805af5] hover:bg-[#6a4ac9] text-white"
+                  onClick={() => window.open('https://pay.kiwify.com.br/DqJguP9', '_blank')}
+                >
                   Começar Agora
                 </Button>
                 <p className="text-center text-xs text-gray-500 mt-3">Oferta por tempo limitado</p>

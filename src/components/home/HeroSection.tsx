@@ -26,6 +26,10 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const scrollToPricing = () => {
+    document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="relative min-h-[calc(100vh-76px)] overflow-hidden">
       {/* Background grid */}
@@ -58,12 +62,12 @@ const HeroSection = () => {
           Potencialize a sua operação com a ajuda do Chat GPT e do Gemini. Treinados por nossos consultores
         </p>
         
-        <Link 
-          to="/cadastro" 
+        <button 
+          onClick={scrollToPricing}
           className="bg-gradient-to-r from-[#805af5] to-[#cd99ff] text-white font-medium px-8 py-3 rounded-md hover:opacity-90 transition"
         >
           Começar Agora
-        </Link>
+        </button>
       </div>
     </div>
   );

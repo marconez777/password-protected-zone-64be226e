@@ -15,7 +15,9 @@ const HomePage = () => {
       <div className="bg-[#121016]">
         <CompaniesSection />
         <FeaturesSection />
-        <PricingSection />
+        <div id="pricing-section">
+          <PricingSection />
+        </div>
       </div>
       <Footer />
     </div>
