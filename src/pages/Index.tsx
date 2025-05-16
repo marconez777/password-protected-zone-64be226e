@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 
 const Index = () => {
   const { user, loading } = useAuth();
-  const [showHomePage, setShowHomePage] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
   // Controla a transição entre estados para evitar flash da UI antiga
@@ -18,9 +17,8 @@ const Index = () => {
     if (!loading) {
       // Quando termina o carregamento, define o estado inicial
       setInitialLoadComplete(true);
-      setShowHomePage(!user);
     }
-  }, [loading, user]);
+  }, [loading]);
 
   // Mostra o spinner de carregamento enquanto verifica autenticação
   if (loading || !initialLoadComplete) {
