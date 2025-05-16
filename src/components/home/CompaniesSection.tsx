@@ -1,9 +1,8 @@
-
 import React from 'react';
 
 const CompaniesSection = () => {
   return (
-    <div className="w-full py-16 bg-[#0c0a11]">
+    <div className="w-full py-16 bg-[#121016]">
       <div className="container mx-auto px-4">
         <h2 className="text-center text-xl text-gray-300 font-medium mb-12">
           MELHORES I.A. DO MERCADO

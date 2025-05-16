@@ -12,9 +12,11 @@ const HomePage = () => {
     <div className="min-h-screen bg-[#121016] w-full">
       <HomeNavbar />
       <HeroSection />
-      <CompaniesSection />
-      <FeaturesSection />
-      <PricingSection />
+      <div className="bg-[#121016]">
+        <CompaniesSection />
+        <FeaturesSection />
+        <PricingSection />
+      </div>
       <Footer />
     </div>
   );
