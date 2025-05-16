@@ -1,5 +1,5 @@
 
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuth } from "@/providers/auth";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { FeatureCards } from "@/components/dashboard/FeatureCards";
 import { useEffect } from "react";

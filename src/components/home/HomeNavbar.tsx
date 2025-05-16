@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
+import { useAuth } from '@/providers/auth';
 
 const HomeNavbar = () => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <nav className="bg-transparent px-4 md:px-8 py-4 flex items-center justify-between">
@@ -111,12 +113,21 @@ const HomeNavbar = () => {
       </div>
       
       <div className="mr-[10%]">
-        <Link
-          to="/cadastro"
-          className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
-        >
-          Assinar
-        </Link>
+        {user ? (
+          <Link
+            to="/dashboard"
+            className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
+          >
+            Dashboard
+          </Link>
+        ) : (
+          <Link
+            to="/cadastro"
+            className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
+          >
+            Assinar
+          </Link>
+        )}
       </div>
     </nav>
   );

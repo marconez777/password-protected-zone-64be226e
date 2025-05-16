@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider, ProtectedRoute } from "@/providers/auth";
 
-import Index from "@/pages/Index";
+import HomePage from "@/pages/HomePage";
 import Login from "@/pages/Login";
 import Cadastro from "@/pages/Cadastro";
 import CadastroEnviado from "@/pages/CadastroEnviado";
@@ -25,7 +25,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
