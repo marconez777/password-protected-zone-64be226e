@@ -5,6 +5,7 @@ import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import CompaniesSection from '@/components/home/CompaniesSection';
 import PricingSection from '@/components/home/PricingSection';
+import Footer from '@/components/home/Footer';
 
 const HomePage = () => {
   return (
@@ -14,6 +15,7 @@ const HomePage = () => {
       <CompaniesSection />
       <FeaturesSection />
       <PricingSection />
+      <Footer />
     </div>
   );
 };
