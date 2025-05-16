@@ -1,16 +1,29 @@
 
 import { useAuth } from "@/providers/AuthProvider";
 import { Link } from "react-router-dom";
-import { LogIn, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/ui/logo";
 import HomePage from "./HomePage";
+import { useEffect, useState } from "react";
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const [showHomePage, setShowHomePage] = useState(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
-  if (loading) {
+  // Controla a transição entre estados para evitar flash da UI antiga
+  useEffect(() => {
+    if (!loading) {
+      // Quando termina o carregamento, define o estado inicial
+      setInitialLoadComplete(true);
+      setShowHomePage(!user);
+    }
+  }, [loading, user]);
+
+  // Mostra o spinner de carregamento enquanto verifica autenticação
+  if (loading || !initialLoadComplete) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="w-16 h-16 border-4 border-mkranker-purple border-t-transparent rounded-full animate-spin"></div>
@@ -18,7 +31,7 @@ const Index = () => {
     );
   }
 
-  // If user is logged in, show the logged-in view
+  // Se user está logado, mostra a view de usuário logado
   if (user) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -49,7 +62,7 @@ const Index = () => {
     );
   }
   
-  // If no user is logged in, show the new homepage
+  // Se não tem usuário logado, mostra a homepage
   return <HomePage />;
 };
 
