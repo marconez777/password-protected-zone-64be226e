@@ -124,14 +124,14 @@ export function SearchFunnelForm() {
   return (
     <div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="mb-6 grid w-full grid-cols-2 max-w-[400px]">
+        <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
           <TabsTrigger value="formulario">Formulário</TabsTrigger>
           <TabsTrigger value="historico">Histórico</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="formulario">
-          <Card>
-            <CardContent className="pt-6">
+        <TabsContent value="formulario" className="mt-6">
+          <Card className="border-0 shadow-none bg-transparent">
+            <CardContent className="pt-6 px-0">
               <p className="text-gray-600 mb-6">
                 Preencha as informações abaixo e clique em gerar
               </p>
