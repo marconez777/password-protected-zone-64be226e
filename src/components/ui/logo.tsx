@@ -23,11 +23,7 @@ export function Logo({
         alt="MK Ranker Logo"
         className="h-10 w-auto" 
       />
-      {showText && (
-        <span className={cn("ml-2 text-xl font-bold", variant === 'light' ? "text-gray-800" : "text-white")}>
-          MK Ranker
-        </span>
-      )}
+      {/* Text display has been removed */}
     </div>
   );
 }
