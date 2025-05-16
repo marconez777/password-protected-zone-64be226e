@@ -9,7 +9,7 @@ const HomeNavbar = () => {
 
   return (
     <nav className="bg-transparent px-4 md:px-8 py-4 flex items-center justify-between">
-      <div className="flex items-center ml-[15%]">
+      <div className="flex items-center ml-[12%]">
         <Logo variant="dark" showText={true} className="h-8" />
       </div>
       
@@ -93,7 +93,7 @@ const HomeNavbar = () => {
             <li className="relative group">
               <Link 
                 to="/blog" 
-                className="text-white hover:opacity-90 pb-1 group-hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
+                className="text-white hover:opacity-90 pb-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
                 Blog
               </Link>
@@ -101,7 +101,7 @@ const HomeNavbar = () => {
             <li className="relative group">
               <Link 
                 to="/treinamentos" 
-                className="text-white hover:opacity-90 pb-1 group-hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
+                className="text-white hover:opacity-90 pb-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
                 Treinamentos
               </Link>
@@ -110,7 +110,7 @@ const HomeNavbar = () => {
         </div>
       </div>
       
-      <div className="mr-[15%]">
+      <div className="mr-[12%]">
         <Link
           to="/cadastro"
           className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
