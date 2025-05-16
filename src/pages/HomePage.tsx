@@ -5,7 +5,7 @@ import HeroSection from '@/components/home/HeroSection';
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-[#121016]">
+    <div className="min-h-screen bg-[#121016] w-full">
       <HomeNavbar />
       <HeroSection />
     </div>

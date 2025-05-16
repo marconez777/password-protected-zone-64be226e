@@ -1,8 +1,31 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
+  const [currentText, setCurrentText] = useState("Estratégia");
+  const [isAnimating, setIsAnimating] = useState(false);
+  const texts = ["Estratégia", "Redação", "Pesquisa"];
+
+  useEffect(() => {
+    let currentIndex = 0;
+    
+    const animateText = () => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % texts.length;
+        setCurrentText(texts[currentIndex]);
+        setIsAnimating(false);
+      }, 500); // Duration of the fade out animation
+    };
+
+    const interval = setInterval(() => {
+      animateText();
+    }, 4000); // 4 seconds per word
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative min-h-[calc(100vh-76px)] overflow-hidden">
       {/* Background grid */}
@@ -16,19 +39,19 @@ const HeroSection = () => {
         }}
       />
       
-      {/* Purple abstract shapes */}
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-[#805af5] rounded-full blur-[100px] opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-[#cd99ff] rounded-full blur-[80px] opacity-20 -translate-x-1/2 translate-y-1/2"></div>
-      <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#8260d0] rounded-full blur-[90px] opacity-20 translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-[220px] h-[220px] bg-[#9b87f5] rounded-full blur-[85px] opacity-20 translate-x-1/2 translate-y-1/2"></div>
+      {/* Purple abstract shapes - adjusted to be 20% more centered */}
+      <div className="absolute top-[10%] left-[10%] w-[300px] h-[300px] bg-[#805af5] rounded-full blur-[100px] opacity-20"></div>
+      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-[#cd99ff] rounded-full blur-[80px] opacity-20"></div>
+      <div className="absolute top-[10%] right-[10%] w-[250px] h-[250px] bg-[#8260d0] rounded-full blur-[90px] opacity-20"></div>
+      <div className="absolute bottom-[10%] right-[10%] w-[220px] h-[220px] bg-[#9b87f5] rounded-full blur-[85px] opacity-20"></div>
       
       {/* Content */}
       <div className="container mx-auto px-4 pt-20 pb-16 relative z-10 text-center flex flex-col items-center justify-center min-h-[calc(100vh-76px)]">
         <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
           Automatize o SEO
         </h1>
-        <h2 className="text-transparent bg-clip-text bg-gradient-to-b from-[#805af5] to-[#cd99ff] text-6xl md:text-7xl lg:text-8xl font-bold mb-8">
-          Estratégia
+        <h2 className={`text-transparent bg-clip-text bg-gradient-to-b from-[#805af5] to-[#cd99ff] text-6xl md:text-7xl lg:text-8xl font-bold mb-8 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
+          {currentText}
         </h2>
         
         <p className="text-gray-100 text-lg md:text-xl max-w-2xl mx-auto mb-10">
