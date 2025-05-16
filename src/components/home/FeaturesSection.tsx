@@ -14,6 +14,10 @@ const FeaturesSection = () => {
   // Estado para controlar qual feature está ativa
   const [activeFeature, setActiveFeature] = useState<string>('pesquisa');
 
+  const handleStartNow = () => {
+    window.open('https://pay.kiwify.com.br/sZRHsgM', '_blank');
+  };
+
   // Dados das features
   const features: Feature[] = [
     {
@@ -52,6 +56,7 @@ const FeaturesSection = () => {
               </li>
             </ul>
             <Button 
+              onClick={handleStartNow}
               className="mt-6 bg-[#805af5] hover:bg-[#6e46c5] text-white px-6 py-4 h-auto rounded-md flex items-center"
             >
               Começar agora! <span className="ml-2">→</span>
@@ -96,6 +101,7 @@ const FeaturesSection = () => {
               </li>
             </ul>
             <Button 
+              onClick={handleStartNow}
               className="mt-6 bg-[#805af5] hover:bg-[#6e46c5] text-white px-6 py-4 h-auto rounded-md flex items-center"
             >
               Começar agora! <span className="ml-2">→</span>
@@ -139,6 +145,7 @@ const FeaturesSection = () => {
               </li>
             </ul>
             <Button 
+              onClick={handleStartNow}
               className="mt-6 bg-[#805af5] hover:bg-[#6e46c5] text-white px-6 py-4 h-auto rounded-md flex items-center"
             >
               Começar agora! <span className="ml-2">→</span>
@@ -182,6 +189,7 @@ const FeaturesSection = () => {
               </li>
             </ul>
             <Button 
+              onClick={handleStartNow}
               className="mt-6 bg-[#805af5] hover:bg-[#6e46c5] text-white px-6 py-4 h-auto rounded-md flex items-center"
             >
               Começar agora! <span className="ml-2">→</span>
@@ -225,6 +233,7 @@ const FeaturesSection = () => {
               </li>
             </ul>
             <Button 
+              onClick={handleStartNow}
               className="mt-6 bg-[#805af5] hover:bg-[#6e46c5] text-white px-6 py-4 h-auto rounded-md flex items-center"
             >
               Começar agora! <span className="ml-2">→</span>

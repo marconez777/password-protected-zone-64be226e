@@ -13,10 +13,8 @@ export function Logo({
   variant = 'light', 
   ...props 
 }: LogoProps) {
-  // Use the variant to determine which logo to display
-  const logoSrc = variant === 'light' 
-    ? "/lovable-uploads/66079de7-3561-4f58-be8d-a718cbbe92de.png" 
-    : "/lovable-uploads/f9dd956a-b8fd-41f7-9443-284daab02a2e.png";
+  // Use the new logo for both light and dark variants
+  const logoSrc = "/lovable-uploads/04f33483-ea84-483f-8aec-bc56d88e58b7.png";
   
   return (
     <div className={cn("flex items-center", className)} {...props}>

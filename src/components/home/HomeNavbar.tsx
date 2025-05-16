@@ -111,12 +111,14 @@ const HomeNavbar = () => {
       </div>
       
       <div className="mr-[10%]">
-        <Link
-          to="/cadastro"
+        <a
+          href="https://pay.kiwify.com.br/sZRHsgM"
+          target="_blank"
+          rel="noopener noreferrer"
           className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
         >
           Assinar
-        </Link>
+        </a>
       </div>
     </nav>
   );
