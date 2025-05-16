@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,7 +19,7 @@ const PricingSection = () => {
   ];
 
   return (
-    <div id="pricing" className="w-full py-24 bg-[#121016]">
+    <div className="w-full py-24 bg-[#121016]">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto mb-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -60,10 +59,7 @@ const PricingSection = () => {
               </div>
 
               <div className="mt-auto">
-                <Button 
-                  className="w-full bg-gray-700 hover:bg-gray-600 text-white"
-                  onClick={() => window.open('https://pay.kiwify.com.br/sZRHsgM', '_blank')}
-                >
+                <Button className="w-full bg-gray-700 hover:bg-gray-600 text-white">
                   Começar Agora
                 </Button>
                 <p className="text-center text-xs text-gray-500 mt-3">Oferta por tempo limitado</p>
@@ -126,10 +122,7 @@ const PricingSection = () => {
               </div>
               
               <div className="mt-auto">
-                <Button 
-                  className="w-full bg-[#805af5] hover:bg-[#6a4ac9] text-white"
-                  onClick={() => window.open('https://pay.kiwify.com.br/DqJguP9', '_blank')}
-                >
+                <Button className="w-full bg-[#805af5] hover:bg-[#6a4ac9] text-white">
                   Começar Agora
                 </Button>
                 <p className="text-center text-xs text-gray-500 mt-3">Oferta por tempo limitado</p>

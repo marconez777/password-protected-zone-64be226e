@@ -1,21 +1,69 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
+  const [currentText, setCurrentText] = useState("Estratégia");
+  const [isAnimating, setIsAnimating] = useState(false);
+  const texts = ["Estratégia", "Redação", "Pesquisa"];
+
+  useEffect(() => {
+    let currentIndex = 0;
+    
+    const animateText = () => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % texts.length;
+        setCurrentText(texts[currentIndex]);
+        setIsAnimating(false);
+      }, 500); // Duration of the fade out animation
+    };
+
+    const interval = setInterval(() => {
+      animateText();
+    }, 4000); // 4 seconds per word
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="w-full py-32 bg-[#121016]">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Potencialize sua Presença Online com Inteligência Artificial
-          </h1>
-          <p className="text-gray-400 text-lg mb-8">
-            Descubra como nossa plataforma de IA pode transformar sua estratégia de SEO e conteúdo.
-          </p>
-          <Button size="lg" className="mt-8">
-            Começar Agora
-          </Button>
-        </div>
+    <div className="relative min-h-[calc(100vh-76px)] overflow-hidden">
+      {/* Background grid */}
+      <div 
+        className="absolute inset-0 bg-[#121016]"
+        style={{
+          backgroundImage: `url(/lovable-uploads/a88f65d3-4ba7-4fe4-b278-7a11bc45e690.png)`,
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          opacity: 0.6
+        }}
+      />
+      
+      {/* Purple abstract shapes */}
+      <div className="absolute top-[10%] left-[15%] w-[300px] h-[300px] bg-[#805af5] rounded-full blur-[100px] opacity-20"></div>
+      <div className="absolute bottom-[15%] left-[15%] w-[200px] h-[200px] bg-[#cd99ff] rounded-full blur-[80px] opacity-20"></div>
+      <div className="absolute top-[10%] right-[30%] w-[250px] h-[250px] bg-[#8260d0] rounded-full blur-[90px] opacity-20"></div>
+      <div className="absolute bottom-[10%] right-[10%] w-[220px] h-[220px] bg-[#9b87f5] rounded-full blur-[85px] opacity-20"></div>
+      
+      {/* Content */}
+      <div className="container mx-auto px-4 pt-20 pb-16 relative z-10 text-center flex flex-col items-center justify-center min-h-[calc(100vh-76px)]">
+        <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
+          Automatize o SEO
+        </h1>
+        <h2 className={`text-transparent bg-clip-text bg-gradient-to-b from-[#805af5] to-[#cd99ff] text-6xl md:text-7xl lg:text-8xl font-bold mb-8 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'} w-full px-10 mx-auto overflow-visible py-2`}>
+          {currentText}
+        </h2>
+        
+        <p className="text-gray-100 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+          Potencialize a sua operação com a ajuda do Chat GPT e do Gemini. Treinados por nossos consultores
+        </p>
+        
+        <Link 
+          to="/cadastro" 
+          className="bg-gradient-to-r from-[#805af5] to-[#cd99ff] text-white font-medium px-8 py-3 rounded-md hover:opacity-90 transition"
+        >
+          Começar Agora
+        </Link>
       </div>
     </div>
   );
