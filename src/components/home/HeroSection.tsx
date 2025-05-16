@@ -41,8 +41,8 @@ const HeroSection = () => {
       
       {/* Purple abstract shapes - adjusted positions */}
       <div className="absolute top-[10%] left-[10%] w-[300px] h-[300px] bg-[#805af5] rounded-full blur-[100px] opacity-20"></div>
-      <div className="absolute bottom-[10%] left-[25%] w-[200px] h-[200px] bg-[#cd99ff] rounded-full blur-[80px] opacity-20"></div>
-      <div className="absolute top-[10%] right-[20%] w-[250px] h-[250px] bg-[#8260d0] rounded-full blur-[90px] opacity-20"></div>
+      <div className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-[#cd99ff] rounded-full blur-[80px] opacity-20"></div>
+      <div className="absolute top-[10%] right-[30%] w-[250px] h-[250px] bg-[#8260d0] rounded-full blur-[90px] opacity-20"></div>
       <div className="absolute bottom-[10%] right-[10%] w-[220px] h-[220px] bg-[#9b87f5] rounded-full blur-[85px] opacity-20"></div>
       
       {/* Content */}
@@ -50,7 +50,7 @@ const HeroSection = () => {
         <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-2">
           Automatize o SEO
         </h1>
-        <h2 className={`text-transparent bg-clip-text bg-gradient-to-b from-[#805af5] to-[#cd99ff] text-6xl md:text-7xl lg:text-8xl font-bold mb-8 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'} w-full px-4 overflow-visible`}>
+        <h2 className={`text-transparent bg-clip-text bg-gradient-to-b from-[#805af5] to-[#cd99ff] text-6xl md:text-7xl lg:text-8xl font-bold mb-8 transition-opacity duration-500 ${isAnimating ? 'opacity-0' : 'opacity-100'} w-full px-10 mx-auto overflow-visible`}>
           {currentText}
         </h2>
         
