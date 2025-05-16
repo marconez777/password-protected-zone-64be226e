@@ -10,8 +10,8 @@ const HomePage = () => {
     <div className="min-h-screen bg-[#121016] w-full">
       <HomeNavbar />
       <HeroSection />
-      <FeaturesSection />
       <CompaniesSection />
+      <FeaturesSection />
     </div>
   );
 };
