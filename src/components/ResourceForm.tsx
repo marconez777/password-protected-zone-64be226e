@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,23 +14,22 @@ export function ResourceForm({
   description,
   onSubmit,
   children,
-  resultComponent,
+  resultComponent
 }: ResourceFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-  
+  const {
+    toast
+  } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       // Run the onSubmit function provided by the parent component
       const success = await onSubmit();
-      
       if (success) {
         toast({
           title: "Sucesso!",
-          description: "Seu conteúdo foi gerado com sucesso.",
+          description: "Seu conteúdo foi gerado com sucesso."
         });
       }
     } catch (error) {
@@ -39,17 +37,15 @@ export function ResourceForm({
       toast({
         title: "Erro na submissão",
         description: "Ocorreu um erro ao processar sua solicitação.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -65,11 +61,8 @@ export function ResourceForm({
       </form>
       
       {/* Show the result component if provided */}
-      {resultComponent && (
-        <div className="mt-6 border-t pt-6 px-6 pb-6">
+      {resultComponent && <div className="mt-6 border-t pt-6 px-6 pb-6">
           {resultComponent}
-        </div>
-      )}
-    </Card>
-  );
+        </div>}
+    </Card>;
 }
