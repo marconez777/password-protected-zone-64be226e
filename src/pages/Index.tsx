@@ -21,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-5xl mx-auto text-center">
         <div className="flex flex-col items-center justify-center mb-6">
-          <Logo className="mb-4" showText={true} />
+          <Logo className="mb-4" showText={true} variant="light" />
         </div>
         <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
           Sistema de análise e otimização de palavras-chave.

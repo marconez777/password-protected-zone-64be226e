@@ -41,7 +41,7 @@ export function AppSidebar() {
   return (
     <Sidebar className="border-r">
       <SidebarHeader className="flex items-center px-4 py-2">
-        <Logo className="h-8 w-8 text-primary mr-2" />
+        <Logo className="mr-2" showText={false} variant="dark" />
         <h1 className="font-bold text-lg">MK Ranker</h1>
         <Button 
           variant="ghost" 
