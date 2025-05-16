@@ -62,12 +62,12 @@ const HeroSection = () => {
           Potencialize a sua operação com a ajuda do Chat GPT e do Gemini. Treinados por nossos consultores
         </p>
         
-        <button 
-          onClick={scrollToPricing}
+        <Link 
+          to="/cadastro"
           className="bg-gradient-to-r from-[#805af5] to-[#cd99ff] text-white font-medium px-8 py-3 rounded-md hover:opacity-90 transition"
         >
           Começar Agora
-        </button>
+        </Link>
       </div>
     </div>
   );

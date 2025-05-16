@@ -36,47 +36,47 @@ const HomeNavbar = () => {
                 <div className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]">
                   <ul className="py-2">
                     <li className="group">
-                      <Link to="/dashboard" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Dashboard
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/search-funnel" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Funil de Busca
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/keywords" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Palavras-chave
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/market-and-target" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Mercado e Público-alvo
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-lp" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para LP
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-produto" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Produto
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/pautas-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Pautas para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/meta-dados" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Meta Dados
                       </Link>
                     </li>
@@ -92,7 +92,7 @@ const HomeNavbar = () => {
             </li>
             <li className="relative group">
               <Link 
-                to="/blog" 
+                to="/cadastro" 
                 className="text-white hover:opacity-90 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
                 Blog
@@ -100,7 +100,7 @@ const HomeNavbar = () => {
             </li>
             <li className="relative group">
               <Link 
-                to="/treinamentos" 
+                to="/cadastro" 
                 className="text-white hover:opacity-90 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
                 Treinamentos
@@ -111,14 +111,12 @@ const HomeNavbar = () => {
       </div>
       
       <div className="mr-[10%]">
-        <a
-          href="https://pay.kiwify.com.br/sZRHsgM"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/cadastro"
           className="border border-[#805af5] text-white rounded-md px-6 py-2 hover:bg-[#805af5]/20 transition"
         >
           Assinar
-        </a>
+        </Link>
       </div>
     </nav>
   );
