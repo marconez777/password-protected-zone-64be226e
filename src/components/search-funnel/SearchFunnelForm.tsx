@@ -130,8 +130,8 @@ export function SearchFunnelForm() {
         </TabsList>
         
         <TabsContent value="formulario" className="mt-6">
-          <Card className="border-0 shadow-none bg-transparent">
-            <CardContent className="pt-6 px-0">
+          <Card className="border rounded-lg shadow-sm">
+            <CardContent className="pt-6">
               <p className="text-gray-600 mb-6">
                 Preencha as informações abaixo e clique em gerar
               </p>

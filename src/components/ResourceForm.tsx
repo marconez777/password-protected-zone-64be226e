@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,7 +46,6 @@ export function ResourceForm({
   };
   return <Card>
       <CardHeader>
-        
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
