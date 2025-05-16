@@ -8,7 +8,7 @@ const SearchFunnel = () => {
       title="Funil de Busca" 
       subtitle="Gere funis de busca para seu negócio"
     >
-      <div className="bg-background rounded-lg">
+      <div className="bg-white rounded-lg">
         <SearchFunnelForm />
       </div>
     </DashboardLayout>
