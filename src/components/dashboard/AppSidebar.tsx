@@ -1,4 +1,3 @@
-
 import { 
   Sidebar, 
   SidebarHeader, 
@@ -41,11 +40,7 @@ export function AppSidebar() {
   return (
     <Sidebar className="border-r">
       <SidebarHeader className="flex items-center px-4 py-2">
-        <img 
-          src="/lovable-uploads/c0943c7c-66f0-4054-84ad-77b160ed1d70.png" 
-          alt="MK Ranker Logo" 
-          className="h-8 w-auto" 
-        />
+        <Logo variant="light" className="h-8" />
         <Button 
           variant="ghost" 
           size="icon"
