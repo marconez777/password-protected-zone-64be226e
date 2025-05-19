@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -63,10 +62,11 @@ const FeaturesSection = () => {
             </Button>
           </div>
           <div className="w-full md:w-1/2 flex justify-center">
-            {/* Placeholder para a imagem - será substituído depois */}
-            <div className="bg-[#1A1A2E] border border-[#805af5]/30 rounded-lg w-full h-[300px] flex items-center justify-center text-white/50">
-              Imagem de demonstração
-            </div>
+            <img 
+              src="/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png" 
+              alt="Mercado e Público Alvo" 
+              className="w-full rounded-lg border border-[#805af5]/30 shadow-lg object-cover"
+            />
           </div>
         </div>
       ),
