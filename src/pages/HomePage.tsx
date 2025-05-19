@@ -3,6 +3,7 @@ import React from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
+import CardsSection from '@/components/home/CardsSection';
 import CompaniesSection from '@/components/home/CompaniesSection';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
@@ -15,6 +16,7 @@ const HomePage = () => {
       <div className="bg-[#121016]">
         <CompaniesSection />
         <FeaturesSection />
+        <CardsSection />
         <div id="pricing-section">
           <PricingSection />
         </div>
