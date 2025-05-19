@@ -70,18 +70,18 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/market-and-target">
-                    <Target className="h-4 w-4 mr-2" />
-                    <span>Mercado e Público-alvo</span>
+                  <Link to="/dashboard">
+                    <Home className="h-4 w-4 mr-2" />
+                    <span>Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/dashboard">
-                    <Home className="h-4 w-4 mr-2" />
-                    <span>Dashboard</span>
+                  <Link to="/market-and-target">
+                    <Target className="h-4 w-4 mr-2" />
+                    <span>Mercado e Público-alvo</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
