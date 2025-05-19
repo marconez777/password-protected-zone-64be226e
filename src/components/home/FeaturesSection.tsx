@@ -4,10 +4,12 @@ import { features } from './featuresData';
 import FeatureItem from './FeatureItem';
 import FeaturesNavigation from './FeaturesNavigation';
 import { AnimatePresence } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const FeaturesSection = () => {
   // Estado para controlar qual feature está ativa
   const [activeFeature, setActiveFeature] = useState<string>('pesquisa');
+  const isMobile = useIsMobile();
 
   // Preload de imagens para melhorar a performance
   useEffect(() => {
@@ -23,8 +25,13 @@ const FeaturesSection = () => {
 
   const activeFeatureData = features.find(feature => feature.id === activeFeature);
 
+  // If we're on mobile, don't render the component
+  if (isMobile) {
+    return null;
+  }
+
   return (
-    <div className="relative w-full py-12 lg:py-24 bg-[#121016] overflow-hidden">
+    <div className="relative w-full py-12 lg:py-24 bg-[#121016] overflow-hidden hidden md:block">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-2">
