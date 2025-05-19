@@ -1,15 +1,19 @@
 
 import React, { useState } from 'react';
-import { features } from './features/featuresData';
-import FeaturesNavigation from './features/FeaturesNavigation';
 import FeatureItem from './features/FeatureItem';
+import FeaturesNavigation from './features/FeaturesNavigation';
+import featuresData from './features/featuresData';
 
 const FeaturesSection = () => {
   // Estado para controlar qual feature está ativa
   const [activeFeature, setActiveFeature] = useState<string>('pesquisa');
 
-  // Encontra a feature ativa
-  const currentFeature = features.find(feature => feature.id === activeFeature) || features[0];
+  const handleStartNow = () => {
+    window.open('https://pay.kiwify.com.br/sZRHsgM', '_blank');
+  };
+
+  // Encontra o feature ativo
+  const activeFeatureData = featuresData.find(feature => feature.id === activeFeature);
 
   return (
     <div className="relative w-full py-12 lg:py-24 bg-[#121016] overflow-hidden">
@@ -23,22 +27,25 @@ const FeaturesSection = () => {
           </p>
         </div>
 
-        {/* Botões de navegação */}
+        {/* Botões de navegação com borda roxa */}
         <FeaturesNavigation 
-          features={features} 
+          features={featuresData} 
           activeFeature={activeFeature} 
-          setActiveFeature={setActiveFeature} 
+          onFeatureChange={setActiveFeature} 
         />
 
         {/* Conteúdo da feature ativa */}
         <div className="bg-[#111019] border border-[#805af5]/30 rounded-lg overflow-hidden">
-          <FeatureItem
-            title={currentFeature.title}
-            description={currentFeature.description}
-            bulletPoints={currentFeature.bulletPoints}
-            imageSrc={currentFeature.imageSrc}
-            imageAlt={currentFeature.imageAlt}
-          />
+          {activeFeatureData && (
+            <FeatureItem 
+              title={activeFeatureData.title}
+              description={activeFeatureData.description}
+              bulletPoints={activeFeatureData.bulletPoints}
+              imageSrc={activeFeatureData.imageSrc}
+              imageAlt={activeFeatureData.imageAlt}
+              onStartNow={handleStartNow}
+            />
+          )}
         </div>
       </div>
     </div>

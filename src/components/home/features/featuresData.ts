@@ -1,6 +1,4 @@
 
-import { ReactNode } from 'react';
-
 export type Feature = {
   id: string;
   title: string;
@@ -10,12 +8,11 @@ export type Feature = {
   imageAlt: string;
 };
 
-// Dados das features
-export const features: Feature[] = [
+const featuresData: Feature[] = [
   {
     id: 'pesquisa',
-    title: 'O gemini faz uma pesquisa de mercado incrível',
-    description: '',
+    title: 'Pesquisa de Mercado',
+    description: 'O gemini faz uma pesquisa de mercado incrível',
     bulletPoints: [
       'Sem prompts complicados',
       'Dados direto do Google',
@@ -27,8 +24,8 @@ export const features: Feature[] = [
   },
   {
     id: 'funil',
-    title: 'Construa funis de busca otimizados',
-    description: '',
+    title: 'Funil de Busca',
+    description: 'Construa funis de busca otimizados',
     bulletPoints: [
       'Análise completa da jornada do usuário',
       'Mapeamento da intenção de busca',
@@ -39,8 +36,8 @@ export const features: Feature[] = [
   },
   {
     id: 'palavras',
-    title: 'Descubra as melhores palavras-chave',
-    description: '',
+    title: 'Palavras Chave',
+    description: 'Descubra as melhores palavras-chave',
     bulletPoints: [
       'Análise de volume e competitividade',
       'Descoberta de nichos inexplorados',
@@ -51,8 +48,8 @@ export const features: Feature[] = [
   },
   {
     id: 'textos',
-    title: 'Crie textos otimizados para SEO',
-    description: '',
+    title: 'Textos com SEO',
+    description: 'Crie textos otimizados para SEO',
     bulletPoints: [
       'Densidade ideal de palavras-chave',
       'Estrutura semântica otimizada',
@@ -63,8 +60,8 @@ export const features: Feature[] = [
   },
   {
     id: 'pautas',
-    title: 'Gere pautas relevantes para seu blog',
-    description: '',
+    title: 'Pautas de Blog',
+    description: 'Gere pautas relevantes para seu blog',
     bulletPoints: [
       'Ideias alinhadas com tendências atuais',
       'Calendário editorial estratégico',
@@ -74,3 +71,5 @@ export const features: Feature[] = [
     imageAlt: 'Pautas de Blog',
   },
 ];
+
+export default featuresData;
