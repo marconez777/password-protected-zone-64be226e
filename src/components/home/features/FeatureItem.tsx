@@ -49,6 +49,7 @@ const FeatureItem: React.FC<FeatureItemProps> = ({
           src={imageSrc} 
           alt={imageAlt} 
           className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
+          data-editable="true"
         />
       </div>
     </div>
