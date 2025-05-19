@@ -3,19 +3,23 @@ import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { Search, ArrowRight, ZoomIn } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FunilDeBusca = () => {
-  const [activeItem, setActiveItem] = useState('overview');
+  const [activeItem, setActiveItem] = useState('funil');
   
+  // Updated sidebar items based on the image
   const sidebarItems = [
-    { id: 'overview', label: 'Visão Geral' },
-    { id: 'inicio', label: 'Início do Funil' },
-    { id: 'meio', label: 'Meio do Funil' },
-    { id: 'final', label: 'Final do Funil' },
-    { id: 'exemplos', label: 'Exemplos' },
-    { id: 'tutorial', label: 'Tutorial' },
+    { id: 'funil', label: 'Funil de Busca', path: '/funil-de-busca' },
+    { id: 'palavras-chave', label: 'Palavras-chave', path: '/keywords' },
+    { id: 'mercado', label: 'Mercado e Público-alvo', path: '/market-and-target' },
+    { id: 'texto-seo-lp', label: 'Texto SEO para LP', path: '/texto-seo-lp' },
+    { id: 'texto-seo-produto', label: 'Texto SEO para Produto', path: '/texto-seo-produto' },
+    { id: 'texto-seo-blog', label: 'Texto SEO para Blog', path: '/texto-seo-blog' },
+    { id: 'pautas-blog', label: 'Pautas para Blog', path: '/pautas-blog' },
+    { id: 'meta-dados', label: 'Meta Dados', path: '/meta-dados' },
+    { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
   return (
@@ -37,17 +41,29 @@ const FunilDeBusca = () => {
               <h3 className="text-xl font-bold text-white mb-6">Recursos de I.A</h3>
               <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
                 {sidebarItems.map((item) => (
-                  <button
+                  <Link
                     key={item.id}
-                    className={`w-full text-left py-2 px-3 rounded-md transition-colors ${
+                    to={item.path}
+                    className={`block w-full text-left py-2 px-3 rounded-md transition-colors ${
                       activeItem === item.id
                         ? 'bg-[#805af5] text-white'
                         : 'text-gray-300 hover:bg-[#805af5]/20'
                     }`}
-                    onClick={() => setActiveItem(item.id)}
+                    onClick={(e) => {
+                      if (item.soon) {
+                        e.preventDefault();
+                      } else {
+                        setActiveItem(item.id);
+                      }
+                    }}
                   >
                     {item.label}
-                  </button>
+                    {item.soon && (
+                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
+                        em breve
+                      </span>
+                    )}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -73,21 +89,13 @@ const FunilDeBusca = () => {
                   e guie os usuários através da jornada de conversão.
                 </p>
                 
-                {/* Image with zoom functionality */}
-                <div className="my-10 relative group">
+                {/* Simple image without zoom functionality */}
+                <div className="my-10">
                   <img 
                     src="/lovable-uploads/7ec91621-a082-4c9e-aeb7-343df8c0e37f.png" 
                     alt="Exemplo de Funil de Busca" 
                     className="w-full rounded-lg border border-gray-700"
                   />
-                  <a 
-                    href="/lovable-uploads/7ec91621-a082-4c9e-aeb7-343df8c0e37f.png" 
-                    target="_blank"
-                    className="absolute right-4 top-4 bg-black/70 rounded-full p-2 opacity-70 hover:opacity-100 transition-opacity"
-                    title="Ver em tamanho maior"
-                  >
-                    <ZoomIn size={20} className="text-white" />
-                  </a>
                 </div>
                 
                 <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como criar um Funil de Busca eficiente</h2>
