@@ -18,49 +18,49 @@ const cards: CardItem[] = [
     icon: Search,
     title: "Funil de Busca com IA",
     description: "Otimize sua estratégia de busca orgânica com análises geradas por GPT para conquistar melhores posições nos buscadores.",
-    path: "/funil-de-busca"
+    path: "/recursos/funil-de-busca-com-ia"
   },
   {
     icon: Key,
     title: "Palavras-chave com IA",
     description: "Encontre as melhores keywords com alto potencial de conversão usando inteligência artificial GPT para o seu negócio.",
-    path: "/keywords"
+    path: "/recursos/palavras-chave-com-ia"
   },
   {
     icon: Users,
     title: "Público-alvo com IA",
     description: "Análise detalhada do seu mercado e público-alvo gerada por IA Gemini para estratégias mais assertivas.",
-    path: "/market-and-target"
+    path: "/recursos/mercado-e-publico-alvo-com-ia"
   },
   {
     icon: FileText,
     title: "Texto SEO LP com IA",
     description: "Conteúdo otimizado para landing pages gerado por GPT que convertem e ranqueiam melhor nos buscadores.",
-    path: "/texto-seo-lp"
+    path: "/recursos/texto-seo-lp-com-ia"
   },
   {
     icon: FileText,
     title: "Texto SEO Produto com IA",
     description: "Descrições poderosas para seus produtos criadas com IA Gemini com foco em SEO e conversão.",
-    path: "/texto-seo-produto"
+    path: "/recursos/texto-seo-produto-com-ia"
   },
   {
     icon: FileText,
     title: "Texto SEO Blog com IA",
     description: "Artigos otimizados gerados por GPT para seu blog alcançar as primeiras posições nos buscadores.",
-    path: "/texto-seo-blog"
+    path: "/recursos/texto-seo-blog-com-ia"
   },
   {
     icon: FileText,
     title: "Pautas de Blog com IA",
     description: "Ideias e estruturas completas geradas por IA Gemini para criar um calendário de conteúdo eficiente.",
-    path: "/pautas-blog"
+    path: "/recursos/pautas-blog-com-ia"
   },
   {
     icon: FileText,
     title: "Meta Dados com IA",
     description: "Títulos e descrições otimizados com GPT para atrair mais cliques nos resultados de busca.",
-    path: "/meta-dados"
+    path: "/recursos/meta-dados-com-ia"
   },
   {
     icon: Image,

@@ -39,14 +39,16 @@ const App = () => {
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
           <Route path="/recursos" element={<RecursosPage />} />
-          <Route path="/funil-de-busca" element={<FunilDeBusca />} />
-          <Route path="/keywords" element={<KeywordsPublic />} />
-          <Route path="/market-and-target" element={<MarketAndTargetPublic />} />
-          <Route path="/texto-seo-lp" element={<TextoSEOLPPublic />} />
-          <Route path="/texto-seo-produto" element={<TextoSEOProdutoPublic />} />
-          <Route path="/texto-seo-blog" element={<TextoSEOBlogPublic />} />
-          <Route path="/pautas-blog" element={<PautasBlogPublic />} />
-          <Route path="/meta-dados" element={<MetaDadosPublic />} />
+          
+          {/* Institutional Resource Pages - New URL Pattern */}
+          <Route path="/recursos/funil-de-busca-com-ia" element={<FunilDeBusca />} />
+          <Route path="/recursos/palavras-chave-com-ia" element={<KeywordsPublic />} />
+          <Route path="/recursos/mercado-e-publico-alvo-com-ia" element={<MarketAndTargetPublic />} />
+          <Route path="/recursos/texto-seo-lp-com-ia" element={<TextoSEOLPPublic />} />
+          <Route path="/recursos/texto-seo-produto-com-ia" element={<TextoSEOProdutoPublic />} />
+          <Route path="/recursos/texto-seo-blog-com-ia" element={<TextoSEOBlogPublic />} />
+          <Route path="/recursos/pautas-blog-com-ia" element={<PautasBlogPublic />} />
+          <Route path="/recursos/meta-dados-com-ia" element={<MetaDadosPublic />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

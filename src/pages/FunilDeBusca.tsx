@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
@@ -9,16 +8,16 @@ import { Link } from 'react-router-dom';
 const FunilDeBusca = () => {
   const [activeItem, setActiveItem] = useState('funil');
   
-  // Updated sidebar items based on the image
+  // Updated sidebar items with new URL pattern
   const sidebarItems = [
-    { id: 'funil', label: 'Funil de Busca', path: '/funil-de-busca' },
-    { id: 'palavras-chave', label: 'Palavras-chave', path: '/keywords' },
-    { id: 'mercado', label: 'Mercado e Público-alvo', path: '/market-and-target' },
-    { id: 'texto-seo-lp', label: 'Texto SEO para LP', path: '/texto-seo-lp' },
-    { id: 'texto-seo-produto', label: 'Texto SEO para Produto', path: '/texto-seo-produto' },
-    { id: 'texto-seo-blog', label: 'Texto SEO para Blog', path: '/texto-seo-blog' },
-    { id: 'pautas-blog', label: 'Pautas para Blog', path: '/pautas-blog' },
-    { id: 'meta-dados', label: 'Meta Dados', path: '/meta-dados' },
+    { id: 'funil', label: 'Funil de Busca', path: '/recursos/funil-de-busca-com-ia' },
+    { id: 'palavras-chave', label: 'Palavras-chave', path: '/recursos/palavras-chave-com-ia' },
+    { id: 'mercado', label: 'Mercado e Público-alvo', path: '/recursos/mercado-e-publico-alvo-com-ia' },
+    { id: 'texto-seo-lp', label: 'Texto SEO para LP', path: '/recursos/texto-seo-lp-com-ia' },
+    { id: 'texto-seo-produto', label: 'Texto SEO para Produto', path: '/recursos/texto-seo-produto-com-ia' },
+    { id: 'texto-seo-blog', label: 'Texto SEO para Blog', path: '/recursos/texto-seo-blog-com-ia' },
+    { id: 'pautas-blog', label: 'Pautas para Blog', path: '/recursos/pautas-blog-com-ia' },
+    { id: 'meta-dados', label: 'Meta Dados', path: '/recursos/meta-dados-com-ia' },
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 

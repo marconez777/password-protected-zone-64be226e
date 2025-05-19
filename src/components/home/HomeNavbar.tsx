@@ -99,42 +99,42 @@ const HomeNavbar = () => {
                   onMouseEnter={() => startAutoCloseTimer()}>
                   <ul className="py-2">
                     <li className="group">
-                      <Link to="/funil-de-busca" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/funil-de-busca-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Funil de Busca
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/keywords" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/palavras-chave-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Palavras-chave
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/market-and-target" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/mercado-e-publico-alvo-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Mercado e Público-alvo
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-lp" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/texto-seo-lp-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para LP
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-produto" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/texto-seo-produto-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Produto
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/texto-seo-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/texto-seo-blog-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/pautas-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/pautas-blog-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Pautas para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/meta-dados" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/recursos/meta-dados-com-ia" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Meta Dados
                       </Link>
                     </li>
@@ -245,7 +245,7 @@ const HomeNavbar = () => {
                     <ul className="pl-4 space-y-2 mt-2">
                       <li>
                         <Link 
-                          to="/funil-de-busca" 
+                          to="/recursos/funil-de-busca-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -254,7 +254,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/keywords" 
+                          to="/recursos/palavras-chave-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -263,7 +263,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/market-and-target" 
+                          to="/recursos/mercado-e-publico-alvo-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -272,7 +272,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/texto-seo-lp" 
+                          to="/recursos/texto-seo-lp-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -281,7 +281,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/texto-seo-produto" 
+                          to="/recursos/texto-seo-produto-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -290,7 +290,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/texto-seo-blog" 
+                          to="/recursos/texto-seo-blog-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -299,7 +299,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/pautas-blog" 
+                          to="/recursos/pautas-blog-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -308,7 +308,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/meta-dados" 
+                          to="/recursos/meta-dados-com-ia" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
