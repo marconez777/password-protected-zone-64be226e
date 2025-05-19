@@ -99,42 +99,42 @@ const HomeNavbar = () => {
                   onMouseEnter={() => startAutoCloseTimer()}>
                   <ul className="py-2">
                     <li className="group">
-                      <Link to="/sobre-funil-de-busca" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/funil-de-busca" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Funil de Busca
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-keywords" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/keywords" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Palavras-chave
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-market-and-target" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/market-and-target" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Mercado e Público-alvo
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-texto-seo-lp" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-lp" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para LP
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-texto-seo-produto" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-produto" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Produto
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-texto-seo-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-pautas-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/pautas-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Pautas para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/sobre-meta-dados" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/meta-dados" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Meta Dados
                       </Link>
                     </li>
@@ -245,7 +245,7 @@ const HomeNavbar = () => {
                     <ul className="pl-4 space-y-2 mt-2">
                       <li>
                         <Link 
-                          to="/sobre-funil-de-busca" 
+                          to="/funil-de-busca" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -254,7 +254,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-keywords" 
+                          to="/keywords" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -263,7 +263,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-market-and-target" 
+                          to="/market-and-target" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -272,7 +272,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-texto-seo-lp" 
+                          to="/texto-seo-lp" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -281,7 +281,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-texto-seo-produto" 
+                          to="/texto-seo-produto" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -290,7 +290,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-texto-seo-blog" 
+                          to="/texto-seo-blog" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -299,7 +299,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-pautas-blog" 
+                          to="/pautas-blog" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >
@@ -308,7 +308,7 @@ const HomeNavbar = () => {
                       </li>
                       <li>
                         <Link 
-                          to="/sobre-meta-dados" 
+                          to="/meta-dados" 
                           className="text-white/80 block py-1"
                           onClick={closeMobileMenu}
                         >

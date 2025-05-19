@@ -18,49 +18,49 @@ const cards: CardItem[] = [
     icon: Search,
     title: "Funil de Busca com IA",
     description: "Otimize sua estratégia de busca orgânica com análises geradas por GPT para conquistar melhores posições nos buscadores.",
-    path: "/sobre-funil-de-busca"
+    path: "/funil-de-busca"
   },
   {
     icon: Key,
     title: "Palavras-chave com IA",
     description: "Encontre as melhores keywords com alto potencial de conversão usando inteligência artificial GPT para o seu negócio.",
-    path: "/sobre-keywords"
+    path: "/keywords"
   },
   {
     icon: Users,
     title: "Público-alvo com IA",
     description: "Análise detalhada do seu mercado e público-alvo gerada por IA Gemini para estratégias mais assertivas.",
-    path: "/sobre-market-and-target"
+    path: "/market-and-target"
   },
   {
     icon: FileText,
     title: "Texto SEO LP com IA",
     description: "Conteúdo otimizado para landing pages gerado por GPT que convertem e ranqueiam melhor nos buscadores.",
-    path: "/sobre-texto-seo-lp"
+    path: "/texto-seo-lp"
   },
   {
     icon: FileText,
     title: "Texto SEO Produto com IA",
     description: "Descrições poderosas para seus produtos criadas com IA Gemini com foco em SEO e conversão.",
-    path: "/sobre-texto-seo-produto"
+    path: "/texto-seo-produto"
   },
   {
     icon: FileText,
     title: "Texto SEO Blog com IA",
     description: "Artigos otimizados gerados por GPT para seu blog alcançar as primeiras posições nos buscadores.",
-    path: "/sobre-texto-seo-blog"
+    path: "/texto-seo-blog"
   },
   {
     icon: FileText,
     title: "Pautas de Blog com IA",
     description: "Ideias e estruturas completas geradas por IA Gemini para criar um calendário de conteúdo eficiente.",
-    path: "/sobre-pautas-blog"
+    path: "/pautas-blog"
   },
   {
     icon: FileText,
     title: "Meta Dados com IA",
     description: "Títulos e descrições otimizados com GPT para atrair mais cliques nos resultados de busca.",
-    path: "/sobre-meta-dados"
+    path: "/meta-dados"
   },
   {
     icon: Image,

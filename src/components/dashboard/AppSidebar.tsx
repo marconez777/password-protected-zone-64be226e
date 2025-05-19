@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/providers/auth";
+import { useAuth } from "@/providers/AuthProvider";
 import { toast } from "sonner";
 
 export function AppSidebar() {
@@ -79,7 +79,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/market-and-target-tool">
+                  <Link to="/market-and-target">
                     <Target className="h-4 w-4 mr-2" />
                     <span>Mercado e Público-alvo</span>
                   </Link>
@@ -97,7 +97,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/keywords-tool">
+                  <Link to="/keywords">
                     <KeyRound className="h-4 w-4 mr-2" />
                     <span>Palavras-chave</span>
                   </Link>
@@ -106,7 +106,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-lp-tool">
+                  <Link to="/texto-seo-lp">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para LP</span>
                   </Link>
@@ -115,7 +115,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-produto-tool">
+                  <Link to="/texto-seo-produto">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para Produto</span>
                   </Link>
@@ -124,7 +124,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-blog-tool">
+                  <Link to="/texto-seo-blog">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para Blog</span>
                   </Link>
@@ -133,7 +133,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/pautas-blog-tool">
+                  <Link to="/pautas-blog">
                     <BookText className="h-4 w-4 mr-2" />
                     <span>Pautas para Blog</span>
                   </Link>
@@ -142,7 +142,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/meta-dados-tool">
+                  <Link to="/meta-dados">
                     <ScrollText className="h-4 w-4 mr-2" />
                     <span>Meta Dados</span>
                   </Link>

@@ -10,14 +10,14 @@ const TextoSEOProdutoPublic = () => {
   const [activeItem, setActiveItem] = useState('texto-seo-produto');
   
   const sidebarItems = [
-    { id: 'funil', label: 'Funil de Busca', path: '/sobre-funil-de-busca' },
-    { id: 'palavras-chave', label: 'Palavras-chave', path: '/sobre-keywords' },
-    { id: 'mercado', label: 'Mercado e Público-alvo', path: '/sobre-market-and-target' },
-    { id: 'texto-seo-lp', label: 'Texto SEO para LP', path: '/sobre-texto-seo-lp' },
-    { id: 'texto-seo-produto', label: 'Texto SEO para Produto', path: '/sobre-texto-seo-produto' },
-    { id: 'texto-seo-blog', label: 'Texto SEO para Blog', path: '/sobre-texto-seo-blog' },
-    { id: 'pautas-blog', label: 'Pautas para Blog', path: '/sobre-pautas-blog' },
-    { id: 'meta-dados', label: 'Meta Dados', path: '/sobre-meta-dados' },
+    { id: 'funil', label: 'Funil de Busca', path: '/funil-de-busca' },
+    { id: 'palavras-chave', label: 'Palavras-chave', path: '/keywords' },
+    { id: 'mercado', label: 'Mercado e Público-alvo', path: '/market-and-target' },
+    { id: 'texto-seo-lp', label: 'Texto SEO para LP', path: '/texto-seo-lp' },
+    { id: 'texto-seo-produto', label: 'Texto SEO para Produto', path: '/texto-seo-produto' },
+    { id: 'texto-seo-blog', label: 'Texto SEO para Blog', path: '/texto-seo-blog' },
+    { id: 'pautas-blog', label: 'Pautas para Blog', path: '/pautas-blog' },
+    { id: 'meta-dados', label: 'Meta Dados', path: '/meta-dados' },
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
