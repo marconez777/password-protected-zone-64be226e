@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { Search, ArrowRight } from 'lucide-react';
+import { ListChecks, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const FunilDeBusca = () => {
-  const [activeItem, setActiveItem] = useState('funil');
+const PautasBlogPublic = () => {
+  const [activeItem, setActiveItem] = useState('pautas-blog');
   
-  // Updated sidebar items based on the image
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/funil-de-busca' },
     { id: 'palavras-chave', label: 'Palavras-chave', path: '/keywords' },
@@ -31,7 +30,7 @@ const FunilDeBusca = () => {
         <div className="text-sm text-gray-400 mb-8">
           <Link to="/" className="hover:text-white">Home</Link> {" > "} 
           <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Funil de Busca</span>
+          <span className="text-white">Pautas para Blog</span>
         </div>
         
         <div className="flex flex-col lg:flex-row gap-6">
@@ -72,49 +71,46 @@ const FunilDeBusca = () => {
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
             <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Funil de Busca</h1>
+              <h1 className="text-3xl font-bold text-white mb-6">Pautas para Blog</h1>
               
               <div className="prose prose-invert max-w-none">
                 <p className="text-gray-300 mb-6">
-                  Um funil de busca é uma estratégia de SEO que estrutura o conteúdo do seu site para capturar usuários em diferentes estágios da jornada de compra, desde a descoberta inicial até a decisão final de aquisição.
+                  Gerar ideias de conteúdo relevantes e atrativas para seu blog é essencial para manter uma estratégia de conteúdo eficaz. Nossa ferramenta de IA ajuda a criar pautas alinhadas com seu público e objetivos de negócio.
                 </p>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">O que é um Funil de Busca?</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como criar pautas eficazes para blog</h2>
                 <p className="text-gray-300 mb-6">
-                  Um funil de busca é uma estrutura de conteúdo SEO onde você cria páginas específicas para cada estágio da jornada do usuário, 
-                  desde a consciência inicial até a decisão de compra. Isso permite que você capture tráfego de pesquisa em vários estágios 
-                  e guie os usuários através da jornada de conversão.
+                  Boas pautas de blog combinam relevância para o público-alvo, potencial para SEO e alinhamento com os objetivos de negócio. Um calendário editorial bem planejado ajuda a manter a consistência e qualidade do conteúdo.
                 </p>
                 
-                {/* Simple image without zoom functionality */}
                 <div className="my-10">
                   <img 
-                    src="/lovable-uploads/7ec91621-a082-4c9e-aeb7-343df8c0e37f.png" 
-                    alt="Exemplo de Funil de Busca" 
+                    src="/lovable-uploads/f9dd956a-b8fd-41f7-9443-284daab02a2e.png" 
+                    alt="Pautas para Blog" 
                     className="w-full rounded-lg border border-gray-700"
                   />
                 </div>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como criar um Funil de Busca eficiente</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Estratégias para criação de pautas</h2>
                 
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start gap-4">
                     <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <Search size={18} className="text-white" />
+                      <ListChecks size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Pesquisa de palavras-chave</h3>
-                      <p className="text-gray-300">Identifique termos em diferentes estágios do funil: informacionais, comerciais e transacionais.</p>
+                      <h3 className="text-xl font-medium text-white">Pesquisa de tópicos</h3>
+                      <p className="text-gray-300">Identifique temas populares em seu nicho e perguntas frequentes do seu público-alvo.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
                     <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <ArrowRight size={18} className="text-white" />
+                      <Calendar size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Mapeamento de conteúdo</h3>
-                      <p className="text-gray-300">Crie conteúdo específico para cada estágio, ajustando tom, formato e CTAs.</p>
+                      <h3 className="text-xl font-medium text-white">Calendário editorial</h3>
+                      <p className="text-gray-300">Organize suas pautas em um calendário para manter consistência e cobrir diferentes estágios do funil.</p>
                     </div>
                   </div>
                 </div>
@@ -135,4 +131,4 @@ const FunilDeBusca = () => {
   );
 };
 
-export default FunilDeBusca;
+export default PautasBlogPublic;

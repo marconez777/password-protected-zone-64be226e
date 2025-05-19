@@ -20,6 +20,13 @@ import Admin from "@/pages/Admin";
 import NotFound from "@/pages/NotFound";
 import RecursosPage from "@/pages/RecursosPage";
 import FunilDeBusca from "@/pages/FunilDeBusca";
+import KeywordsPublic from "@/pages/KeywordsPublic";
+import MarketAndTargetPublic from "@/pages/MarketAndTargetPublic";
+import TextoSEOLPPublic from "@/pages/TextoSEOLPPublic";
+import TextoSEOProdutoPublic from "@/pages/TextoSEOProdutoPublic";
+import TextoSEOBlogPublic from "@/pages/TextoSEOBlogPublic";
+import PautasBlogPublic from "@/pages/PautasBlogPublic";
+import MetaDadosPublic from "@/pages/MetaDadosPublic";
 
 const App = () => {
   return (
@@ -33,17 +40,24 @@ const App = () => {
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
           <Route path="/recursos" element={<RecursosPage />} />
           <Route path="/funil-de-busca" element={<FunilDeBusca />} />
+          <Route path="/keywords" element={<KeywordsPublic />} />
+          <Route path="/market-and-target" element={<MarketAndTargetPublic />} />
+          <Route path="/texto-seo-lp" element={<TextoSEOLPPublic />} />
+          <Route path="/texto-seo-produto" element={<TextoSEOProdutoPublic />} />
+          <Route path="/texto-seo-blog" element={<TextoSEOBlogPublic />} />
+          <Route path="/pautas-blog" element={<PautasBlogPublic />} />
+          <Route path="/meta-dados" element={<MetaDadosPublic />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/search-funnel" element={<ProtectedRoute><SearchFunnel /></ProtectedRoute>} />
-          <Route path="/keywords" element={<ProtectedRoute><Keywords /></ProtectedRoute>} />
-          <Route path="/market-and-target" element={<ProtectedRoute><MarketAndTarget /></ProtectedRoute>} />
-          <Route path="/texto-seo-lp" element={<ProtectedRoute><TextoSEOLP /></ProtectedRoute>} />
-          <Route path="/texto-seo-produto" element={<ProtectedRoute><TextoSEOProduto /></ProtectedRoute>} />
-          <Route path="/texto-seo-blog" element={<ProtectedRoute><TextoSEOBlog /></ProtectedRoute>} />
-          <Route path="/pautas-blog" element={<ProtectedRoute><PautasBlog /></ProtectedRoute>} />
-          <Route path="/meta-dados" element={<ProtectedRoute><MetaDados /></ProtectedRoute>} />
+          <Route path="/keywords-tool" element={<ProtectedRoute><Keywords /></ProtectedRoute>} />
+          <Route path="/market-and-target-tool" element={<ProtectedRoute><MarketAndTarget /></ProtectedRoute>} />
+          <Route path="/texto-seo-lp-tool" element={<ProtectedRoute><TextoSEOLP /></ProtectedRoute>} />
+          <Route path="/texto-seo-produto-tool" element={<ProtectedRoute><TextoSEOProduto /></ProtectedRoute>} />
+          <Route path="/texto-seo-blog-tool" element={<ProtectedRoute><TextoSEOBlog /></ProtectedRoute>} />
+          <Route path="/pautas-blog-tool" element={<ProtectedRoute><PautasBlog /></ProtectedRoute>} />
+          <Route path="/meta-dados-tool" element={<ProtectedRoute><MetaDados /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -61,37 +61,37 @@ const HomeNavbar = () => {
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/keywords" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Palavras-chave
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/market-and-target" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Mercado e Público-alvo
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-lp" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para LP
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-produto" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Produto
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/texto-seo-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Texto SEO para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/pautas-blog" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Pautas para Blog
                       </Link>
                     </li>
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/meta-dados" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Meta Dados
                       </Link>
                     </li>

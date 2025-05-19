@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { Search, ArrowRight } from 'lucide-react';
+import { Code, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const FunilDeBusca = () => {
-  const [activeItem, setActiveItem] = useState('funil');
+const MetaDadosPublic = () => {
+  const [activeItem, setActiveItem] = useState('meta-dados');
   
-  // Updated sidebar items based on the image
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/funil-de-busca' },
     { id: 'palavras-chave', label: 'Palavras-chave', path: '/keywords' },
@@ -31,7 +30,7 @@ const FunilDeBusca = () => {
         <div className="text-sm text-gray-400 mb-8">
           <Link to="/" className="hover:text-white">Home</Link> {" > "} 
           <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Funil de Busca</span>
+          <span className="text-white">Meta Dados</span>
         </div>
         
         <div className="flex flex-col lg:flex-row gap-6">
@@ -72,49 +71,46 @@ const FunilDeBusca = () => {
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
             <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Funil de Busca</h1>
+              <h1 className="text-3xl font-bold text-white mb-6">Meta Dados</h1>
               
               <div className="prose prose-invert max-w-none">
                 <p className="text-gray-300 mb-6">
-                  Um funil de busca é uma estratégia de SEO que estrutura o conteúdo do seu site para capturar usuários em diferentes estágios da jornada de compra, desde a descoberta inicial até a decisão final de aquisição.
+                  Meta dados são informações invisíveis para os usuários, mas essenciais para mecanismos de busca e compartilhamento em redes sociais. Nossa ferramenta de IA gera meta títulos, descrições e tags otimizadas para melhorar o SEO do seu site.
                 </p>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">O que é um Funil de Busca?</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Importância dos Meta Dados</h2>
                 <p className="text-gray-300 mb-6">
-                  Um funil de busca é uma estrutura de conteúdo SEO onde você cria páginas específicas para cada estágio da jornada do usuário, 
-                  desde a consciência inicial até a decisão de compra. Isso permite que você capture tráfego de pesquisa em vários estágios 
-                  e guie os usuários através da jornada de conversão.
+                  Meta dados bem otimizados melhoram a visibilidade nos resultados de busca, aumentam a taxa de cliques (CTR) e informam aos mecanismos de busca sobre o conteúdo da sua página, impactando diretamente o SEO.
                 </p>
                 
-                {/* Simple image without zoom functionality */}
                 <div className="my-10">
                   <img 
-                    src="/lovable-uploads/7ec91621-a082-4c9e-aeb7-343df8c0e37f.png" 
-                    alt="Exemplo de Funil de Busca" 
+                    src="/lovable-uploads/66079de7-3561-4f58-be8d-a718cbbe92de.png" 
+                    alt="Meta Dados" 
                     className="w-full rounded-lg border border-gray-700"
                   />
                 </div>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como criar um Funil de Busca eficiente</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Principais meta tags</h2>
                 
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start gap-4">
                     <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <Search size={18} className="text-white" />
+                      <Code size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Pesquisa de palavras-chave</h3>
-                      <p className="text-gray-300">Identifique termos em diferentes estágios do funil: informacionais, comerciais e transacionais.</p>
+                      <h3 className="text-xl font-medium text-white">Meta título</h3>
+                      <p className="text-gray-300">Crie títulos persuasivos com 50-60 caracteres que incluam sua palavra-chave principal.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
                     <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <ArrowRight size={18} className="text-white" />
+                      <Share2 size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Mapeamento de conteúdo</h3>
-                      <p className="text-gray-300">Crie conteúdo específico para cada estágio, ajustando tom, formato e CTAs.</p>
+                      <h3 className="text-xl font-medium text-white">Meta descrição</h3>
+                      <p className="text-gray-300">Escreva descrições atrativas com 150-160 caracteres que incentivem o clique.</p>
                     </div>
                   </div>
                 </div>
@@ -135,4 +131,4 @@ const FunilDeBusca = () => {
   );
 };
 
-export default FunilDeBusca;
+export default MetaDadosPublic;
