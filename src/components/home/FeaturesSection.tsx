@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { features } from './featuresData';
 import FeatureItem from './FeatureItem';
 import FeaturesNavigation from './FeaturesNavigation';
@@ -8,6 +8,14 @@ import { AnimatePresence } from 'framer-motion';
 const FeaturesSection = () => {
   // Estado para controlar qual feature está ativa
   const [activeFeature, setActiveFeature] = useState<string>('pesquisa');
+
+  // Preload de imagens para melhorar a performance
+  useEffect(() => {
+    features.forEach(feature => {
+      const img = new Image();
+      img.src = feature.imagePath;
+    });
+  }, []);
 
   const handleStartNow = () => {
     window.open('https://pay.kiwify.com.br/sZRHsgM', '_blank');

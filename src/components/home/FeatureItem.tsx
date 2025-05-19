@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Feature } from './featuresData';
 import { motion } from 'framer-motion';
@@ -10,6 +10,8 @@ interface FeatureItemProps {
 }
 
 const FeatureItem = ({ feature, onStartNow }: FeatureItemProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <motion.div 
       className="flex flex-col md:flex-row items-center justify-between gap-8 p-6"
@@ -67,11 +69,21 @@ const FeatureItem = ({ feature, onStartNow }: FeatureItemProps) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        <img 
-          src={feature.imagePath} 
-          alt={feature.title} 
-          className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
-        />
+        <div className="w-full h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg overflow-hidden relative bg-[#18141e]">
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#18141e] animate-pulse">
+              <div className="w-12 h-12 border-4 border-[#805af5]/30 border-t-[#805af5] rounded-full animate-spin"></div>
+            </div>
+          )}
+          <img 
+            src={feature.imagePath} 
+            alt={feature.title} 
+            className={`w-full h-full object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImageLoaded(true)}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </motion.div>
     </motion.div>
   );
