@@ -11,16 +11,16 @@ export function formatMarkdownContent(content: string): React.ReactNode {
   
   // Função para processar o conteúdo markdown
   const processText = (text: string) => {
+    // Processar títulos (deve ser feito antes de processar negrito/itálico para evitar conflitos)
+    text = text.replace(/^### (.*?)$/gm, '<h3 class="text-lg font-bold mb-2 mt-4">$1</h3>');
+    text = text.replace(/^## (.*?)$/gm, '<h2 class="text-xl font-bold mb-3 mt-5">$1</h2>');
+    text = text.replace(/^# (.*?)$/gm, '<h1 class="text-2xl font-bold mb-4 mt-6">$1</h1>');
+    
     // Processar negrito
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Processar itálico
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    // Processar títulos
-    text = text.replace(/^### (.*?)$/gm, '<h3 class="text-lg font-bold mb-2">$1</h3>');
-    text = text.replace(/^## (.*?)$/gm, '<h2 class="text-xl font-bold mb-3">$1</h2>');
-    text = text.replace(/^# (.*?)$/gm, '<h1 class="text-2xl font-bold mb-4">$1</h1>');
     
     // Processar listas
     text = text.replace(/^- (.*?)$/gm, '<li class="ml-5 list-disc">$1</li>');

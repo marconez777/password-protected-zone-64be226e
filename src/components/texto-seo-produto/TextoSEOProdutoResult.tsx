@@ -1,6 +1,6 @@
 
 import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
-import { formatMarkdownContent } from "@/lib/utils";
+import { formatMarkdownContent } from "@/lib/markdown-formatter";
 
 type SEOResult = {
   titulo?: string;
