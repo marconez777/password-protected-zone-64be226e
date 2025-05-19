@@ -77,7 +77,7 @@ const FeaturesSection = () => {
       title: 'Funil de Busca',
       content: (
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-6">
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
               Construa funis de busca otimizados
             </h3>
@@ -108,10 +108,12 @@ const FeaturesSection = () => {
               Começar agora! <span className="ml-2">→</span>
             </Button>
           </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="bg-[#1A1A2E] border border-[#805af5]/30 rounded-lg w-full h-[300px] flex items-center justify-center text-white/50">
-              Imagem de demonstração
-            </div>
+          <div className="w-full md:w-2/3 flex justify-center">
+            <img 
+              src="/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png" 
+              alt="Funil de Busca" 
+              className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
+            />
           </div>
         </div>
       ),
@@ -121,7 +123,7 @@ const FeaturesSection = () => {
       title: 'Palavras Chave',
       content: (
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-6">
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
               Descubra as melhores palavras-chave
             </h3>
@@ -152,10 +154,12 @@ const FeaturesSection = () => {
               Começar agora! <span className="ml-2">→</span>
             </Button>
           </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="bg-[#1A1A2E] border border-[#805af5]/30 rounded-lg w-full h-[300px] flex items-center justify-center text-white/50">
-              Imagem de demonstração
-            </div>
+          <div className="w-full md:w-2/3 flex justify-center">
+            <img 
+              src="/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png" 
+              alt="Palavras Chave" 
+              className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
+            />
           </div>
         </div>
       ),
@@ -165,7 +169,7 @@ const FeaturesSection = () => {
       title: 'Textos com SEO',
       content: (
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-6">
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
               Crie textos otimizados para SEO
             </h3>
@@ -196,10 +200,12 @@ const FeaturesSection = () => {
               Começar agora! <span className="ml-2">→</span>
             </Button>
           </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="bg-[#1A1A2E] border border-[#805af5]/30 rounded-lg w-full h-[300px] flex items-center justify-center text-white/50">
-              Imagem de demonstração
-            </div>
+          <div className="w-full md:w-2/3 flex justify-center">
+            <img 
+              src="/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png" 
+              alt="Textos com SEO" 
+              className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
+            />
           </div>
         </div>
       ),
@@ -209,7 +215,7 @@ const FeaturesSection = () => {
       title: 'Pautas de Blog',
       content: (
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-6">
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/3">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
               Gere pautas relevantes para seu blog
             </h3>
@@ -240,10 +246,12 @@ const FeaturesSection = () => {
               Começar agora! <span className="ml-2">→</span>
             </Button>
           </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="bg-[#1A1A2E] border border-[#805af5]/30 rounded-lg w-full h-[300px] flex items-center justify-center text-white/50">
-              Imagem de demonstração
-            </div>
+          <div className="w-full md:w-2/3 flex justify-center">
+            <img 
+              src="/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png" 
+              alt="Pautas de Blog" 
+              className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
+            />
           </div>
         </div>
       ),
