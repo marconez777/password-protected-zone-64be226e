@@ -29,6 +29,23 @@ const KeywordsPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Conteúdo pré-renderizado para SEO
+  const seoContent = `
+    <div class="seo-content">
+      <h1>Palavras-chave</h1>
+      <p>Palavras-chave são termos e frases que os usuários digitam nos mecanismos de busca. Identificar e utilizar as palavras-chave certas é fundamental para o sucesso da sua estratégia de SEO.</p>
+      
+      <h2>Importância das palavras-chave</h2>
+      <p>Palavras-chave bem pesquisadas podem gerar tráfego qualificado para seu site, aumentar conversões e melhorar seu posicionamento nos mecanismos de busca. Nossa ferramenta de IA ajuda a identificar as melhores palavras-chave para o seu negócio.</p>
+      
+      <h2>Como selecionar palavras-chave eficientes</h2>
+      <ul>
+        <li>Pesquisa de intenção: Identifique termos que correspondem à intenção do seu público-alvo e ao estágio do funil de vendas.</li>
+        <li>Análise de concorrência: Compare palavras-chave dos concorrentes e encontre oportunidades únicas para seu negócio.</li>
+      </ul>
+    </div>
+  `;
+
   // SEO JSON-LD data
   const jsonLdData = `
 {
@@ -54,6 +71,7 @@ const KeywordsPublic = () => {
         ogImage="https://mkranker.com.br/assets/img/keywords-tool.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/palavras-chave-com-ia"
         jsonLd={jsonLdData}
+        contentHTML={seoContent}
       />
 
       <HomeNavbar />
@@ -63,7 +81,7 @@ const KeywordsPublic = () => {
         <RecursoBreadcrumb currentPage="Palavras-chave" />
         
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar - Fixed with scrollable content */}
+          {/* Sidebar */}
           <RecursosSidebar 
             items={sidebarItems} 
             activeItem={activeItem} 

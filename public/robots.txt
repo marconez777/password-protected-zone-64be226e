@@ -17,6 +17,6 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# Sitemap file (you should create one)
+# Sitemap file
 Sitemap: https://mkranker.com.br/sitemap.xml
 

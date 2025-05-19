@@ -28,6 +28,23 @@ const MetaDadosPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Conteúdo pré-renderizado para SEO
+  const seoContent = `
+    <div class="seo-content">
+      <h1>Meta Dados</h1>
+      <p>Meta dados são informações invisíveis para os usuários, mas essenciais para mecanismos de busca e compartilhamento em redes sociais. Nossa ferramenta de IA gera meta títulos, descrições e tags otimizadas para melhorar o SEO do seu site.</p>
+      
+      <h2>Importância dos Meta Dados</h2>
+      <p>Meta dados bem otimizados melhoram a visibilidade nos resultados de busca, aumentam a taxa de cliques (CTR) e informam aos mecanismos de busca sobre o conteúdo da sua página, impactando diretamente o SEO.</p>
+      
+      <h2>Principais meta tags</h2>
+      <ul>
+        <li>Meta título: Crie títulos persuasivos com 50-60 caracteres que incluam sua palavra-chave principal.</li>
+        <li>Meta descrição: Escreva descrições atrativas com 150-160 caracteres que incentivem o clique.</li>
+      </ul>
+    </div>
+  `;
+
   // SEO JSON-LD data
   const jsonLdData = `
 {
@@ -53,6 +70,7 @@ const MetaDadosPublic = () => {
         ogImage="https://mkranker.com.br/assets/img/meta-dados.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/meta-dados-com-ia"
         jsonLd={jsonLdData}
+        contentHTML={seoContent}
       />
 
       <HomeNavbar />

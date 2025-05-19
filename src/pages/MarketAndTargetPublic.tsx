@@ -28,6 +28,23 @@ const MarketAndTargetPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Conteúdo pré-renderizado para SEO
+  const seoContent = `
+    <div class="seo-content">
+      <h1>Mercado e Público-alvo</h1>
+      <p>Conhecer seu mercado e público-alvo é essencial para criar estratégias de marketing eficazes. Nossa ferramenta de IA ajuda a analisar tendências de mercado e definir personas precisas para o seu negócio.</p>
+      
+      <h2>Análise de mercado</h2>
+      <p>Uma análise de mercado completa identifica oportunidades, ameaças e tendências que podem impactar seu negócio. Entender o mercado permite criar estratégias mais eficientes e competitivas.</p>
+      
+      <h2>Definição de público-alvo</h2>
+      <ul>
+        <li>Criação de personas: Desenvolva personas detalhadas para representar diferentes segmentos do seu público-alvo.</li>
+        <li>Segmentação de mercado: Divida seu mercado em grupos específicos para criar mensagens mais personalizadas e eficazes.</li>
+      </ul>
+    </div>
+  `;
+
   // SEO JSON-LD data
   const jsonLdData = `
 {
@@ -53,6 +70,7 @@ const MarketAndTargetPublic = () => {
         ogImage="https://mkranker.com.br/assets/img/market-target.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
         jsonLd={jsonLdData}
+        contentHTML={seoContent}
       />
 
       <HomeNavbar />

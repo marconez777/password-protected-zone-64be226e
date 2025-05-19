@@ -29,6 +29,26 @@ const FunilDeBusca = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Conteúdo pré-renderizado para SEO
+  const seoContent = `
+    <div class="seo-content">
+      <h1>Mapeamento do Funil de Busca de SEO com IA</h1>
+      <p>No atual cenário digital, entender e otimizar o Funil de Busca de SEO com I.A tornou-se essencial para qualquer negócio que deseja se destacar online. O uso de Inteligência Artificial (I.A) nesse contexto não só potencializa a descoberta de oportunidades dentro do micro nicho, mas também refina estratégias para atingir o público-alvo desejado e explorar com máximo aproveitamento o segmento de atuação.</p>
+      
+      <h2>O Poder do Funil de Busca de SEO com I.A</h2>
+      <p>Integrar a I.A ao Funil de Busca de SEO é uma estratégia poderosa que transforma a forma como empresas criam e disponibilizam conteúdo em cada etapa da jornada do cliente. No topo do funil, a I.A pode sugerir temas que capturam a atenção inicial do usuário, utilizando palavras-chave relevantes que correspondem às tendências de pesquisa atuais.</p>
+      
+      <h2>Meio do Funil: Conduzindo o Interesse</h2>
+      <p>À medida que os usuários se movem para o meio do funil, eles buscam informações mais detalhadas que respondam a perguntas específicas sobre seus produtos ou serviços. Aqui, o Funil de Busca de SEO com I.A é vital para sugerir conteúdos que abordem as preocupações e dúvidas comuns do público-alvo.</p>
+      
+      <h2>Fundo do Funil: Convertendo em Ação</h2>
+      <p>No fundo do funil, o principal objetivo é converter o interesse genuíno em ação, seja através de compras ou assinatura de serviços. Nesse ponto, o conteúdo deve ser direcionado, claro e carregado de provas sociais ou depoimentos que instiguem confiança.</p>
+      
+      <h2>Ferramentas de Pesquisa de Palavras-chave: O Aliado Essencial</h2>
+      <p>No contexto do Funil de Busca de SEO com I.A, as ferramentas de pesquisa de palavras-chave continuam sendo aliadas fundamentais. Embora a I.A traga um nível avançado de personalização e eficiência, essas ferramentas oferecem a base de análise e entender o comportamento do usuário nos mecanismos de busca.</p>
+    </div>
+  `;
+
   // SEO JSON-LD data
   const jsonLdData = `
 {
@@ -61,6 +81,7 @@ const FunilDeBusca = () => {
         ogImage="https://mkranker.com.br/assets/img/funil-seo.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/funil-de-busca-com-ia"
         jsonLd={jsonLdData}
+        contentHTML={seoContent}
       />
 
       <HomeNavbar />

@@ -10,6 +10,7 @@ interface SEOMetadataProps {
   canonicalUrl: string;
   jsonLd: string;
   preload?: {href: string, as: string}[];
+  contentHTML?: string; // Nova propriedade para conteúdo SEO
 }
 
 const SEOMetadata: React.FC<SEOMetadataProps> = ({
@@ -19,7 +20,8 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
   ogImage,
   canonicalUrl,
   jsonLd,
-  preload
+  preload,
+  contentHTML
 }) => {
   return (
     <Helmet>
@@ -58,6 +60,11 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
 
       {/* Dados Estruturados (JSON-LD) */}
       <script type="application/ld+json">{jsonLd}</script>
+      
+      {/* Conteúdo pré-renderizado para SEO */}
+      {contentHTML && (
+        <noscript dangerouslySetInnerHTML={{ __html: contentHTML }} />
+      )}
     </Helmet>
   );
 };
