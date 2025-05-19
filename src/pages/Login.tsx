@@ -12,10 +12,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, Navigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { useAuth } from "@/providers/auth";
 import { useLoginForm } from "@/hooks/useLoginForm";
 import { Logo } from "@/components/ui/logo";
+import { toast } from "sonner";
 
 const Login = () => {
   const { 
@@ -28,12 +29,27 @@ const Login = () => {
     handleSignIn 
   } = useLoginForm();
   
-  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
+  const { user, isApproved, isAdmin, loading: authLoading, signOut } = useAuth();
 
   useEffect(() => {
     // Log para debug
     console.log("Login - user:", !!user, "isApproved:", isApproved, "isAdmin:", isAdmin, "authLoading:", authLoading);
   }, [user, isApproved, isAdmin, authLoading]);
+
+  // Handle logout when user is not approved
+  const handleLogout = async () => {
+    try {
+      const result = await signOut();
+      if (result.success) {
+        toast.success("Logout realizado com sucesso");
+      } else {
+        toast.error("Erro ao fazer logout");
+      }
+    } catch (error) {
+      console.error("Erro no logout:", error);
+      toast.error("Erro ao fazer logout");
+    }
+  };
 
   // If already authenticated, redirect to appropriate page
   if (user && isApproved) {
@@ -80,15 +96,27 @@ const Login = () => {
           </CardHeader>
           
           {showPendingApproval ? (
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                <h3 className="font-medium text-yellow-800">Conta em análise</h3>
-                <p className="text-yellow-700 text-sm mt-1">
-                  Sua conta está pendente de aprovação pelo administrador. 
-                  Você receberá uma notificação por email quando sua conta for aprovada.
-                </p>
-              </div>
-            </CardContent>
+            <>
+              <CardContent className="space-y-4">
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <h3 className="font-medium text-yellow-800">Conta em análise</h3>
+                  <p className="text-yellow-700 text-sm mt-1">
+                    Sua conta está pendente de aprovação pelo administrador. 
+                    Você receberá uma notificação por email quando sua conta for aprovada.
+                  </p>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center"
+                  variant="outline"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sair da conta
+                </Button>
+              </CardFooter>
+            </>
           ) : (
             <form onSubmit={handleSignIn}>
               <CardContent className="space-y-4">
