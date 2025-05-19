@@ -39,14 +39,14 @@ const App = () => {
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
           <Route path="/recursos" element={<RecursosPage />} />
-          <Route path="/funil-de-busca" element={<FunilDeBusca />} />
-          <Route path="/keywords" element={<KeywordsPublic />} />
-          <Route path="/market-and-target" element={<MarketAndTargetPublic />} />
-          <Route path="/texto-seo-lp" element={<TextoSEOLPPublic />} />
-          <Route path="/texto-seo-produto" element={<TextoSEOProdutoPublic />} />
-          <Route path="/texto-seo-blog" element={<TextoSEOBlogPublic />} />
-          <Route path="/pautas-blog" element={<PautasBlogPublic />} />
-          <Route path="/meta-dados" element={<MetaDadosPublic />} />
+          <Route path="/sobre-funil-de-busca" element={<FunilDeBusca />} />
+          <Route path="/sobre-keywords" element={<KeywordsPublic />} />
+          <Route path="/sobre-market-and-target" element={<MarketAndTargetPublic />} />
+          <Route path="/sobre-texto-seo-lp" element={<TextoSEOLPPublic />} />
+          <Route path="/sobre-texto-seo-produto" element={<TextoSEOProdutoPublic />} />
+          <Route path="/sobre-texto-seo-blog" element={<TextoSEOBlogPublic />} />
+          <Route path="/sobre-pautas-blog" element={<PautasBlogPublic />} />
+          <Route path="/sobre-meta-dados" element={<MetaDadosPublic />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
