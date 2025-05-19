@@ -27,10 +27,10 @@ const FeaturesSection = () => {
     <div className="relative w-full py-12 lg:py-24 bg-[#121016] overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl text-white font-bold mb-2">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-2">
             O Trabalho De Meses Em Dias
           </h2>
-          <p className="text-3xl md:text-4xl lg:text-5xl text-white font-bold">
+          <p className="text-xl text-gray-300 mt-4">
             Toda a operação fica por conta da I.A.
           </p>
         </div>
