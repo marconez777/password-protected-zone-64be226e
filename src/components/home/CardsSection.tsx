@@ -1,35 +1,62 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, Key, Users, Image } from 'lucide-react';
+import { Search, Key, Users, FileText, Image } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type CardItem = {
   icon: React.ElementType;
   title: string;
   description: string;
+  soon?: boolean;
 };
 
 const cards: CardItem[] = [
   {
     icon: Search,
-    title: "Pesquisa Inteligente",
-    description: "Ferramentas avançadas de pesquisa para encontrar as melhores keywords do seu nicho."
+    title: "Funil de Busca",
+    description: "Otimize sua estratégia de busca orgânica e conquiste melhores posições nos buscadores."
   },
   {
     icon: Key,
-    title: "Palavras-Chave Premium",
-    description: "Descubra palavras-chave de alta conversão com volume de busca significativo."
+    title: "Palavras-chave",
+    description: "Encontre as melhores keywords com alto potencial de conversão para o seu negócio."
   },
   {
     icon: Users,
-    title: "Análise de Público",
-    description: "Entenda melhor seu público-alvo e crie conteúdo direcionado que converte."
+    title: "Mercado e Público-alvo",
+    description: "Análise detalhada do seu mercado e público-alvo para estratégias mais assertivas."
+  },
+  {
+    icon: FileText,
+    title: "Texto SEO para LP",
+    description: "Conteúdo otimizado para landing pages que convertem e ranqueiam."
+  },
+  {
+    icon: FileText,
+    title: "Texto SEO para Produto",
+    description: "Descrições poderosas para seus produtos com foco em SEO e conversão."
+  },
+  {
+    icon: FileText,
+    title: "Texto SEO para Blog",
+    description: "Artigos otimizados para seu blog alcançar as primeiras posições nos buscadores."
+  },
+  {
+    icon: FileText,
+    title: "Pautas para Blog",
+    description: "Ideias e estruturas completas para criar um calendário de conteúdo eficiente."
+  },
+  {
+    icon: FileText,
+    title: "Meta Dados",
+    description: "Títulos e descrições otimizados para atrair mais cliques nos resultados de busca."
   },
   {
     icon: Image,
-    title: "Conteúdo Otimizado",
-    description: "Gere textos e imagens automaticamente otimizados para SEO."
+    title: "Gerador de Imagens",
+    description: "Crie imagens profissionais otimizadas para SEO e engajamento.",
+    soon: true
   }
 ];
 
@@ -48,7 +75,14 @@ const CardItem = ({ item, index }: { item: CardItem; index: number }) => {
           <div className="w-16 h-16 rounded-full bg-[#242936] flex items-center justify-center mb-4">
             <Icon size={32} className="text-[#9b87f5]" />
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+          <div className="relative">
+            <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+            {item.soon && (
+              <span className="absolute -right-10 -top-1 bg-[#805af5] text-xs font-medium px-2 py-0.5 rounded-full text-white">
+                em breve
+              </span>
+            )}
+          </div>
           <p className="text-gray-300">{item.description}</p>
         </CardContent>
       </Card>
