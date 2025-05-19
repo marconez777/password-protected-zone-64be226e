@@ -8,7 +8,37 @@ import { useAuth } from '@/providers/auth';
 const HomeNavbar = () => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const resourcesRef = useRef<HTMLLIElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { user } = useAuth();
+
+  // Function to start the auto-close timer
+  const startAutoCloseTimer = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    
+    // Set new timer to close the dropdown after 4 seconds
+    timerRef.current = setTimeout(() => {
+      setIsResourcesOpen(false);
+    }, 4000); // 4 seconds
+  };
+  
+  // Reset timer when dropdown state changes
+  useEffect(() => {
+    if (isResourcesOpen) {
+      startAutoCloseTimer();
+    } else if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    
+    return () => {
+      // Clean up timer on component unmount
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [isResourcesOpen]);
 
   // Handle clicks outside the dropdown to close it
   useEffect(() => {
@@ -44,7 +74,8 @@ const HomeNavbar = () => {
             <li className="relative group" 
                 ref={resourcesRef}
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
-                onMouseEnter={() => setIsResourcesOpen(true)}>
+                onMouseEnter={() => setIsResourcesOpen(true)}
+                onMouseMove={() => isResourcesOpen && startAutoCloseTimer()}>
               <Link
                 to="/recursos"
                 className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
@@ -53,7 +84,10 @@ const HomeNavbar = () => {
               </Link>
               
               {isResourcesOpen && (
-                <div className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]">
+                <div 
+                  className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]"
+                  onMouseMove={() => startAutoCloseTimer()}
+                  onMouseEnter={() => startAutoCloseTimer()}>
                   <ul className="py-2">
                     <li className="group">
                       <Link to="/funil-de-busca" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
