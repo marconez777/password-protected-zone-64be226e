@@ -50,9 +50,9 @@ const App = () => {
           <Route path="/recursos/pautas-blog-com-ia" element={<PautasBlogPublic />} />
           <Route path="/recursos/meta-dados-com-ia" element={<MetaDadosPublic />} />
           
-          {/* Protected Routes */}
+          {/* Protected Routes - Updated tool URL patterns */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/search-funnel" element={<ProtectedRoute><SearchFunnel /></ProtectedRoute>} />
+          <Route path="/search-funnel-tool" element={<ProtectedRoute><SearchFunnel /></ProtectedRoute>} />
           <Route path="/keywords-tool" element={<ProtectedRoute><Keywords /></ProtectedRoute>} />
           <Route path="/market-and-target-tool" element={<ProtectedRoute><MarketAndTarget /></ProtectedRoute>} />
           <Route path="/texto-seo-lp-tool" element={<ProtectedRoute><TextoSEOLP /></ProtectedRoute>} />
