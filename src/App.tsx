@@ -19,6 +19,7 @@ import MetaDados from "@/pages/MetaDados";
 import Admin from "@/pages/Admin";
 import NotFound from "@/pages/NotFound";
 import RecursosPage from "@/pages/RecursosPage";
+import FunilDeBusca from "@/pages/FunilDeBusca";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
           <Route path="/recursos" element={<RecursosPage />} />
+          <Route path="/funil-de-busca" element={<FunilDeBusca />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

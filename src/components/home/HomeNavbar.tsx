@@ -56,7 +56,7 @@ const HomeNavbar = () => {
                 <div className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]">
                   <ul className="py-2">
                     <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
+                      <Link to="/funil-de-busca" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Funil de Busca
                       </Link>
                     </li>
