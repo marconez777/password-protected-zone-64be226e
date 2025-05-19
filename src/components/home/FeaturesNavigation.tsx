@@ -2,6 +2,7 @@
 import React from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Feature } from './featuresData';
+import { motion } from 'framer-motion';
 
 interface FeaturesNavigationProps {
   features: Feature[];
@@ -26,7 +27,18 @@ const FeaturesNavigation = ({ features, activeFeature, onFeatureChange }: Featur
               activeFeature === feature.id ? 'bg-[#805af5]/20' : 'bg-transparent'
             }`}
           >
-            {feature.title}
+            <motion.span
+              layout
+              className="relative inline-block"
+            >
+              {feature.title}
+              {activeFeature === feature.id && (
+                <motion.div
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#805af5]"
+                  layoutId="activeFeatureIndicator"
+                />
+              )}
+            </motion.span>
           </ToggleGroupItem>
         ))}
       </ToggleGroup>

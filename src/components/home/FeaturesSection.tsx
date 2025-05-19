@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { features } from './featuresData';
 import FeatureItem from './FeatureItem';
 import FeaturesNavigation from './FeaturesNavigation';
+import { AnimatePresence } from 'framer-motion';
 
 const FeaturesSection = () => {
   // Estado para controlar qual feature está ativa
@@ -33,12 +34,15 @@ const FeaturesSection = () => {
         />
 
         <div className="bg-[#111019] border border-[#805af5]/30 rounded-lg overflow-hidden">
-          {activeFeatureData && (
-            <FeatureItem 
-              feature={activeFeatureData} 
-              onStartNow={handleStartNow} 
-            />
-          )}
+          <AnimatePresence mode="wait">
+            {activeFeatureData && (
+              <FeatureItem 
+                key={activeFeatureData.id}
+                feature={activeFeatureData} 
+                onStartNow={handleStartNow} 
+              />
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
