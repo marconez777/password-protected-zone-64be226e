@@ -24,7 +24,7 @@ const FeaturesNavigation = ({ features, activeFeature, onFeatureChange }: Featur
             key={feature.id}
             value={feature.id}
             className={`border border-[#805af5] rounded-full px-6 py-2 text-white hover:bg-[#805af5]/10 transition-all ${
-              activeFeature === feature.id ? 'bg-[#805af5]/20' : 'bg-transparent'
+              activeFeature === feature.id ? 'bg-[#333333] text-white' : 'bg-transparent'
             }`}
           >
             <motion.span
