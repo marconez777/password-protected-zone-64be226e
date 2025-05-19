@@ -39,11 +39,6 @@ const HomeNavbar = () => {
                   <ul className="py-2">
                     <li className="group">
                       <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li className="group">
-                      <Link to="/cadastro" className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all">
                         Funil de Busca
                       </Link>
                     </li>
