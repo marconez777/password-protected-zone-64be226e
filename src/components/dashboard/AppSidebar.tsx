@@ -79,7 +79,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/market-and-target">
+                  <Link to="/market-and-target-tool">
                     <Target className="h-4 w-4 mr-2" />
                     <span>Mercado e Público-alvo</span>
                   </Link>
@@ -88,7 +88,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/search-funnel">
+                  <Link to="/search-funnel-tool">
                     <SearchCheck className="h-4 w-4 mr-2" />
                     <span>Funil de Busca</span>
                   </Link>
@@ -97,7 +97,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/keywords">
+                  <Link to="/keywords-tool">
                     <KeyRound className="h-4 w-4 mr-2" />
                     <span>Palavras-chave</span>
                   </Link>
@@ -106,7 +106,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-lp">
+                  <Link to="/texto-seo-lp-tool">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para LP</span>
                   </Link>
@@ -115,7 +115,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-produto">
+                  <Link to="/texto-seo-produto-tool">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para Produto</span>
                   </Link>
@@ -124,7 +124,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/texto-seo-blog">
+                  <Link to="/texto-seo-blog-tool">
                     <FileText className="h-4 w-4 mr-2" />
                     <span>Texto SEO para Blog</span>
                   </Link>
@@ -133,7 +133,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/pautas-blog">
+                  <Link to="/pautas-blog-tool">
                     <BookText className="h-4 w-4 mr-2" />
                     <span>Pautas para Blog</span>
                   </Link>
@@ -142,7 +142,7 @@ export function AppSidebar() {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to="/meta-dados">
+                  <Link to="/meta-dados-tool">
                     <ScrollText className="h-4 w-4 mr-2" />
                     <span>Meta Dados</span>
                   </Link>
