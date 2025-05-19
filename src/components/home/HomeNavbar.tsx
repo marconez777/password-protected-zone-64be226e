@@ -26,13 +26,15 @@ const HomeNavbar = () => {
                 Home
               </Link>
             </li>
-            <li className="relative group">
-              <button
-                onClick={() => setIsResourcesOpen(!isResourcesOpen)}
+            <li className="relative group" 
+                onMouseEnter={() => setIsResourcesOpen(true)}
+                onMouseLeave={() => setIsResourcesOpen(false)}>
+              <Link
+                to="/recursos"
                 className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
                 Recursos <ChevronDown className="h-4 w-4 ml-1" />
-              </button>
+              </Link>
               
               {isResourcesOpen && (
                 <div className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]">

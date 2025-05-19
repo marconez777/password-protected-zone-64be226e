@@ -18,6 +18,7 @@ import PautasBlog from "@/pages/PautasBlog";
 import MetaDados from "@/pages/MetaDados";
 import Admin from "@/pages/Admin";
 import NotFound from "@/pages/NotFound";
+import RecursosPage from "@/pages/RecursosPage";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
+          <Route path="/recursos" element={<RecursosPage />} />
           
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
