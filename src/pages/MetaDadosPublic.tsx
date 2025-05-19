@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import { Code, Share2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import RecursosSidebar from '@/components/recursos/RecursosSidebar';
+import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 
 const MetaDadosPublic = () => {
   const [activeItem, setActiveItem] = useState('meta-dados');
+  
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
   
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/recursos/funil-de-busca-com-ia' },
@@ -20,59 +28,53 @@ const MetaDadosPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // SEO JSON-LD data
+  const jsonLdData = `
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKRanker",
+  "applicationCategory": "SEOApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "97.00",
+    "priceCurrency": "BRL"
+  },
+  "description": "Ferramenta de Geração de Meta Dados com Inteligência Artificial para otimizar o SEO do seu site."
+}
+  `;
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
+      <SEOMetadata 
+        title="Gerador de Meta Dados com I.A para SEO | MKRanker"
+        description="Crie meta títulos e descrições otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas taxas de cliques."
+        keywords="meta dados, SEO, meta título, meta descrição, tag title, tag description, MKRanker, inteligência artificial"
+        ogImage="https://mkranker.com.br/assets/img/meta-dados.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos/meta-dados-com-ia"
+        jsonLd={jsonLdData}
+      />
+
       <HomeNavbar />
       
-      <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+      <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-400 mb-8">
-          <Link to="/" className="hover:text-white">Home</Link> {" > "} 
-          <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Meta Dados</span>
-        </div>
+        <RecursoBreadcrumb currentPage="Meta Dados" />
         
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar - Fixed with scrollable content */}
-          <div className="lg:w-1/4 xl:w-1/5">
-            <div className="bg-[#1A1A1A] rounded-lg p-6 sticky top-4">
-              <h3 className="text-xl font-bold text-white mb-6">Recursos de I.A</h3>
-              <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
-                {sidebarItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    className={`block w-full text-left py-2 px-3 rounded-md transition-colors ${
-                      activeItem === item.id
-                        ? 'bg-[#805af5] text-white'
-                        : 'text-gray-300 hover:bg-[#805af5]/20'
-                    }`}
-                    onClick={(e) => {
-                      if (item.soon) {
-                        e.preventDefault();
-                      } else {
-                        setActiveItem(item.id);
-                      }
-                    }}
-                  >
-                    {item.label}
-                    {item.soon && (
-                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
-                        em breve
-                      </span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Sidebar */}
+          <RecursosSidebar 
+            items={sidebarItems} 
+            activeItem={activeItem} 
+            setActiveItem={setActiveItem}
+          />
           
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
-            <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Meta Dados</h1>
+            <article className="bg-[#1A1A1A] rounded-lg p-8" itemScope itemType="https://schema.org/Article">
+              <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">Meta Dados</h1>
               
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none" itemProp="articleBody">
                 <p className="text-gray-300 mb-6">
                   Meta dados são informações invisíveis para os usuários, mas essenciais para mecanismos de busca e compartilhamento em redes sociais. Nossa ferramenta de IA gera meta títulos, descrições e tags otimizadas para melhorar o SEO do seu site.
                 </p>
@@ -82,13 +84,16 @@ const MetaDadosPublic = () => {
                   Meta dados bem otimizados melhoram a visibilidade nos resultados de busca, aumentam a taxa de cliques (CTR) e informam aos mecanismos de busca sobre o conteúdo da sua página, impactando diretamente o SEO.
                 </p>
                 
-                <div className="my-10">
+                <figure className="my-10">
                   <img 
                     src="/lovable-uploads/66079de7-3561-4f58-be8d-a718cbbe92de.png" 
                     alt="Meta Dados" 
                     className="w-full rounded-lg border border-gray-700"
+                    loading="lazy"
+                    itemProp="image"
                   />
-                </div>
+                  <figcaption className="text-xs text-center text-gray-400 mt-2">Interface da ferramenta de geração de meta dados</figcaption>
+                </figure>
                 
                 <h2 className="text-2xl font-bold text-white mt-10 mb-4">Principais meta tags</h2>
                 
@@ -114,10 +119,16 @@ const MetaDadosPublic = () => {
                   </div>
                 </div>
               </div>
-            </div>
+              
+              <div className="mt-8 text-gray-400 text-sm" itemProp="author" itemScope itemType="https://schema.org/Organization">
+                <meta itemProp="name" content="MKRanker" />
+              </div>
+              <meta itemProp="datePublished" content="2023-05-15" />
+              <meta itemProp="dateModified" content="2025-05-19" />
+            </article>
           </div>
         </div>
-      </div>
+      </main>
       
       {/* Pricing Section */}
       <div className="mt-16">

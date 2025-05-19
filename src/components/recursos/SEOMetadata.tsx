@@ -9,6 +9,7 @@ interface SEOMetadataProps {
   ogImage: string;
   canonicalUrl: string;
   jsonLd: string;
+  preload?: {href: string, as: string}[];
 }
 
 const SEOMetadata: React.FC<SEOMetadataProps> = ({
@@ -17,7 +18,8 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
   keywords,
   ogImage,
   canonicalUrl,
-  jsonLd
+  jsonLd,
+  preload
 }) => {
   return (
     <Helmet>
@@ -48,6 +50,11 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
 
       {/* Canonical URL */}
       <link rel="canonical" href={canonicalUrl} />
+      
+      {/* Preload critical resources */}
+      {preload && preload.map((item, index) => (
+        <link key={index} rel="preload" href={item.href} as={item.as} />
+      ))}
 
       {/* Dados Estruturados (JSON-LD) */}
       <script type="application/ld+json">{jsonLd}</script>

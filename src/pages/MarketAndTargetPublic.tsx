@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import { Target, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import RecursosSidebar from '@/components/recursos/RecursosSidebar';
+import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 
 const MarketAndTargetPublic = () => {
   const [activeItem, setActiveItem] = useState('mercado');
+  
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
   
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/recursos/funil-de-busca-com-ia' },
@@ -20,59 +28,53 @@ const MarketAndTargetPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // SEO JSON-LD data
+  const jsonLdData = `
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKRanker",
+  "applicationCategory": "MarketingApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "97.00",
+    "priceCurrency": "BRL"
+  },
+  "description": "Ferramenta de Análise de Mercado e Público-alvo com Inteligência Artificial para estratégias de marketing mais eficientes."
+}
+  `;
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
+      <SEOMetadata 
+        title="Análise de Mercado e Público-alvo com I.A | MKRanker"
+        description="Ferramenta de análise de mercado e segmentação de público-alvo com inteligência artificial para estratégias de marketing mais eficientes."
+        keywords="análise de mercado, público-alvo, segmentação, personas, marketing digital, MKRanker, inteligência artificial"
+        ogImage="https://mkranker.com.br/assets/img/market-target.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
+        jsonLd={jsonLdData}
+      />
+
       <HomeNavbar />
       
-      <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+      <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-400 mb-8">
-          <Link to="/" className="hover:text-white">Home</Link> {" > "} 
-          <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Mercado e Público-alvo</span>
-        </div>
+        <RecursoBreadcrumb currentPage="Mercado e Público-alvo" />
         
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar - Fixed with scrollable content */}
-          <div className="lg:w-1/4 xl:w-1/5">
-            <div className="bg-[#1A1A1A] rounded-lg p-6 sticky top-4">
-              <h3 className="text-xl font-bold text-white mb-6">Recursos de I.A</h3>
-              <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
-                {sidebarItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    className={`block w-full text-left py-2 px-3 rounded-md transition-colors ${
-                      activeItem === item.id
-                        ? 'bg-[#805af5] text-white'
-                        : 'text-gray-300 hover:bg-[#805af5]/20'
-                    }`}
-                    onClick={(e) => {
-                      if (item.soon) {
-                        e.preventDefault();
-                      } else {
-                        setActiveItem(item.id);
-                      }
-                    }}
-                  >
-                    {item.label}
-                    {item.soon && (
-                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
-                        em breve
-                      </span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Sidebar */}
+          <RecursosSidebar 
+            items={sidebarItems} 
+            activeItem={activeItem} 
+            setActiveItem={setActiveItem}
+          />
           
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
-            <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Mercado e Público-alvo</h1>
+            <article className="bg-[#1A1A1A] rounded-lg p-8" itemScope itemType="https://schema.org/Article">
+              <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">Mercado e Público-alvo</h1>
               
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none" itemProp="articleBody">
                 <p className="text-gray-300 mb-6">
                   Conhecer seu mercado e público-alvo é essencial para criar estratégias de marketing eficazes. Nossa ferramenta de IA ajuda a analisar tendências de mercado e definir personas precisas para o seu negócio.
                 </p>
@@ -82,13 +84,16 @@ const MarketAndTargetPublic = () => {
                   Uma análise de mercado completa identifica oportunidades, ameaças e tendências que podem impactar seu negócio. Entender o mercado permite criar estratégias mais eficientes e competitivas.
                 </p>
                 
-                <div className="my-10">
+                <figure className="my-10">
                   <img 
                     src="/lovable-uploads/becf4789-08a1-420c-9246-95c6829c54de.png" 
                     alt="Análise de Mercado" 
                     className="w-full rounded-lg border border-gray-700"
+                    loading="lazy"
+                    itemProp="image"
                   />
-                </div>
+                  <figcaption className="text-xs text-center text-gray-400 mt-2">Dashboard de análise de mercado com IA</figcaption>
+                </figure>
                 
                 <h2 className="text-2xl font-bold text-white mt-10 mb-4">Definição de público-alvo</h2>
                 
@@ -114,10 +119,16 @@ const MarketAndTargetPublic = () => {
                   </div>
                 </div>
               </div>
-            </div>
+              
+              <div className="mt-8 text-gray-400 text-sm" itemProp="author" itemScope itemType="https://schema.org/Organization">
+                <meta itemProp="name" content="MKRanker" />
+              </div>
+              <meta itemProp="datePublished" content="2023-05-15" />
+              <meta itemProp="dateModified" content="2025-05-19" />
+            </article>
           </div>
         </div>
-      </div>
+      </main>
       
       {/* Pricing Section */}
       <div className="mt-16">

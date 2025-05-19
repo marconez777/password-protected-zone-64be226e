@@ -17,14 +17,15 @@ interface RecursosSidebarProps {
 
 const RecursosSidebar: React.FC<RecursosSidebarProps> = ({ items, activeItem, setActiveItem }) => {
   return (
-    <div className="lg:w-1/4 xl:w-1/5">
+    <aside className="lg:w-1/4 xl:w-1/5">
       <div className="bg-[#1A1A1A] rounded-lg p-6 sticky top-4">
         <h3 className="text-xl font-bold text-white mb-6">Recursos de I.A</h3>
-        <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
+        <nav className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
           {items.map((item) => (
             <Link
               key={item.id}
               to={item.path}
+              aria-current={activeItem === item.id ? 'page' : undefined}
               className={`block w-full text-left py-2 px-3 rounded-md transition-colors ${
                 activeItem === item.id
                   ? 'bg-[#805af5] text-white'
@@ -40,15 +41,15 @@ const RecursosSidebar: React.FC<RecursosSidebarProps> = ({ items, activeItem, se
             >
               {item.label}
               {item.soon && (
-                <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
+                <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white" aria-label="Em breve">
                   em breve
                 </span>
               )}
             </Link>
           ))}
-        </div>
+        </nav>
       </div>
-    </div>
+    </aside>
   );
 };
 

@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import { KeyRound, BarChart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import RecursosSidebar from '@/components/recursos/RecursosSidebar';
+import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 
 const KeywordsPublic = () => {
   const [activeItem, setActiveItem] = useState('palavras-chave');
+  
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
   
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/recursos/funil-de-busca-com-ia' },
@@ -20,25 +29,53 @@ const KeywordsPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // SEO JSON-LD data
+  const jsonLdData = `
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKRanker",
+  "applicationCategory": "SEOApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "97.00",
+    "priceCurrency": "BRL"
+  },
+  "description": "Ferramenta de Pesquisa de Palavras-chave com Inteligência Artificial para melhorar o posicionamento nos motores de busca."
+}
+  `;
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
+      <SEOMetadata 
+        title="Ferramenta de Pesquisa de Palavras-chave com I.A | MKRanker"
+        description="Descubra as melhores palavras-chave para seu negócio com nossa ferramenta de pesquisa otimizada com inteligência artificial."
+        keywords="palavras-chave, SEO, pesquisa de palavras-chave, ferramenta SEO, tráfego orgânico, MKRanker, inteligência artificial"
+        ogImage="https://mkranker.com.br/assets/img/keywords-tool.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos/palavras-chave-com-ia"
+        jsonLd={jsonLdData}
+      />
+
       <HomeNavbar />
       
-      <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+      <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-400 mb-8">
-          <Link to="/" className="hover:text-white">Home</Link> {" > "} 
-          <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Palavras-chave</span>
-        </div>
+        <RecursoBreadcrumb currentPage="Palavras-chave" />
         
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Main Content - Moving it before the sidebar on mobile */}
-          <div className="lg:w-3/4 xl:w-4/5 order-1 lg:order-2">
-            <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Palavras-chave</h1>
+          {/* Sidebar - Fixed with scrollable content */}
+          <RecursosSidebar 
+            items={sidebarItems} 
+            activeItem={activeItem} 
+            setActiveItem={setActiveItem} 
+          />
+          
+          {/* Main Content */}
+          <div className="lg:w-3/4 xl:w-4/5">
+            <article className="bg-[#1A1A1A] rounded-lg p-8" itemScope itemType="https://schema.org/Article">
+              <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">Palavras-chave</h1>
               
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none" itemProp="articleBody">
                 <p className="text-gray-300 mb-6">
                   Palavras-chave são termos e frases que os usuários digitam nos mecanismos de busca. Identificar e utilizar as palavras-chave certas é fundamental para o sucesso da sua estratégia de SEO.
                 </p>
@@ -48,13 +85,16 @@ const KeywordsPublic = () => {
                   Palavras-chave bem pesquisadas podem gerar tráfego qualificado para seu site, aumentar conversões e melhorar seu posicionamento nos mecanismos de busca. Nossa ferramenta de IA ajuda a identificar as melhores palavras-chave para o seu negócio.
                 </p>
                 
-                <div className="my-10">
+                <figure className="my-10">
                   <img 
                     src="/lovable-uploads/9249eca7-a739-4c4f-9e66-ba984469544f.png" 
                     alt="Pesquisa de Palavras-chave" 
                     className="w-full rounded-lg border border-gray-700"
+                    loading="lazy"
+                    itemProp="image"
                   />
-                </div>
+                  <figcaption className="text-xs text-center text-gray-400 mt-2">Ferramenta de pesquisa de palavras-chave com IA</figcaption>
+                </figure>
                 
                 <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como selecionar palavras-chave eficientes</h2>
                 
@@ -80,44 +120,16 @@ const KeywordsPublic = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          
-          {/* Sidebar - Now positioned after content on mobile */}
-          <div className="lg:w-1/4 xl:w-1/5 order-2 lg:order-1 mt-6 lg:mt-0">
-            <div className="bg-[#1A1A1A] rounded-lg p-6 lg:sticky lg:top-4">
-              <h3 className="text-xl font-bold text-white mb-6">Recursos de I.A</h3>
-              <div className="space-y-2 max-h-[calc(100vh-200px)] lg:overflow-y-auto pr-1">
-                {sidebarItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    className={`block w-full text-left py-2 px-3 rounded-md transition-colors ${
-                      activeItem === item.id
-                        ? 'bg-[#805af5] text-white'
-                        : 'text-gray-300 hover:bg-[#805af5]/20'
-                    }`}
-                    onClick={(e) => {
-                      if (item.soon) {
-                        e.preventDefault();
-                      } else {
-                        setActiveItem(item.id);
-                      }
-                    }}
-                  >
-                    {item.label}
-                    {item.soon && (
-                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
-                        em breve
-                      </span>
-                    )}
-                  </Link>
-                ))}
+              
+              <div className="mt-8 text-gray-400 text-sm" itemProp="author" itemScope itemType="https://schema.org/Organization">
+                <meta itemProp="name" content="MKRanker" />
               </div>
-            </div>
+              <meta itemProp="datePublished" content="2023-05-15" />
+              <meta itemProp="dateModified" content="2025-05-19" />
+            </article>
           </div>
         </div>
-      </div>
+      </main>
       
       {/* Pricing Section */}
       <div className="mt-16">

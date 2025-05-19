@@ -65,7 +65,7 @@ const FunilDeBusca = () => {
 
       <HomeNavbar />
       
-      <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+      <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
         <RecursoBreadcrumb currentPage="Funil de Busca" />
         
@@ -82,7 +82,7 @@ const FunilDeBusca = () => {
             <FunilDeBuscaContent />
           </div>
         </div>
-      </div>
+      </main>
       
       {/* Pricing Section */}
       <div className="mt-16">

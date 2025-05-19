@@ -1,14 +1,22 @@
+
+User-agent: *
+Allow: /
+
+# Allow Googlebot to index everything
 User-agent: Googlebot
 Allow: /
 
+# Allow Bingbot to index everything
 User-agent: Bingbot
 Allow: /
 
+# Allow social media bots to index everything
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+# Sitemap file (you should create one)
+Sitemap: https://mkranker.com.br/sitemap.xml
+

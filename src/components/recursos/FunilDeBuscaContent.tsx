@@ -7,10 +7,10 @@ interface FunilDeBuscaContentProps {
 
 const FunilDeBuscaContent: React.FC<FunilDeBuscaContentProps> = ({ className }) => {
   return (
-    <div className={`bg-[#1A1A1A] rounded-lg p-8 ${className}`}>
-      <h1 className="text-3xl font-bold text-white mb-6">Mapeamento do Funil de Busca de SEO com IA</h1>
+    <article className={`bg-[#1A1A1A] rounded-lg p-8 ${className}`} itemScope itemType="https://schema.org/Article">
+      <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">Mapeamento do Funil de Busca de SEO com IA</h1>
       
-      <div className="prose prose-invert max-w-none">
+      <div className="prose prose-invert max-w-none" itemProp="articleBody">
         <p className="text-gray-300 mb-6">
           No atual cenário digital, entender e otimizar o Funil de Busca de SEO com I.A tornou-se essencial para qualquer negócio que deseja se destacar online. O uso de Inteligência Artificial (I.A) nesse contexto não só potencializa a descoberta de oportunidades dentro do micro nicho, mas também refina estratégias para atingir o público-alvo desejado e explorar com máximo aproveitamento o segmento de atuação.
         </p>
@@ -25,14 +25,16 @@ const FunilDeBuscaContent: React.FC<FunilDeBuscaContentProps> = ({ className }) 
         </p>
 
         {/* First image - Form */}
-        <div className="my-10">
+        <figure className="my-10">
           <img 
             src="/lovable-uploads/69ab3bea-3112-4cf4-aed5-d95928ba67d1.png" 
             alt="Formulário do Funil de Busca" 
             className="w-full rounded-lg border border-gray-700"
             loading="lazy"
+            itemProp="image"
           />
-        </div>
+          <figcaption className="text-xs text-center text-gray-400 mt-2">Formulário de análise do Funil de Busca</figcaption>
+        </figure>
         
         <h2 className="text-2xl font-bold text-white mt-10 mb-4">Meio do Funil: Conduzindo o Interesse</h2>
         <p className="text-gray-300 mb-6">
@@ -53,14 +55,16 @@ const FunilDeBuscaContent: React.FC<FunilDeBuscaContentProps> = ({ className }) 
         </p>
 
         {/* Second image - Results */}
-        <div className="my-10">
+        <figure className="my-10">
           <img 
             src="/lovable-uploads/2b11dd71-c3e5-4785-a3b7-520329a54b03.png" 
             alt="Resultado do Funil de Busca" 
             className="w-full rounded-lg border border-gray-700"
             loading="lazy"
+            itemProp="image"
           />
-        </div>
+          <figcaption className="text-xs text-center text-gray-400 mt-2">Resultados de uma análise de funil de busca</figcaption>
+        </figure>
         
         <h2 className="text-2xl font-bold text-white mt-10 mb-4">Ferramentas de Pesquisa de Palavras-chave: O Aliado Essencial</h2>
         <p className="text-gray-300 mb-6">
@@ -76,7 +80,13 @@ const FunilDeBuscaContent: React.FC<FunilDeBuscaContentProps> = ({ className }) 
           A combinação do Funil de Busca de SEO com I.A pode revitalizar toda estratégia digital e melhorar seu alcance no mercado. Experimente nossas soluções e transforme sua presença online, entre em contato conosco para saber mais!
         </p>
       </div>
-    </div>
+      
+      <div className="mt-8 text-gray-400 text-sm" itemProp="author" itemScope itemType="https://schema.org/Organization">
+        <meta itemProp="name" content="MKRanker" />
+      </div>
+      <meta itemProp="datePublished" content="2023-05-15" />
+      <meta itemProp="dateModified" content="2025-05-19" />
+    </article>
   );
 };
 
