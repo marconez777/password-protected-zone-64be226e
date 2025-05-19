@@ -61,9 +61,28 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
       {/* Dados Estruturados (JSON-LD) */}
       <script type="application/ld+json">{jsonLd}</script>
       
-      {/* Conteúdo pré-renderizado para SEO */}
+      {/* Conteúdo SEO para pré-renderização - visível para mecanismos de busca */}
       {contentHTML && (
-        <noscript dangerouslySetInnerHTML={{ __html: contentHTML }} />
+        <>
+          <meta name="seo-content" content={contentHTML} />
+          
+          {/* Este conteúdo é injetado diretamente no HTML */}
+          <noscript>
+            <div className="seo-content" 
+                 dangerouslySetInnerHTML={{ __html: contentHTML }}
+                 style={{
+                   position: 'absolute',
+                   width: '1px',
+                   height: '1px',
+                   padding: '0',
+                   overflow: 'hidden',
+                   clip: 'rect(0, 0, 0, 0)',
+                   whiteSpace: 'nowrap',
+                   border: '0'
+                 }}
+            />
+          </noscript>
+        </>
       )}
     </Helmet>
   );
