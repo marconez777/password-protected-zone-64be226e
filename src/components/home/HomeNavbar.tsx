@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
@@ -7,7 +7,22 @@ import { useAuth } from '@/providers/auth';
 
 const HomeNavbar = () => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const resourcesRef = useRef<HTMLLIElement>(null);
   const { user } = useAuth();
+
+  // Handle clicks outside the dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (resourcesRef.current && !resourcesRef.current.contains(event.target as Node)) {
+        setIsResourcesOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-transparent px-4 md:px-8 py-4 flex items-center justify-between">
@@ -27,8 +42,9 @@ const HomeNavbar = () => {
               </Link>
             </li>
             <li className="relative group" 
-                onMouseEnter={() => setIsResourcesOpen(true)}
-                onMouseLeave={() => setIsResourcesOpen(false)}>
+                ref={resourcesRef}
+                onClick={() => setIsResourcesOpen(!isResourcesOpen)}
+                onMouseEnter={() => setIsResourcesOpen(true)}>
               <Link
                 to="/recursos"
                 className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
