@@ -1,13 +1,19 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import { Search, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const FunilDeBusca = () => {
   const [activeItem, setActiveItem] = useState('funil');
+  
+  useEffect(() => {
+    // Scroll to top on component mount
+    window.scrollTo(0, 0);
+  }, []);
   
   // Updated sidebar items with new URL pattern
   const sidebarItems = [
@@ -24,6 +30,61 @@ const FunilDeBusca = () => {
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
+      <Helmet>
+        {/* Metadados essenciais */}
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="MKRanker" />
+        <meta name="theme-color" content="#6B46C1" />
+
+        {/* SEO: Título e descrição */}
+        <title>Ferramenta de Funil de Busca de SEO com I.A | MKRanker</title>
+        <meta name="description" content="Encontre palavras-chave estratégicas com o Funil de Busca de SEO com I.A da MKRanker e aumente sua presença online." />
+        <meta name="keywords" content="Funil de Busca de SEO com I.A, palavras-chave, ferramenta SEO, tráfego orgânico, MKRanker, inteligência artificial SEO" />
+
+        {/* Open Graph (Facebook, LinkedIn, etc.) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Ferramenta de Funil de Busca de SEO com I.A | MKRanker" />
+        <meta property="og:description" content="Encontre palavras-chave estratégicas com o Funil de Busca de SEO com I.A da MKRanker e aumente sua presença online." />
+        <meta property="og:url" content="https://mkranker.com.br/recursos/funil-de-busca-com-ia" />
+        <meta property="og:image" content="https://mkranker.com.br/assets/img/funil-seo.jpg" />
+
+        {/* Twitter Cards */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ferramenta de Funil de Busca de SEO com I.A | MKRanker" />
+        <meta name="twitter:description" content="Encontre palavras-chave estratégicas com o Funil de Busca de SEO com I.A da MKRanker e aumente sua presença online." />
+        <meta name="twitter:image" content="https://mkranker.com.br/assets/img/funil-seo.jpg" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://mkranker.com.br/recursos/funil-de-busca-com-ia" />
+
+        {/* Dados Estruturados (JSON-LD) */}
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "MKRanker",
+              "operatingSystem": "All",
+              "applicationCategory": "SEOApplication",
+              "offers": {
+                "@type": "Offer",
+                "price": "97.00",
+                "priceCurrency": "BRL"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "120"
+              },
+              "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia",
+              "description": "Ferramenta de SEO com Inteligência Artificial que automatiza o Funil de Busca para encontrar palavras-chave com potencial de conversão."
+            }
+          `}
+        </script>
+      </Helmet>
+
       <HomeNavbar />
       
       <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
@@ -94,6 +155,7 @@ const FunilDeBusca = () => {
                     src="/lovable-uploads/69ab3bea-3112-4cf4-aed5-d95928ba67d1.png" 
                     alt="Formulário do Funil de Busca" 
                     className="w-full rounded-lg border border-gray-700"
+                    loading="lazy"
                   />
                 </div>
                 
@@ -121,6 +183,7 @@ const FunilDeBusca = () => {
                     src="/lovable-uploads/2b11dd71-c3e5-4785-a3b7-520329a54b03.png" 
                     alt="Resultado do Funil de Busca" 
                     className="w-full rounded-lg border border-gray-700"
+                    loading="lazy"
                   />
                 </div>
                 
@@ -155,3 +218,4 @@ const FunilDeBusca = () => {
 };
 
 export default FunilDeBusca;
+
