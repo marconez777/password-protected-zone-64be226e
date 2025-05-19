@@ -13,37 +13,23 @@ interface FeaturesNavigationProps {
 const FeaturesNavigation = ({ features, activeFeature, onFeatureChange }: FeaturesNavigationProps) => {
   return (
     <div className="flex justify-center mb-12 overflow-x-auto pb-4">
-      <ToggleGroup 
-        type="single" 
-        value={activeFeature} 
-        onValueChange={(value) => value && onFeatureChange(value)} 
-        className="flex space-x-4"
-      >
+      <div className="flex flex-wrap gap-3 justify-center">
         {features.map((feature) => (
-          <ToggleGroupItem
+          <button
             key={feature.id}
-            value={feature.id}
-            className={`border border-[#805af5] rounded-full px-6 py-2 text-white hover:bg-[#805af5]/10 transition-all ${
+            onClick={() => onFeatureChange(feature.id)}
+            className={`rounded-full px-6 py-3 text-white transition-all border ${
               activeFeature === feature.id 
-                ? 'bg-[#1A1F2C] border-[#9b87f5] text-white' 
-                : 'bg-transparent'
+                ? 'bg-[#805af5] border-[#9b87f5] text-white' 
+                : 'bg-[#1A1F2C] border-[#2e3447] hover:border-[#805af5]/50'
             }`}
           >
-            <motion.span
-              layout
-              className="relative inline-block"
-            >
+            <span className="relative inline-block whitespace-nowrap">
               {feature.title}
-              {activeFeature === feature.id && (
-                <motion.div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#9b87f5]"
-                  layoutId="activeFeatureIndicator"
-                />
-              )}
-            </motion.span>
-          </ToggleGroupItem>
+            </span>
+          </button>
         ))}
-      </ToggleGroup>
+      </div>
     </div>
   );
 };
