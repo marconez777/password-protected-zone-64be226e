@@ -4,7 +4,6 @@ import { Toaster } from "sonner";
 import { AuthProvider, ProtectedRoute } from "@/providers/auth";
 
 import HomePage from "@/pages/HomePage";
-import Resources from "@/pages/Resources";
 import Login from "@/pages/Login";
 import Cadastro from "@/pages/Cadastro";
 import CadastroEnviado from "@/pages/CadastroEnviado";
@@ -27,7 +26,6 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/recursos" element={<Resources />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-enviado" element={<CadastroEnviado />} />

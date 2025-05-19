@@ -27,19 +27,11 @@ const HomeNavbar = () => {
               </Link>
             </li>
             <li className="relative group">
-              <Link
-                to="/recursos"
-                className="text-white hover:opacity-90 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
-              >
-                Recursos
-              </Link>
-            </li>
-            <li className="relative group">
               <button
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
                 className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
               >
-                Ferramentas <ChevronDown className="h-4 w-4 ml-1" />
+                Recursos <ChevronDown className="h-4 w-4 ml-1" />
               </button>
               
               {isResourcesOpen && (
