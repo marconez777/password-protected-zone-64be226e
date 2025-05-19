@@ -44,7 +44,7 @@ const FeatureItem = ({
       </div>
       <div className="w-full md:w-2/3 flex justify-center">
         <img 
-          src={imageSrc} 
+          src="/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png" 
           alt={imageAlt} 
           className="w-full h-auto max-h-[450px] rounded-lg border border-[#805af5]/30 shadow-lg object-contain"
         />

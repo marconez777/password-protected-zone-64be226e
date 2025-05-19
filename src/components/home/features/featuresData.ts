@@ -19,7 +19,7 @@ const featuresData: Feature[] = [
       'Treinada por Consultores SEO',
       'Gemini Advanced 2.5 Pro',
     ],
-    imageSrc: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    imageSrc: '/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png',
     imageAlt: 'Mercado e Público Alvo',
   },
   {
@@ -31,7 +31,7 @@ const featuresData: Feature[] = [
       'Mapeamento da intenção de busca',
       'Estratégias personalizadas de conversão',
     ],
-    imageSrc: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    imageSrc: '/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png',
     imageAlt: 'Funil de Busca',
   },
   {
@@ -43,7 +43,7 @@ const featuresData: Feature[] = [
       'Descoberta de nichos inexplorados',
       'Recomendações de conteúdo estratégico',
     ],
-    imageSrc: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    imageSrc: '/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png',
     imageAlt: 'Palavras Chave',
   },
   {
@@ -55,7 +55,7 @@ const featuresData: Feature[] = [
       'Estrutura semântica otimizada',
       'Conteúdo atraente e relevante',
     ],
-    imageSrc: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    imageSrc: '/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png',
     imageAlt: 'Textos com SEO',
   },
   {
@@ -67,7 +67,7 @@ const featuresData: Feature[] = [
       'Calendário editorial estratégico',
       'Tópicos de alto potencial de tráfego',
     ],
-    imageSrc: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    imageSrc: '/lovable-uploads/013f4c16-a745-49c2-a756-d4659df9e3a1.png',
     imageAlt: 'Pautas de Blog',
   },
 ];
