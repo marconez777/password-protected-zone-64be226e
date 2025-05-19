@@ -1,0 +1,58 @@
+
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+
+interface SEOMetadataProps {
+  title: string;
+  description: string;
+  keywords: string;
+  ogImage: string;
+  canonicalUrl: string;
+  jsonLd: string;
+}
+
+const SEOMetadata: React.FC<SEOMetadataProps> = ({
+  title,
+  description,
+  keywords,
+  ogImage,
+  canonicalUrl,
+  jsonLd
+}) => {
+  return (
+    <Helmet>
+      {/* Metadados essenciais */}
+      <meta charSet="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="robots" content="index, follow" />
+      <meta name="author" content="MKRanker" />
+      <meta name="theme-color" content="#6B46C1" />
+
+      {/* SEO: Título e descrição */}
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+
+      {/* Open Graph (Facebook, LinkedIn, etc.) */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:image" content={ogImage} />
+
+      {/* Twitter Cards */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
+
+      {/* Canonical URL */}
+      <link rel="canonical" href={canonicalUrl} />
+
+      {/* Dados Estruturados (JSON-LD) */}
+      <script type="application/ld+json">{jsonLd}</script>
+    </Helmet>
+  );
+};
+
+export default SEOMetadata;
