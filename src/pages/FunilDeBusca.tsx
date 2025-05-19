@@ -62,25 +62,25 @@ const FunilDeBusca = () => {
         {/* Dados Estruturados (JSON-LD) */}
         <script type="application/ld+json">
           {`
-            {
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              "name": "MKRanker",
-              "operatingSystem": "All",
-              "applicationCategory": "SEOApplication",
-              "offers": {
-                "@type": "Offer",
-                "price": "97.00",
-                "priceCurrency": "BRL"
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "reviewCount": "120"
-              },
-              "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia",
-              "description": "Ferramenta de SEO com Inteligência Artificial que automatiza o Funil de Busca para encontrar palavras-chave com potencial de conversão."
-            }
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MKRanker",
+  "operatingSystem": "All",
+  "applicationCategory": "SEOApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "97.00",
+    "priceCurrency": "BRL"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "120"
+  },
+  "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia",
+  "description": "Ferramenta de SEO com Inteligência Artificial que automatiza o Funil de Busca para encontrar palavras-chave com potencial de conversão."
+}
           `}
         </script>
       </Helmet>
@@ -218,4 +218,3 @@ const FunilDeBusca = () => {
 };
 
 export default FunilDeBusca;
-
