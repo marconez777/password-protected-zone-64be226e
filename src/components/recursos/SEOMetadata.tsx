@@ -10,7 +10,7 @@ interface SEOMetadataProps {
   canonicalUrl: string;
   jsonLd: string;
   preload?: {href: string, as: string}[];
-  contentHTML?: string; // Nova propriedade para conteúdo SEO
+  contentHTML?: string; // Propriedade para conteúdo SEO
 }
 
 const SEOMetadata: React.FC<SEOMetadataProps> = ({
@@ -66,22 +66,8 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
         <>
           <meta name="seo-content" content={contentHTML} />
           
-          {/* Este conteúdo é injetado diretamente no HTML */}
-          <noscript>
-            <div className="seo-content" 
-                 dangerouslySetInnerHTML={{ __html: contentHTML }}
-                 style={{
-                   position: 'absolute',
-                   width: '1px',
-                   height: '1px',
-                   padding: '0',
-                   overflow: 'hidden',
-                   clip: 'rect(0, 0, 0, 0)',
-                   whiteSpace: 'nowrap',
-                   border: '0'
-                 }}
-            />
-          </noscript>
+          {/* Este conteúdo é injetado diretamente no HTML - FIXED: wrapping children in braces */}
+          <noscript>{contentHTML}</noscript>
         </>
       )}
     </Helmet>
