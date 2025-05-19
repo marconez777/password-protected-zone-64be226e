@@ -15,47 +15,47 @@ const cards: CardItem[] = [
   {
     icon: Search,
     title: "Funil de Busca",
-    description: "Otimize sua estratégia de busca orgânica e conquiste melhores posições nos buscadores."
+    description: "Otimize sua estratégia de busca orgânica com análises geradas por GPT para conquistar melhores posições nos buscadores."
   },
   {
     icon: Key,
     title: "Palavras-chave",
-    description: "Encontre as melhores keywords com alto potencial de conversão para o seu negócio."
+    description: "Encontre as melhores keywords com alto potencial de conversão usando inteligência artificial GPT para o seu negócio."
   },
   {
     icon: Users,
     title: "Mercado e Público-alvo",
-    description: "Análise detalhada do seu mercado e público-alvo para estratégias mais assertivas."
+    description: "Análise detalhada do seu mercado e público-alvo gerada por IA Gemini para estratégias mais assertivas."
   },
   {
     icon: FileText,
     title: "Texto SEO para LP",
-    description: "Conteúdo otimizado para landing pages que convertem e ranqueiam."
+    description: "Conteúdo otimizado para landing pages gerado por GPT que convertem e ranqueiam melhor nos buscadores."
   },
   {
     icon: FileText,
     title: "Texto SEO para Produto",
-    description: "Descrições poderosas para seus produtos com foco em SEO e conversão."
+    description: "Descrições poderosas para seus produtos criadas com IA Gemini com foco em SEO e conversão."
   },
   {
     icon: FileText,
     title: "Texto SEO para Blog",
-    description: "Artigos otimizados para seu blog alcançar as primeiras posições nos buscadores."
+    description: "Artigos otimizados gerados por GPT para seu blog alcançar as primeiras posições nos buscadores."
   },
   {
     icon: FileText,
     title: "Pautas para Blog",
-    description: "Ideias e estruturas completas para criar um calendário de conteúdo eficiente."
+    description: "Ideias e estruturas completas geradas por IA Gemini para criar um calendário de conteúdo eficiente."
   },
   {
     icon: FileText,
     title: "Meta Dados",
-    description: "Títulos e descrições otimizados para atrair mais cliques nos resultados de busca."
+    description: "Títulos e descrições otimizados com GPT para atrair mais cliques nos resultados de busca."
   },
   {
     icon: Image,
     title: "Gerador de Imagens",
-    description: "Crie imagens profissionais otimizadas para SEO e engajamento.",
+    description: "Crie imagens profissionais usando IA Gemini otimizadas para SEO e engajamento.",
     soon: true
   }
 ];
