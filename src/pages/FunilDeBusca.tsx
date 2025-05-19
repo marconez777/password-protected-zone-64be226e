@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const FunilDeBusca = () => {
   const [activeItem, setActiveItem] = useState('funil');
   
-  // Updated sidebar items with new paths
+  // Updated sidebar items with correct paths
   const sidebarItems = [
     { id: 'funil', label: 'Funil de Busca', path: '/sobre-funil-de-busca' },
     { id: 'palavras-chave', label: 'Palavras-chave', path: '/sobre-keywords' },
