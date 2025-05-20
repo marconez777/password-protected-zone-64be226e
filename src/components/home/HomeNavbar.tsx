@@ -21,10 +21,10 @@ const HomeNavbar = () => {
       clearTimeout(timerRef.current);
     }
     
-    // Set new timer to close the dropdown after 4 seconds
+    // Set new timer to close the dropdown after 1 second (changed from 4 seconds)
     timerRef.current = setTimeout(() => {
       setIsResourcesOpen(false);
-    }, 4000); // 4 seconds
+    }, 1000); // 1 second (changed from 4000)
   };
   
   // Reset timer when dropdown state changes
