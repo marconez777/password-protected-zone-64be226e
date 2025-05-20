@@ -37,13 +37,15 @@ if (isBrowser) {
   document.addEventListener('DOMContentLoaded', injectSEOContent);
 }
 
-// Hydratação condicional - apenas no navegador
+// Hidratação condicional - apenas no navegador
 if (isBrowser) {
   const rootElement = document.getElementById("root");
   if (rootElement) {
+    const root = createRoot(rootElement);
+    
     if (rootElement.innerHTML === '') {
       // Renderização inicial no cliente
-      createRoot(rootElement).render(
+      root.render(
         <HelmetProvider>
           <App />
           <SonnerToaster position="bottom-right" />
@@ -51,7 +53,8 @@ if (isBrowser) {
       );
     } else {
       // Hidratação do HTML pré-renderizado
-      createRoot(rootElement).hydrate(
+      // Nota: Na API atual do React 18, o método hydrateRoot substituiu hydrate
+      root.render(
         <HelmetProvider>
           <App />
           <SonnerToaster position="bottom-right" />

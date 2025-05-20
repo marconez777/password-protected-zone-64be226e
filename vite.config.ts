@@ -4,7 +4,6 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import preact from '@preact/preset-vite';
 import { Plugin } from 'vite';
 
 // Função personalizada para pré-renderizar as rotas
@@ -14,13 +13,13 @@ function preRenderPlugin(): Plugin {
     closeBundle: async () => {
       console.log('Pre-rendering routes...');
       
-      // Importamos os módulos necessários aqui para evitar problemas durante a compilação
-      const { JSDOM } = await import('jsdom');
-      const fs = await import('fs');
-      const { renderToString } = await import('react-dom/server');
-      const { createElement } = await import('react');
-      
       try {
+        // Importamos os módulos necessários aqui para evitar problemas durante a compilação
+        const { JSDOM } = await import('jsdom');
+        const fs = await import('fs');
+        const { renderToString } = await import('react-dom/server');
+        const { createElement } = await import('react');
+        
         // Lê o arquivo HTML base
         const template = fs.readFileSync('./dist/index.html', 'utf-8');
         
@@ -32,12 +31,13 @@ function preRenderPlugin(): Plugin {
           
           // Simula o DOM para SSR
           const dom = new JSDOM(template);
-          global.window = dom.window as any;
-          global.document = dom.window.document;
-          global.navigator = dom.window.navigator;
+          // Define tipos explícitos para o objeto global
+          (global as any).window = dom.window;
+          (global as any).document = dom.window.document;
+          (global as any).navigator = dom.window.navigator;
           
           // Carrega o componente App
-          const App = (await import('./src/App')).default;
+          const { App } = await import('./src/App');
           
           // Renderiza o componente para string HTML
           const appHtml = renderToString(createElement(App));
