@@ -17,7 +17,8 @@ export * from './dialog';
 export * from './drawer';
 export * from './form';
 export * from './hover-card';
-export * from './sonner';
+// Export sonner with a renamed Toaster to avoid conflict
+export { toast as sonnerToast, Toaster as SonnerToaster } from './sonner';
 export * from './toast';
 export * from './toaster';
 export * from './skeleton';

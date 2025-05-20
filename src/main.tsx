@@ -1,8 +1,7 @@
-
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { Toaster } from "sonner"
+import { SonnerToaster } from "./components/ui"
 import { HelmetProvider } from 'react-helmet-async';
 
 // Cria um elemento para injetar o conteúdo SEO diretamente no HTML
@@ -48,7 +47,7 @@ if (isBrowser) {
       root.render(
         <HelmetProvider>
           <App />
-          <Toaster position="bottom-right" />
+          <SonnerToaster position="bottom-right" />
         </HelmetProvider>
       );
     } else {
@@ -57,7 +56,7 @@ if (isBrowser) {
       root.render(
         <HelmetProvider>
           <App />
-          <Toaster position="bottom-right" />
+          <SonnerToaster position="bottom-right" />
         </HelmetProvider>
       );
     }
