@@ -121,6 +121,14 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
         
         <div className="overflow-x-auto">
           <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50">
+                <TableHead className="font-semibold text-gray-700">Palavra-chave</TableHead>
+                <TableHead className="font-semibold text-gray-700">Relação</TableHead>
+                <TableHead className="font-semibold text-gray-700">Volume de Busca</TableHead>
+                <TableHead className="font-semibold text-gray-700">CPC (R$)</TableHead>
+              </TableRow>
+            </TableHeader>
             <TableBody>
               {keywords.map((item, index) => (
                 <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
