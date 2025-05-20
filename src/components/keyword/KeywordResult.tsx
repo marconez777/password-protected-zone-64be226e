@@ -1,103 +1,25 @@
 
-import { useEffect, useState } from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { ResourceResultDisplay } from '../shared/ResourceResultDisplay';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { KeywordHistoryTable } from './KeywordHistoryTable';
+import { useKeywordData } from '@/hooks/useKeywordData';
 
 type KeywordResultProps = {
   result: any;
 };
 
-type KeywordData = {
-  keyword: string;
-  relation?: string;
-  volume?: string;
-  cpc?: string;
-};
-
 export const KeywordResult = ({ result }: KeywordResultProps) => {
-  const [keywords, setKeywords] = useState<KeywordData[]>([]);
-  
-  useEffect(() => {
-    if (result) {
-      console.log("Processing result:", result);
-      
-      if (result.message) {
-        // Se houver uma mensagem de erro, não processar as palavras-chave
-        setKeywords([]);
-        return;
-      }
-      
-      // Verificar se o resultado tem o formato de saída do webhook
-      if (result.output) {
-        // Dividir por novas linhas e filtrar linhas vazias
-        const lines = result.output
-          .split('\n')
-          .filter(line => line.trim().length > 0);
-        
-        // Processar cada linha para extrair informações estruturadas, pulando as duas primeiras linhas
-        const processedKeywords: KeywordData[] = lines
-          .slice(2) // Pula as duas primeiras linhas (cabeçalho e linha de título)
-          .map(line => {
-            // Remover números e pontos no início (ex., "1. ")
-            const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
-            
-            // Tentar analisar a linha se for no formato "| keyword | relation | volume | cpc |"
-            const parts = cleanLine.split('|').map(part => part.trim()).filter(Boolean);
-            
-            if (parts.length >= 1) {
-              return {
-                keyword: parts[0],
-                relation: parts.length > 1 ? parts[1] : "-",
-                volume: parts.length > 2 ? parts[2] : "-",
-                cpc: parts.length > 3 ? parts[3] : "-"
-              };
-            }
-            
-            // Fallback para linhas que não seguem o formato esperado
-            return {
-              keyword: cleanLine,
-              relation: "-",
-              volume: "-",
-              cpc: "-"
-            };
-          });
-          
-        console.log("Extracted keywords data:", processedKeywords);
-        setKeywords(processedKeywords);
-      } else if (result.palavras_relacionadas) {
-        // Suporte para o formato anterior
-        const keywordArray = Array.isArray(result.palavras_relacionadas) 
-          ? result.palavras_relacionadas 
-          : Object.values(result.palavras_relacionadas);
-        
-        // Converter para o novo formato de dados, mas pular as duas primeiras entradas
-        const processedKeywords = keywordArray
-          .slice(2) // Pula as duas primeiras entradas
-          .map((keyword: string) => ({
-            keyword: keyword,
-            relation: "-",
-            volume: "-",
-            cpc: "-"
-          }));
-        
-        setKeywords(processedKeywords);
-      } else {
-        console.error("O resultado não contém a estrutura de dados esperada:", result);
-        setKeywords([]);
-      }
-    }
-  }, [result]);
+  const { keywords, originalKeyword, hasError } = useKeywordData(result);
 
   if (!result) {
     return null;
   }
 
-  if (result.message) {
+  if (hasError || result.message) {
     return (
       <Alert className="mt-4">
         <AlertTitle>Mensagem</AlertTitle>
-        <AlertDescription>{result.message}</AlertDescription>
+        <AlertDescription>{result.message || "Ocorreu um erro ao processar os resultados."}</AlertDescription>
       </Alert>
     );
   }
@@ -113,9 +35,6 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
     );
   }
 
-  // Obter a palavra-chave original da entrada
-  const originalKeyword = result.input_original?.palavras_chave || result?.palavras_chave || "Palavra-chave";
-
   return (
     <ResourceResultDisplay title="Palavras-chave Relacionadas">
       <div className="bg-white rounded-lg p-4 border border-gray-200">
@@ -123,28 +42,7 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
           Palavras-chave relacionadas a "{originalKeyword}"
         </h4>
         
-        <div className="overflow-x-auto">
-          <Table className="border border-gray-300">
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold text-gray-700 border border-gray-300">Palavra-chave</TableHead>
-                <TableHead className="font-semibold text-gray-700 border border-gray-300">Relação</TableHead>
-                <TableHead className="font-semibold text-gray-700 border border-gray-300">Volume de Busca</TableHead>
-                <TableHead className="font-semibold text-gray-700 border border-gray-300">CPC (R$)</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {keywords.map((item, index) => (
-                <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <TableCell className="py-2 border border-gray-300">{item.keyword}</TableCell>
-                  <TableCell className="py-2 border border-gray-300">{item.relation}</TableCell>
-                  <TableCell className="py-2 border border-gray-300">{item.volume}</TableCell>
-                  <TableCell className="py-2 border border-gray-300">{item.cpc}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <KeywordHistoryTable keywords={keywords} />
       </div>
     </ResourceResultDisplay>
   );
