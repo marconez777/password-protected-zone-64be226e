@@ -28,8 +28,6 @@ import TextoSEOProdutoPublic from "@/pages/TextoSEOProdutoPublic";
 import TextoSEOBlogPublic from "@/pages/TextoSEOBlogPublic";
 import PautasBlogPublic from "@/pages/PautasBlogPublic";
 import MetaDadosPublic from "@/pages/MetaDadosPublic";
-import BlogPage from "@/pages/BlogPage";
-import BlogPostPage from "@/pages/BlogPostPage";
 
 const App = () => {
   return (
@@ -43,10 +41,6 @@ const App = () => {
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/cadastro-enviado" element={<CadastroEnviado />} />
             <Route path="/recursos" element={<RecursosPage />} />
-            
-            {/* Blog Routes */}
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:postId" element={<BlogPostPage />} />
             
             {/* Institutional Resource Pages - New URL Pattern */}
             <Route path="/recursos/funil-de-busca-com-ia" element={<FunilDeBusca />} />

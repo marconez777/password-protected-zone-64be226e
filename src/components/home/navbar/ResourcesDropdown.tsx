@@ -1,143 +1,88 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import NavbarDropdownItem from './NavbarDropdownItem';
 
 interface ResourcesDropdownProps {
-  isMobile?: boolean;
-  isOpen?: boolean;
-  setIsOpen?: (isOpen: boolean) => void;
-  startAutoCloseTimer?: () => void;
-  onItemClick?: () => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  startAutoCloseTimer: () => void;
+  onItemClick: () => void;
 }
 
-const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({ 
-  isMobile = false,
+const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
   isOpen,
   setIsOpen,
   startAutoCloseTimer,
   onItemClick
 }) => {
-  // We'll use controlled state if provided, otherwise we let the DropdownMenu handle its own state
-  const handleTriggerClick = () => {
-    if (setIsOpen && typeof isOpen !== 'undefined') {
-      setIsOpen(!isOpen);
-      if (!isOpen && startAutoCloseTimer) {
-        startAutoCloseTimer();
+  const resourcesRef = useRef<HTMLLIElement>(null);
+
+  // Handle clicks outside the dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (resourcesRef.current && !resourcesRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
       }
-    }
-  };
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setIsOpen]);
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger asChild>
-        <button
-          className={`inline-flex items-center gap-1 font-medium transition-colors ${
-            isMobile
-              ? 'text-gray-300 hover:text-white w-full justify-between'
-              : 'text-gray-300 hover:text-white'
-          }`}
-          onClick={handleTriggerClick}
-        >
-          <span>Recursos</span>
-          {isMobile ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4 transition group-hover:rotate-180" />
-          )}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className={`w-[240px] ${
-          isMobile ? 'bg-[#252525] text-white border-gray-700' : ''
-        }`}
+    <li className="relative group" 
+      ref={resourcesRef}
+      onClick={() => setIsOpen(!isOpen)}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseMove={() => isOpen && startAutoCloseTimer()}>
+      <Link
+        to="/recursos"
+        className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
       >
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/funil-de-busca-com-ia"
-              title="Funil de Busca"
-              description="Palavras-chave para cada etapa do funil"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/palavras-chave-com-ia"
-              title="Palavras-chave"
-              description="Encontre palavras-chave relevantes"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/mercado-e-publico-alvo-com-ia"
-              title="Mercado e Público-alvo"
-              description="Defina seu mercado e público ideal"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/texto-seo-lp-com-ia"
-              title="Texto SEO para LP"
-              description="Crie textos otimizados para landing pages"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/texto-seo-produto-com-ia"
-              title="Texto SEO para Produto"
-              description="Otimize descrições de produtos"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/texto-seo-blog-com-ia"
-              title="Texto SEO para Blog"
-              description="Gere conteúdo otimizado para blogs"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/pautas-blog-com-ia"
-              title="Pautas para Blog"
-              description="Crie pautas de conteúdo relevantes"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/recursos/meta-dados-com-ia"
-              title="Meta Dados"
-              description="Otimize meta tags para SEO"
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <NavbarDropdownItem
-              href="/blog"
-              title="Blog"
-              description="Artigos e novidades sobre SEO"
-              isNew={true}
-              onClick={onItemClick}
-            />
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        Recursos <ChevronDown className="h-4 w-4 ml-1" />
+      </Link>
+      
+      {isOpen && (
+        <div 
+          className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]"
+          onMouseMove={() => startAutoCloseTimer()}
+          onMouseEnter={() => startAutoCloseTimer()}>
+          <ul className="py-2">
+            <NavbarDropdownItem to="/recursos/funil-de-busca-com-ia" onClick={onItemClick}>
+              Funil de Busca
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/palavras-chave-com-ia" onClick={onItemClick}>
+              Palavras-chave
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/mercado-e-publico-alvo-com-ia" onClick={onItemClick}>
+              Mercado e Público-alvo
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/texto-seo-lp-com-ia" onClick={onItemClick}>
+              Texto SEO para LP
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/texto-seo-produto-com-ia" onClick={onItemClick}>
+              Texto SEO para Produto
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/texto-seo-blog-com-ia" onClick={onItemClick}>
+              Texto SEO para Blog
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/pautas-blog-com-ia" onClick={onItemClick}>
+              Pautas para Blog
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="/recursos/meta-dados-com-ia" onClick={onItemClick}>
+              Meta Dados
+            </NavbarDropdownItem>
+            <NavbarDropdownItem to="#" isUpcoming>
+              Gerador de Imagens
+            </NavbarDropdownItem>
+          </ul>
+        </div>
+      )}
+    </li>
   );
 };
 

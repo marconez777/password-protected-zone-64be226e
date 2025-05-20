@@ -5,7 +5,6 @@ import { ChevronDown, X } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import NavbarDropdownItem from './NavbarDropdownItem';
 import { useAuth } from '@/providers/auth';
-import ResourcesDropdown from './ResourcesDropdown';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -53,87 +52,51 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 className="flex items-center justify-between text-white text-xl py-2"
                 onClick={() => setIsResourcesOpen(!isResourcesOpen)}
               >
-                <span className="text-white flex-1">Recursos</span>
+                <Link 
+                  to="/recursos"
+                  className="text-white flex-1"
+                  onClick={closeMenu}
+                >
+                  Recursos
+                </Link>
                 <ChevronDown className={`h-5 w-5 transition-transform ${isResourcesOpen ? 'rotate-180' : ''}`} />
               </div>
               
               {isResourcesOpen && (
                 <ul className="pl-4 space-y-2 mt-2">
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/funil-de-busca-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Funil de Busca
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/palavras-chave-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Palavras-chave
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/mercado-e-publico-alvo-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Mercado e Público-alvo
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/texto-seo-lp-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Texto SEO para LP
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/texto-seo-produto-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Texto SEO para Produto
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/texto-seo-blog-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Texto SEO para Blog
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/pautas-blog-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Pautas para Blog
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem 
-                      to="/recursos/meta-dados-com-ia" 
-                      onClick={closeMenu}
-                    >
-                      Meta Dados
-                    </NavbarDropdownItem>
-                  </li>
-                  <li>
-                    <NavbarDropdownItem to="/blog" isNew={true}>
-                      Blog
-                    </NavbarDropdownItem>
-                  </li>
+                  <NavbarDropdownItem to="/recursos/funil-de-busca-com-ia" onClick={closeMenu}>
+                    Funil de Busca
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/palavras-chave-com-ia" onClick={closeMenu}>
+                    Palavras-chave
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/mercado-e-publico-alvo-com-ia" onClick={closeMenu}>
+                    Mercado e Público-alvo
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/texto-seo-lp-com-ia" onClick={closeMenu}>
+                    Texto SEO para LP
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/texto-seo-produto-com-ia" onClick={closeMenu}>
+                    Texto SEO para Produto
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/texto-seo-blog-com-ia" onClick={closeMenu}>
+                    Texto SEO para Blog
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/pautas-blog-com-ia" onClick={closeMenu}>
+                    Pautas para Blog
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="/recursos/meta-dados-com-ia" onClick={closeMenu}>
+                    Meta Dados
+                  </NavbarDropdownItem>
+                  <NavbarDropdownItem to="#" isUpcoming>
+                    Gerador de Imagens
+                  </NavbarDropdownItem>
                 </ul>
               )}
             </li>
             <li>
               <Link 
-                to="/blog" 
+                to="/cadastro" 
                 className="text-white text-xl block py-2"
                 onClick={closeMenu}
               >
