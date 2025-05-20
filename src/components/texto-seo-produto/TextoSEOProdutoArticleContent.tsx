@@ -1,17 +1,12 @@
-
 import React from 'react';
 import { Box } from 'lucide-react';
 import { ShoppingBag, Tag } from 'lucide-react';
-
 const TextoSEOProdutoArticleContent = () => {
-  return (
-    <div className="bg-[#1A1A1A] rounded-lg p-8">
+  return <div className="bg-[#1A1A1A] rounded-lg p-8">
       <h1 className="text-3xl font-bold text-white mb-6">Gerador de Texto para Descrição de Produto com IA</h1>
       
       <div className="prose prose-invert max-w-none">
-        <p className="text-gray-300 mb-6">
-          Ter uma descrição de produto com IA não é apenas uma vantagem competitiva—é uma necessidade. Imagine transformar suas descrições de produtos em verdadeiros imãs de clientes, levando seu e-commerce ao topo dos resultados do Google! Com o avanço das tecnologias de inteligência artificial, geradores de texto são capazes de proporcionar um salto em qualidade e eficácia nas descrições de produtos para catálogos online.
-        </p>
+        <p className="text-gray-300 mb-6">Ter uma descrição de produto com IA não é apenas uma vantagem competitiva, é uma necessidade. Imagine transformar suas descrições de produtos em verdadeiros imãs de clientes, levando seu e-commerce ao topo dos resultados do Google! Com o avanço das tecnologias de inteligência artificial, geradores de texto são capazes de proporcionar um salto em qualidade e eficácia nas descrições de produtos para catálogos online.</p>
         
         <h2 className="text-2xl font-bold text-white mt-10 mb-4">O Poder da Descrição de Produto com IA</h2>
         <p className="text-gray-300 mb-6">
@@ -19,11 +14,7 @@ const TextoSEOProdutoArticleContent = () => {
         </p>
         
         <div className="my-10">
-          <img 
-            src="/lovable-uploads/6d19dc8d-6d14-473e-8684-2a9ad7b3c68e.png" 
-            alt="Texto SEO para Produto" 
-            className="w-full rounded-lg border border-gray-700"
-          />
+          <img src="/lovable-uploads/6d19dc8d-6d14-473e-8684-2a9ad7b3c68e.png" alt="Texto SEO para Produto" className="w-full rounded-lg border border-gray-700" />
         </div>
         
         <h3 className="text-xl font-bold text-white mt-8 mb-4">Benefícios de um Gerador de Texto com Palavras Chave</h3>
@@ -94,8 +85,6 @@ const TextoSEOProdutoArticleContent = () => {
           Agora que você conhece os benefícios incomparáveis de uma descrição de produto com IA, é hora de agir. Transforme suas descrições de e-commerce em ferramentas poderosas de venda. Comece agora mesmo a explorar as possibilidades e estude implementar essa tecnologia que está redesenhando o futuro do comércio online.
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default TextoSEOProdutoArticleContent;
