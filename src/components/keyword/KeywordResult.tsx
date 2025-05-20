@@ -4,20 +4,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResourceResultDisplay } from '../shared/ResourceResultDisplay';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-type KeywordItem = {
-  keyword: string;
-  volume?: string | number;
-  cpc?: string | number;
-}
 
 type KeywordResultProps = {
   result: any;
 };
 
 export const KeywordResult = ({ result }: KeywordResultProps) => {
-  const [keywordItems, setKeywordItems] = useState<KeywordItem[]>([]);
+  const [keywords, setKeywords] = useState<string[]>([]);
   
   useEffect(() => {
     if (result) {
@@ -25,7 +18,7 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
       
       if (result.message) {
         // If there's an error message, don't process keywords
-        setKeywordItems([]);
+        setKeywords([]);
         return;
       }
       
@@ -39,32 +32,17 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
           .map(line => line.replace(/^\d+\.\s*/, '').trim());
           
         console.log("Extracted keywords:", lines);
-        
-        // Convert to table format with empty volume and CPC
-        const formattedItems = lines.map(keyword => ({
-          keyword,
-          volume: "-",
-          cpc: "-"
-        }));
-        
-        setKeywordItems(formattedItems);
+        setKeywords(lines);
       } else if (result.palavras_relacionadas) {
         // Support for the previous format
         const keywordArray = Array.isArray(result.palavras_relacionadas) 
           ? result.palavras_relacionadas 
           : Object.values(result.palavras_relacionadas);
         
-        // Convert to table format
-        const formattedItems = keywordArray.map((keyword: string) => ({
-          keyword,
-          volume: "-",
-          cpc: "-"
-        }));
-        
-        setKeywordItems(formattedItems);
+        setKeywords(keywordArray as string[]);
       } else {
         console.error("Result doesn't contain expected data structure:", result);
-        setKeywordItems([]);
+        setKeywords([]);
       }
     }
   }, [result]);
@@ -82,7 +60,7 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
     );
   }
 
-  if (keywordItems.length === 0) {
+  if (keywords.length === 0) {
     return (
       <Alert className="mt-4">
         <AlertTitle>Nenhum resultado encontrado</AlertTitle>
@@ -102,24 +80,11 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
         <h4 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1">
           Palavras-chave relacionadas a "{originalKeyword}"
         </h4>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Palavra</TableHead>
-              <TableHead>Volume de Busca</TableHead>
-              <TableHead>CPC</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {keywordItems.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{item.keyword}</TableCell>
-                <TableCell>{item.volume}</TableCell>
-                <TableCell>{item.cpc}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <ul className="list-disc pl-5 space-y-2">
+          {keywords.map((keyword, index) => (
+            <li key={index} className="text-gray-800">{keyword}</li>
+          ))}
+        </ul>
       </div>
     </ResourceResultDisplay>
   );
