@@ -44,8 +44,8 @@ function preRenderPlugin(): Plugin {
               jsxFragmentFactory: 'Fragment',
             });
             
-            // Carrega o componente App - usando require para beneficiar da configuração acima
-            const { App } = require('./src/App.tsx');
+            // Carrega o componente App - usando require diretamente sem path aliases
+            const { App } = require('../src/App.tsx');
             
             // Renderiza o componente para string HTML
             const appHtml = renderToString(createElement(App));
