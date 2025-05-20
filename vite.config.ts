@@ -36,38 +36,49 @@ function preRenderPlugin(): Plugin {
           (global as any).document = dom.window.document;
           (global as any).navigator = dom.window.navigator;
           
-          // Carrega o componente App
-          const { App } = await import('./src/App');
-          
-          // Renderiza o componente para string HTML
-          const appHtml = renderToString(createElement(App));
-          
-          // Injeta o HTML no div #root
-          const rootElement = dom.window.document.querySelector('#root');
-          if (rootElement) {
-            rootElement.innerHTML = appHtml;
+          try {
+            // Configuração para lidar com módulos JSX no ambiente de SSR
+            require('esbuild-register/dist/node').register({
+              jsx: true,
+              jsxFactory: 'createElement',
+              jsxFragmentFactory: 'Fragment',
+            });
+            
+            // Carrega o componente App - usando require para beneficiar da configuração acima
+            const { App } = require('./src/App.tsx');
+            
+            // Renderiza o componente para string HTML
+            const appHtml = renderToString(createElement(App));
+            
+            // Injeta o HTML no div #root
+            const rootElement = dom.window.document.querySelector('#root');
+            if (rootElement) {
+              rootElement.innerHTML = appHtml;
+            }
+            
+            // Adiciona os meta dados SEO
+            const head = dom.window.document.querySelector('head');
+            if (head) {
+              // Meta tags básicas para SEO
+              const metaTags = `
+                <meta name="description" content="MKRanker - Automatize o SEO com IA para melhorar seu rankeamento no Google com ferramentas poderosas e estratégias avançadas." />
+                <meta name="keywords" content="SEO, marketing digital, IA para SEO, rankeamento Google, estratégias SEO, otimização de sites" />
+              `;
+              head.innerHTML += metaTags;
+            }
+            
+            // Obtém o HTML final
+            const html = dom.serialize();
+            
+            // Cria as pastas necessárias
+            const targetPath = route === '/' ? './dist/index.html' : `./dist${route}/index.html`;
+            
+            // Escreve o arquivo HTML pré-renderizado
+            fs.writeFileSync(targetPath, html, 'utf-8');
+            console.log(`Pre-rendered: ${targetPath}`);
+          } catch (error) {
+            console.error('Error during component rendering:', error);
           }
-          
-          // Adiciona os meta dados SEO
-          const head = dom.window.document.querySelector('head');
-          if (head) {
-            // Meta tags básicas para SEO
-            const metaTags = `
-              <meta name="description" content="MKRanker - Automatize o SEO com IA para melhorar seu rankeamento no Google com ferramentas poderosas e estratégias avançadas." />
-              <meta name="keywords" content="SEO, marketing digital, IA para SEO, rankeamento Google, estratégias SEO, otimização de sites" />
-            `;
-            head.innerHTML += metaTags;
-          }
-          
-          // Obtém o HTML final
-          const html = dom.serialize();
-          
-          // Cria as pastas necessárias
-          const targetPath = route === '/' ? './dist/index.html' : `./dist${route}/index.html`;
-          
-          // Escreve o arquivo HTML pré-renderizado
-          fs.writeFileSync(targetPath, html, 'utf-8');
-          console.log(`Pre-rendered: ${targetPath}`);
         }
       } catch (error) {
         console.error('Error during pre-rendering:', error);
