@@ -31,7 +31,21 @@ import MetaDadosPublic from "@/pages/MetaDadosPublic";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 
+// Verificar se estamos no navegador
+const isBrowser = typeof window !== 'undefined';
+
 const App = () => {
+  // Se não estivermos no navegador, retornamos apenas o componente da página inicial
+  // para pré-renderização, sem o BrowserRouter que não funciona no SSR
+  if (!isBrowser) {
+    return (
+      <HelmetProvider>
+        <HomePage />
+      </HelmetProvider>
+    );
+  }
+  
+  // Renderização para o cliente (navegador)
   return (
     <AuthProvider>
       <HelmetProvider>

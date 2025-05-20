@@ -29,12 +29,37 @@ const injectSEOContent = () => {
   }
 };
 
-// Executa antes da hidratação do React
-document.addEventListener('DOMContentLoaded', injectSEOContent);
+// Função para checar se estamos no navegador
+const isBrowser = typeof window !== 'undefined';
 
-createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
-    <App />
-    <SonnerToaster position="bottom-right" />
-  </HelmetProvider>
-);
+// Executa antes da hidratação do React apenas no navegador
+if (isBrowser) {
+  document.addEventListener('DOMContentLoaded', injectSEOContent);
+}
+
+// Hydratação condicional - apenas no navegador
+if (isBrowser) {
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    if (rootElement.innerHTML === '') {
+      // Renderização inicial no cliente
+      createRoot(rootElement).render(
+        <HelmetProvider>
+          <App />
+          <SonnerToaster position="bottom-right" />
+        </HelmetProvider>
+      );
+    } else {
+      // Hidratação do HTML pré-renderizado
+      createRoot(rootElement).hydrate(
+        <HelmetProvider>
+          <App />
+          <SonnerToaster position="bottom-right" />
+        </HelmetProvider>
+      );
+    }
+  }
+}
+
+// Exportamos App para SSR
+export { App };
