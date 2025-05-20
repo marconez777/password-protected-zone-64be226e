@@ -11,20 +11,31 @@ export function formatMarkdownContent(content: string): React.ReactNode {
   
   // Função para processar o conteúdo markdown
   const processText = (text: string) => {
-    // Processar títulos (deve ser feito antes de processar negrito/itálico para evitar conflitos)
-    text = text.replace(/^### (.*?)$/gm, '<h3 class="text-lg font-bold mb-2 mt-4">$1</h3>');
-    text = text.replace(/^## (.*?)$/gm, '<h2 class="text-xl font-bold mb-3 mt-5">$1</h2>');
-    text = text.replace(/^# (.*?)$/gm, '<h1 class="text-2xl font-bold mb-4 mt-6">$1</h1>');
+    // Processar markdown para cabeçalhos (H1-H6)
+    text = text.replace(/^#{6}\s+(.*?)$/gm, '<h6 class="text-sm font-bold mb-1 mt-3">$1</h6>');
+    text = text.replace(/^#{5}\s+(.*?)$/gm, '<h5 class="text-base font-bold mb-1 mt-3">$1</h5>');
+    text = text.replace(/^#{4}\s+(.*?)$/gm, '<h4 class="text-base font-bold mb-2 mt-3">$1</h4>');
+    text = text.replace(/^#{3}\s+(.*?)$/gm, '<h3 class="text-lg font-bold mb-2 mt-4">$1</h3>');
+    text = text.replace(/^#{2}\s+(.*?)$/gm, '<h2 class="text-xl font-bold mb-3 mt-5">$1</h2>');
+    text = text.replace(/^#{1}\s+(.*?)$/gm, '<h1 class="text-2xl font-bold mb-4 mt-6">$1</h1>');
     
     // Processar negrito
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Processar itálico
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    text = text.replace(/_(.*?)_/g, '<em>$1</em>');
     
     // Processar listas
     text = text.replace(/^- (.*?)$/gm, '<li class="ml-5 list-disc">$1</li>');
+    text = text.replace(/^\* (.*?)$/gm, '<li class="ml-5 list-disc">$1</li>');
     text = text.replace(/^[0-9]+\. (.*?)$/gm, '<li class="ml-5 list-decimal">$1</li>');
+    
+    // Processar códigos inline
+    text = text.replace(/`(.*?)`/g, '<code class="bg-gray-100 text-gray-800 px-1 rounded font-mono">$1</code>');
+    
+    // Processar links
+    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">$1</a>');
     
     // Processar quebras de linha
     text = text.replace(/\n\n/g, '<br /><br />');

@@ -53,7 +53,7 @@ export function TextoSEOLPResult({ result }: { result: SEOResult | null }) {
         )}
         
         {processedResult.texto && (
-          <div className="whitespace-pre-wrap text-gray-700">
+          <div className="text-gray-700">
             {formatMarkdownContent(processedResult.texto)}
           </div>
         )}

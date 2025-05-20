@@ -2,6 +2,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResourceResultDisplay } from "@/components/shared/ResourceResultDisplay";
+import { formatMarkdownContent } from "@/lib/markdown-formatter";
 
 type PautasResult = {
   pautas?: string[];
@@ -104,7 +105,11 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
       <div className="bg-white rounded-lg p-4">
         <ul className="list-disc pl-5 space-y-2">
           {pautasToDisplay.map((pauta, index) => (
-            <li key={index} className="text-gray-800">{pauta}</li>
+            <li key={index} className="text-gray-800">
+              {typeof pauta === 'string' && pauta.includes('**') || pauta.includes('*') || pauta.includes('#') 
+                ? formatMarkdownContent(pauta) 
+                : pauta}
+            </li>
           ))}
         </ul>
       </div>
