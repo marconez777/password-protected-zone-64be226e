@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { BookOpen, AlignLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
+import TextoSEOBlogArticleContent from '@/components/texto-seo-blog/TextoSEOBlogArticleContent';
+import { textoSEOBlogJsonLdData } from '@/components/texto-seo-blog/TextoSEOBlogJSONLD';
 
 const TextoSEOBlogPublic = () => {
   const [activeItem, setActiveItem] = useState('texto-seo-blog');
@@ -24,13 +27,15 @@ const TextoSEOBlogPublic = () => {
     <div className="min-h-screen bg-[#121016] w-full">
       <HomeNavbar />
       
+      {/* Add JSON-LD for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: textoSEOBlogJsonLdData }}
+      />
+      
       <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
-        <div className="text-sm text-gray-400 mb-8">
-          <Link to="/" className="hover:text-white">Home</Link> {" > "} 
-          <Link to="/recursos" className="hover:text-white">recursos</Link> {" > "} 
-          <span className="text-white">Texto SEO para Blog</span>
-        </div>
+        <RecursoBreadcrumb currentPage="Texto SEO para Blog" />
         
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar - Fixed with scrollable content */}
@@ -69,52 +74,7 @@ const TextoSEOBlogPublic = () => {
           
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
-            <div className="bg-[#1A1A1A] rounded-lg p-8">
-              <h1 className="text-3xl font-bold text-white mb-6">Texto SEO para Blog</h1>
-              
-              <div className="prose prose-invert max-w-none">
-                <p className="text-gray-300 mb-6">
-                  Artigos de blog otimizados para SEO atraem tráfego orgânico, estabelecem autoridade e ajudam a converter visitantes. Nossa ferramenta de IA cria conteúdo envolvente e otimizado para mecanismos de busca.
-                </p>
-                
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como criar artigos otimizados para SEO</h2>
-                <p className="text-gray-300 mb-6">
-                  Criar artigos de blog otimizados para SEO envolve pesquisa de palavras-chave, estrutura adequada, conteúdo de qualidade e diversos elementos técnicos que ajudam os mecanismos de busca a entender e classificar seu conteúdo.
-                </p>
-                
-                <div className="my-10">
-                  <img 
-                    src="/lovable-uploads/d64b34e7-caf8-49c0-8617-e66a9df3ac78.png" 
-                    alt="Texto SEO para Blog" 
-                    className="w-full rounded-lg border border-gray-700"
-                  />
-                </div>
-                
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Elementos essenciais</h2>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <BookOpen size={18} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-medium text-white">Estrutura otimizada</h3>
-                      <p className="text-gray-300">Use títulos e subtítulos H1, H2, H3 organizados hierarquicamente com palavras-chave estratégicas.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <div className="bg-[#805af5] rounded-full p-2 mt-1">
-                      <AlignLeft size={18} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-medium text-white">Conteúdo de valor</h3>
-                      <p className="text-gray-300">Ofereça informações úteis, respostas às perguntas dos leitores e soluções para seus problemas.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TextoSEOBlogArticleContent />
           </div>
         </div>
       </div>
