@@ -15,15 +15,15 @@ interface Category {
 
 const BlogSidebar: React.FC<BlogSidebarProps> = ({ activeCategory, setActiveCategory }) => {
   const categories: Category[] = [
-    { id: 'all', label: 'Todos os Artigos', count: 25 },
-    { id: 'on-page', label: 'On Page', count: 4 },
-    { id: 'seo-tecnico', label: 'SEO Técnico', count: 3 },
-    { id: 'estrategia', label: 'Estratégia', count: 5 },
-    { id: 'redacao', label: 'Redação', count: 2 },
-    { id: 'backlinks', label: 'Backlinks', count: 2 },
-    { id: 'performance', label: 'Performance', count: 3 },
-    { id: 'marketing-conteudo', label: 'Marketing de Conteúdo', count: 4 },
-    { id: 'noticias', label: 'Notícias', count: 2 },
+    { id: 'all', label: 'Todos os Artigos', count: 0 },
+    { id: 'on-page', label: 'On Page', count: 0 },
+    { id: 'seo-tecnico', label: 'SEO Técnico', count: 0 },
+    { id: 'estrategia', label: 'Estratégia', count: 0 },
+    { id: 'redacao', label: 'Redação', count: 0 },
+    { id: 'backlinks', label: 'Backlinks', count: 0 },
+    { id: 'performance', label: 'Performance', count: 0 },
+    { id: 'marketing-conteudo', label: 'Marketing de Conteúdo', count: 0 },
+    { id: 'noticias', label: 'Notícias', count: 0 },
   ];
 
   return (

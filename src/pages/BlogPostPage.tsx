@@ -21,20 +21,23 @@ const BlogPostPage = () => {
     title: 'Como a Inteligência Artificial está Revolucionando o SEO',
     date: '15 Mai 2025',
     content: `
-      <h2>A Nova Era do SEO com Inteligência Artificial</h2>
-      <p>A inteligência artificial está transformando radicalmente a forma como abordamos o SEO. Desde algoritmos de pesquisa mais inteligentes até ferramentas de análise avançada, a IA está redefinindo as regras do jogo.</p>
+      <h2 class="text-2xl font-bold text-white mt-6 mb-3">A Nova Era do SEO com Inteligência Artificial</h2>
+      <p class="text-gray-300 mb-4">A inteligência artificial está transformando radicalmente a forma como abordamos o SEO. Desde algoritmos de pesquisa mais inteligentes até ferramentas de análise avançada, a IA está redefinindo as regras do jogo.</p>
       
-      <h3>Como a IA Está Mudando os Algoritmos de Busca</h3>
-      <p>Os motores de busca como o Google estão cada vez mais sofisticados graças à inteligência artificial. O RankBrain, sistema de IA do Google, ajuda a interpretar consultas de pesquisa e entender a intenção por trás delas, proporcionando resultados mais relevantes.</p>
+      <h3 class="text-xl font-bold text-white mt-6 mb-3">Como a IA Está Mudando os Algoritmos de Busca</h3>
+      <p class="text-gray-300 mb-4">Os motores de busca como o Google estão cada vez mais sofisticados graças à inteligência artificial. O RankBrain, sistema de IA do Google, ajuda a interpretar consultas de pesquisa e entender a intenção por trás delas, proporcionando resultados mais relevantes.</p>
       
-      <h3>Ferramentas de SEO Impulsionadas por IA</h3>
-      <p>Hoje, existem diversas ferramentas de SEO que utilizam IA para analisar dados e fornecer insights valiosos. Essas ferramentas podem identificar oportunidades de palavras-chave, analisar a concorrência e até mesmo prever tendências de pesquisa.</p>
+      <h3 class="text-xl font-bold text-white mt-6 mb-3">Ferramentas de SEO Impulsionadas por IA</h3>
+      <p class="text-gray-300 mb-4">Hoje, existem diversas ferramentas de SEO que utilizam IA para analisar dados e fornecer insights valiosos. Essas ferramentas podem identificar oportunidades de palavras-chave, analisar a concorrência e até mesmo prever tendências de pesquisa.</p>
       
-      <h3>Criação de Conteúdo com IA</h3>
-      <p>A IA está revolucionando a criação de conteúdo para SEO. Ferramentas como o GPT-4 podem gerar textos otimizados para SEO, sugerir títulos atraentes e até mesmo identificar lacunas de conteúdo que podem ser exploradas.</p>
+      <h3 class="text-xl font-bold text-white mt-6 mb-3">Criação de Conteúdo com IA</h3>
+      <p class="text-gray-300 mb-4">A IA está revolucionando a criação de conteúdo para SEO. Ferramentas como o GPT-4 podem gerar textos otimizados para SEO, sugerir títulos atraentes e até mesmo identificar lacunas de conteúdo que podem ser exploradas.</p>
       
-      <h3>O Futuro do SEO com IA</h3>
-      <p>À medida que a IA continua a evoluir, podemos esperar um SEO ainda mais personalizado e eficiente. A análise preditiva, a automação de tarefas e a otimização contínua serão fundamentais para o sucesso das estratégias de SEO no futuro.</p>
+      <h3 class="text-xl font-bold text-white mt-6 mb-3">O Futuro do SEO com IA</h3>
+      <p class="text-gray-300 mb-4">À medida que a IA continua a evoluir, podemos esperar um SEO ainda mais personalizado e eficiente. A análise preditiva, a automação de tarefas e a otimização contínua serão fundamentais para o sucesso das estratégias de SEO no futuro.</p>
+
+      <h3 class="text-xl font-bold text-white mt-6 mb-3">Conclusão</h3>
+      <p class="text-gray-300 mb-4">A inteligência artificial não é apenas uma tendência passageira no mundo do SEO, mas sim uma revolução que veio para ficar. As empresas que adotarem ferramentas e estratégias baseadas em IA terão uma vantagem competitiva significativa nos próximos anos.</p>
     `,
     image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
   };
@@ -100,8 +103,8 @@ const BlogPostPage = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">{post.title}</h1>
               
               <div 
-                className="prose prose-invert max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-h2:text-2xl prose-h3:text-xl prose-h3:mt-6 prose-p:text-base prose-p:leading-relaxed prose-p:mb-4"
                 dangerouslySetInnerHTML={{ __html: post.content }}
+                className="text-content"
               />
             </div>
           </Card>
