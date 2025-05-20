@@ -1,47 +1,85 @@
 
 import { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { ResourceResultDisplay } from '../shared/ResourceResultDisplay';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type KeywordResultProps = {
   result: any;
 };
 
+type KeywordData = {
+  keyword: string;
+  relation?: string;
+  volume?: string;
+  cpc?: string;
+};
+
 export const KeywordResult = ({ result }: KeywordResultProps) => {
-  const [keywords, setKeywords] = useState<string[]>([]);
+  const [keywords, setKeywords] = useState<KeywordData[]>([]);
   
   useEffect(() => {
     if (result) {
       console.log("Processing result:", result);
       
       if (result.message) {
-        // If there's an error message, don't process keywords
+        // Se houver uma mensagem de erro, não processar as palavras-chave
         setKeywords([]);
         return;
       }
       
-      // Check if result has output format from the webhook
+      // Verificar se o resultado tem o formato de saída do webhook
       if (result.output) {
-        // Split by new lines and filter empty lines
+        // Dividir por novas linhas e filtrar linhas vazias
         const lines = result.output
           .split('\n')
-          .filter(line => line.trim().length > 0)
-          // Remove numbers and dots at the beginning (e.g., "1. ")
-          .map(line => line.replace(/^\d+\.\s*/, '').trim());
+          .filter(line => line.trim().length > 0);
+        
+        // Processar cada linha para extrair informações estruturadas
+        const processedKeywords: KeywordData[] = lines.map(line => {
+          // Remover números e pontos no início (ex., "1. ")
+          const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
           
-        console.log("Extracted keywords:", lines);
-        setKeywords(lines);
+          // Tentar analisar a linha se for no formato "| keyword | relation | volume | cpc |"
+          const parts = cleanLine.split('|').map(part => part.trim()).filter(Boolean);
+          
+          if (parts.length >= 1) {
+            return {
+              keyword: parts[0],
+              relation: parts.length > 1 ? parts[1] : "-",
+              volume: parts.length > 2 ? parts[2] : "-",
+              cpc: parts.length > 3 ? parts[3] : "-"
+            };
+          }
+          
+          // Fallback para linhas que não seguem o formato esperado
+          return {
+            keyword: cleanLine,
+            relation: "-",
+            volume: "-",
+            cpc: "-"
+          };
+        });
+          
+        console.log("Extracted keywords data:", processedKeywords);
+        setKeywords(processedKeywords);
       } else if (result.palavras_relacionadas) {
-        // Support for the previous format
+        // Suporte para o formato anterior
         const keywordArray = Array.isArray(result.palavras_relacionadas) 
           ? result.palavras_relacionadas 
           : Object.values(result.palavras_relacionadas);
         
-        setKeywords(keywordArray as string[]);
+        // Converter para o novo formato de dados
+        const processedKeywords = keywordArray.map((keyword: string) => ({
+          keyword: keyword,
+          relation: "-",
+          volume: "-",
+          cpc: "-"
+        }));
+        
+        setKeywords(processedKeywords);
       } else {
-        console.error("Result doesn't contain expected data structure:", result);
+        console.error("O resultado não contém a estrutura de dados esperada:", result);
         setKeywords([]);
       }
     }
@@ -71,7 +109,7 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
     );
   }
 
-  // Get the original keyword from the input
+  // Obter a palavra-chave original da entrada
   const originalKeyword = result.input_original?.palavras_chave || result?.palavras_chave || "Palavra-chave";
 
   return (
@@ -80,11 +118,29 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
         <h4 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1">
           Palavras-chave relacionadas a "{originalKeyword}"
         </h4>
-        <ul className="list-disc pl-5 space-y-2">
-          {keywords.map((keyword, index) => (
-            <li key={index} className="text-gray-800">{keyword}</li>
-          ))}
-        </ul>
+        
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50">
+                <TableHead className="font-semibold text-gray-700">Palavra-chave</TableHead>
+                <TableHead className="font-semibold text-gray-700">Relação</TableHead>
+                <TableHead className="font-semibold text-gray-700">Volume de Busca</TableHead>
+                <TableHead className="font-semibold text-gray-700">CPC (R$)</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {keywords.map((item, index) => (
+                <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <TableCell className="py-2">{item.keyword}</TableCell>
+                  <TableCell className="py-2">{item.relation}</TableCell>
+                  <TableCell className="py-2">{item.volume}</TableCell>
+                  <TableCell className="py-2">{item.cpc}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </ResourceResultDisplay>
   );
