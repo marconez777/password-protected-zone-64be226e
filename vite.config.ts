@@ -44,7 +44,7 @@ function preRenderPlugin(): Plugin {
               jsxFragmentFactory: 'Fragment',
             });
             
-            // Carrega o componente App - usando require diretamente sem path aliases
+            // Carrega o componente App - usando require com caminho relativo
             const App = require('./src/App.tsx').default;
             
             // Renderiza o componente para string HTML
