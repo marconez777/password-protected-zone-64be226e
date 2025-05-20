@@ -124,22 +124,22 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
         </h4>
         
         <div className="overflow-x-auto">
-          <Table>
+          <Table className="border border-gray-300">
             <TableHeader>
               <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold text-gray-700">Palavra-chave</TableHead>
-                <TableHead className="font-semibold text-gray-700">Relação</TableHead>
-                <TableHead className="font-semibold text-gray-700">Volume de Busca</TableHead>
-                <TableHead className="font-semibold text-gray-700">CPC (R$)</TableHead>
+                <TableHead className="font-semibold text-gray-700 border border-gray-300">Palavra-chave</TableHead>
+                <TableHead className="font-semibold text-gray-700 border border-gray-300">Relação</TableHead>
+                <TableHead className="font-semibold text-gray-700 border border-gray-300">Volume de Busca</TableHead>
+                <TableHead className="font-semibold text-gray-700 border border-gray-300">CPC (R$)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {keywords.map((item, index) => (
                 <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <TableCell className="py-2">{item.keyword}</TableCell>
-                  <TableCell className="py-2">{item.relation}</TableCell>
-                  <TableCell className="py-2">{item.volume}</TableCell>
-                  <TableCell className="py-2">{item.cpc}</TableCell>
+                  <TableCell className="py-2 border border-gray-300">{item.keyword}</TableCell>
+                  <TableCell className="py-2 border border-gray-300">{item.relation}</TableCell>
+                  <TableCell className="py-2 border border-gray-300">{item.volume}</TableCell>
+                  <TableCell className="py-2 border border-gray-300">{item.cpc}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

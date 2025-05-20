@@ -8,6 +8,7 @@ import { Loader2, Eye, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type KeywordHistoryProps = {
   setActiveTab: (tab: string) => void;
@@ -104,18 +105,38 @@ export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryPr
     );
     
     // Extract keywords from the result
-    let keywords: string[] = [];
+    let keywords = [];
     const result = item.output_gerado;
     
     if (result?.output) {
-      keywords = result.output
+      const lines = result.output
         .split('\n')
-        .filter((line: string) => line.trim().length > 0)
-        .map((line: string) => line.replace(/^\d+\.\s*/, '').trim());
+        .filter((line: string) => line.trim().length > 0);
+      
+      // Process lines, skipping the first two
+      keywords = lines.slice(2).map((line: string) => {
+        const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
+        const parts = cleanLine.split('|').map((part: string) => part.trim()).filter(Boolean);
+        
+        return {
+          keyword: parts[0] || cleanLine,
+          relation: parts.length > 1 ? parts[1] : "-",
+          volume: parts.length > 2 ? parts[2] : "-",
+          cpc: parts.length > 3 ? parts[3] : "-"
+        };
+      });
     } else if (result?.palavras_relacionadas) {
-      keywords = Array.isArray(result.palavras_relacionadas) 
+      const keywordArray = Array.isArray(result.palavras_relacionadas) 
         ? result.palavras_relacionadas 
         : Object.values(result.palavras_relacionadas);
+      
+      // Skip first two entries
+      keywords = keywordArray.slice(2).map((kw: string) => ({
+        keyword: kw,
+        relation: "-",
+        volume: "-",
+        cpc: "-"
+      }));
     }
     
     return (
@@ -131,11 +152,28 @@ export const KeywordHistory = ({ setActiveTab, setFormResult }: KeywordHistoryPr
           </h4>
           
           {keywords.length > 0 ? (
-            <ul className="list-disc pl-5 space-y-2">
-              {keywords.map((kw: string, index: number) => (
-                <li key={index} className="text-gray-800">{kw}</li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto">
+              <Table className="border border-gray-300">
+                <TableHeader>
+                  <TableRow className="bg-gray-50">
+                    <TableHead className="font-semibold text-gray-700 border border-gray-300">Palavra-chave</TableHead>
+                    <TableHead className="font-semibold text-gray-700 border border-gray-300">Relação</TableHead>
+                    <TableHead className="font-semibold text-gray-700 border border-gray-300">Volume de Busca</TableHead>
+                    <TableHead className="font-semibold text-gray-700 border border-gray-300">CPC (R$)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {keywords.map((item: any, index: number) => (
+                    <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <TableCell className="py-2 border border-gray-300">{item.keyword}</TableCell>
+                      <TableCell className="py-2 border border-gray-300">{item.relation}</TableCell>
+                      <TableCell className="py-2 border border-gray-300">{item.volume}</TableCell>
+                      <TableCell className="py-2 border border-gray-300">{item.cpc}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <p className="text-gray-500">Nenhuma palavra-chave encontrada no resultado.</p>
           )}
