@@ -1,29 +1,34 @@
-
 export interface Post {
-  slug: string;
+  id: string;
   title: string;
-  date: string;
+  slug: string;
+  category: string;
+  excerpt: string;
   content: string;
   image: string;
-  category: string;
+  date: string;
+  datePublished?: string; // ISO date for schema.org
+  dateModified?: string; // ISO date for schema.org
+  author?: string;
+  tags?: string[];
 }
 
 export const posts: Post[] = [
   {
-    slug: 'o-que-e-ia-de-seo',
+    id: 'o-que-e-ia-de-seo',
     title: 'O que é IA de SEO e como ela pode transformar sua estratégia de SEO',
-    date: '20 Mai 2025',
+    slug: 'o-que-e-ia-de-seo',
     category: 'on-page',
-    image: '/lovable-uploads/328ab6d6-16f1-40f9-ba23-3e99279b9ec6.png',
+    excerpt: 'A IA de SEO (Inteligência Artificial para Otimização de Motores de Busca) se tornou um aliado indispensável para empresas que buscam se destacar no mundo digital.',
     content: `
       <div class="prose max-w-none">
         <p class="text-gray-700 mb-6">
-          A IA de SEO (Inteligência Artificial para Otimização de Motores de Busca) se tornou um aliado indispensável para empresas que buscam se destacar no mundo digital. Com o aumento da competição online, entender como essa tecnologia pode moldar sua estratégia de marketing digital é essencial. Neste artigo, vamos explorar o que é a IA de SEO, como ela funciona e quais benefícios pode trazer para o seu negócio.
+          A IA de SEO utiliza algoritmos avançados para analisar grandes volumes de dados relacionados ao comportamento do usuário, tendências de busca e competitividade. Ela pode ajudar a identificar palavras-chave eficazes, analisar concorrentes e prever mudanças nas preferências dos consumidores.
         </p>
         
         <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">O que faz uma IA de SEO?</h2>
         <p class="text-gray-700 mb-6">
-          A IA de SEO utiliza algoritmos avançados para analisar grandes volumes de dados relacionados ao comportamento do usuário, tendências de busca e competitividade. Ela pode ajudar a identificar palavras-chave eficazes, analisar concorrentes e prever mudanças nas preferências dos consumidores.
+          A IA de SEO processa dados em uma velocidade e volume que superam qualquer análise manual. Isso significa que você pode obter insights valiosos em tempo real.
         </p>
         
         <h2 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Benefícios da IA de SEO</h2>
@@ -107,6 +112,12 @@ export const posts: Post[] = [
           Se você deseja implementar a IA de SEO em sua empresa e precisa de ajuda para transformar sua estratégia de marketing digital, entre em contato conosco! Estamos prontos para auxiliar você a alcançar resultados incríveis!
         </p>
       </div>
-    `
+    `,
+    date: '20 Mai 2025',
+    image: '/lovable-uploads/328ab6d6-16f1-40f9-ba23-3e99279b9ec6.png',
+    datePublished: '2025-05-20',
+    dateModified: '2025-05-20',
+    author: 'John Doe',
+    tags: ['SEO', 'IA']
   }
 ];

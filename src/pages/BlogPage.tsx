@@ -20,8 +20,8 @@ const BlogPage = () => {
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
         title="Blog de Marketing Digital e SEO | MKRanker"
-        description="Blog especializado em SEO, Marketing Digital e Estratégias para Aumentar o Tráfego Orgânico do seu Site."
-        keywords="blog seo, marketing digital, tráfego orgânico, estratégias seo, rankeamento google, conteúdo marketing"
+        description="Blog especializado em SEO, Marketing Digital e Estratégias para Aumentar o Tráfego Orgânico do seu Site usando IA e técnicas avançadas."
+        keywords="blog seo, marketing digital, tráfego orgânico, estratégias seo, rankeamento google, conteúdo marketing, inteligência artificial, otimização de sites"
         ogImage="https://mkranker.com.br/assets/img/blog-cover.jpg"
         canonicalUrl="https://mkranker.com.br/blog"
         jsonLd={blogJsonLdData}
