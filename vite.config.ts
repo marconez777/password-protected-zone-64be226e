@@ -113,7 +113,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: {
     alias: {
-      // Remove the path alias for @
+      // No path aliases
     },
   },
   build: {
