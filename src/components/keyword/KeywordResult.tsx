@@ -35,31 +35,33 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
           .split('\n')
           .filter(line => line.trim().length > 0);
         
-        // Processar cada linha para extrair informações estruturadas
-        const processedKeywords: KeywordData[] = lines.map(line => {
-          // Remover números e pontos no início (ex., "1. ")
-          const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
-          
-          // Tentar analisar a linha se for no formato "| keyword | relation | volume | cpc |"
-          const parts = cleanLine.split('|').map(part => part.trim()).filter(Boolean);
-          
-          if (parts.length >= 1) {
+        // Processar cada linha para extrair informações estruturadas, pulando as duas primeiras linhas
+        const processedKeywords: KeywordData[] = lines
+          .slice(2) // Pula as duas primeiras linhas (cabeçalho e linha de título)
+          .map(line => {
+            // Remover números e pontos no início (ex., "1. ")
+            const cleanLine = line.replace(/^\d+\.\s*/, '').trim();
+            
+            // Tentar analisar a linha se for no formato "| keyword | relation | volume | cpc |"
+            const parts = cleanLine.split('|').map(part => part.trim()).filter(Boolean);
+            
+            if (parts.length >= 1) {
+              return {
+                keyword: parts[0],
+                relation: parts.length > 1 ? parts[1] : "-",
+                volume: parts.length > 2 ? parts[2] : "-",
+                cpc: parts.length > 3 ? parts[3] : "-"
+              };
+            }
+            
+            // Fallback para linhas que não seguem o formato esperado
             return {
-              keyword: parts[0],
-              relation: parts.length > 1 ? parts[1] : "-",
-              volume: parts.length > 2 ? parts[2] : "-",
-              cpc: parts.length > 3 ? parts[3] : "-"
+              keyword: cleanLine,
+              relation: "-",
+              volume: "-",
+              cpc: "-"
             };
-          }
-          
-          // Fallback para linhas que não seguem o formato esperado
-          return {
-            keyword: cleanLine,
-            relation: "-",
-            volume: "-",
-            cpc: "-"
-          };
-        });
+          });
           
         console.log("Extracted keywords data:", processedKeywords);
         setKeywords(processedKeywords);
@@ -69,13 +71,15 @@ export const KeywordResult = ({ result }: KeywordResultProps) => {
           ? result.palavras_relacionadas 
           : Object.values(result.palavras_relacionadas);
         
-        // Converter para o novo formato de dados
-        const processedKeywords = keywordArray.map((keyword: string) => ({
-          keyword: keyword,
-          relation: "-",
-          volume: "-",
-          cpc: "-"
-        }));
+        // Converter para o novo formato de dados, mas pular as duas primeiras entradas
+        const processedKeywords = keywordArray
+          .slice(2) // Pula as duas primeiras entradas
+          .map((keyword: string) => ({
+            keyword: keyword,
+            relation: "-",
+            volume: "-",
+            cpc: "-"
+          }));
         
         setKeywords(processedKeywords);
       } else {
