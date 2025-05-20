@@ -47,7 +47,9 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
           // Bold items with asterisks or dash
           /^[\*\-]\s+\*\*.*\*\*/.test(trimmed) ||
           // Just grab anything with a number followed by a dot (fallback)
-          /^\d+\..*$/.test(trimmed)
+          /^\d+\..*$/.test(trimmed) ||
+          // Match lines with asterisks or dashes at the beginning
+          /^[\*\-]\s+.*$/.test(trimmed)
         );
       })
       .map(line => {
@@ -106,7 +108,7 @@ export function PautasBlogResult({ result }: { result: PautasResult | null }) {
         <ul className="list-disc pl-5 space-y-2">
           {pautasToDisplay.map((pauta, index) => (
             <li key={index} className="text-gray-800">
-              {typeof pauta === 'string' && pauta.includes('**') || pauta.includes('*') || pauta.includes('#') 
+              {typeof pauta === 'string' && (pauta.includes('**') || pauta.includes('*') || pauta.includes('#')) 
                 ? formatMarkdownContent(pauta) 
                 : pauta}
             </li>
