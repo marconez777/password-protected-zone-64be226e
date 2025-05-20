@@ -35,9 +35,6 @@ const BlogPostPage = () => {
       
       <h3>O Futuro do SEO com IA</h3>
       <p>À medida que a IA continua a evoluir, podemos esperar um SEO ainda mais personalizado e eficiente. A análise preditiva, a automação de tarefas e a otimização contínua serão fundamentais para o sucesso das estratégias de SEO no futuro.</p>
-      
-      <h2>Conclusão</h2>
-      <p>A inteligência artificial não é apenas uma tendência passageira no mundo do SEO, mas sim uma revolução que veio para ficar. As empresas que adotarem ferramentas e estratégias baseadas em IA terão uma vantagem competitiva significativa nos próximos anos.</p>
     `,
     image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
   };
@@ -103,7 +100,7 @@ const BlogPostPage = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-6">{post.title}</h1>
               
               <div 
-                className="prose prose-invert max-w-none"
+                className="prose prose-invert max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-h2:text-2xl prose-h3:text-xl prose-h3:mt-6 prose-p:text-base prose-p:leading-relaxed prose-p:mb-4"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </div>
