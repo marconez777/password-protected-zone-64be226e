@@ -113,7 +113,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: {
     alias: {
-      // No path aliases
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
