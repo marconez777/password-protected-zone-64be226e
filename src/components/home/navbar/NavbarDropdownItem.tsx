@@ -6,9 +6,10 @@ interface NavbarDropdownItemProps {
   to: string;
   onClick?: () => void;
   isUpcoming?: boolean;
+  children: React.ReactNode;
 }
 
-const NavbarDropdownItem: React.FC<NavbarDropdownItemProps & { children: React.ReactNode }> = ({
+const NavbarDropdownItem: React.FC<NavbarDropdownItemProps> = ({
   to,
   children,
   onClick,

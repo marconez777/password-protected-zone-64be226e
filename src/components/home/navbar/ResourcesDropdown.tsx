@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 import NavbarDropdownItem from './NavbarDropdownItem';
 
 interface ResourcesDropdownProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  isResourcesOpen: boolean;
+  setIsResourcesOpen: (isOpen: boolean) => void;
   startAutoCloseTimer: () => void;
   onItemClick: () => void;
 }
 
 const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
-  isOpen,
-  setIsOpen,
+  isResourcesOpen,
+  setIsResourcesOpen,
   startAutoCloseTimer,
   onItemClick
 }) => {
@@ -23,7 +23,7 @@ const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (resourcesRef.current && !resourcesRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        setIsResourcesOpen(false);
       }
     };
 
@@ -31,14 +31,14 @@ const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [setIsOpen]);
+  }, [setIsResourcesOpen]);
 
   return (
     <li className="relative group" 
       ref={resourcesRef}
-      onClick={() => setIsOpen(!isOpen)}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseMove={() => isOpen && startAutoCloseTimer()}>
+      onClick={() => setIsResourcesOpen(!isResourcesOpen)}
+      onMouseEnter={() => setIsResourcesOpen(true)}
+      onMouseMove={() => isResourcesOpen && startAutoCloseTimer()}>
       <Link
         to="/recursos"
         className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
@@ -46,7 +46,7 @@ const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
         Recursos <ChevronDown className="h-4 w-4 ml-1" />
       </Link>
       
-      {isOpen && (
+      {isResourcesOpen && (
         <div 
           className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]"
           onMouseMove={() => startAutoCloseTimer()}

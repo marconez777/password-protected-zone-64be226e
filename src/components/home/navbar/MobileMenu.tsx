@@ -96,7 +96,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             </li>
             <li>
               <Link 
-                to="/cadastro" 
+                to="/blog" 
                 className="text-white text-xl block py-2"
                 onClick={closeMenu}
               >
