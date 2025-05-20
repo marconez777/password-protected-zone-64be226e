@@ -1,8 +1,8 @@
 
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 import {
   Card,
   CardContent,
@@ -10,12 +10,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "../components/ui/card";
 import { Link, Navigate } from "react-router-dom";
 import { Loader2, LogOut } from "lucide-react";
-import { useAuth } from "@/providers/auth";
-import { useLoginForm } from "@/hooks/useLoginForm";
-import { Logo } from "@/components/ui/logo";
+import { useAuth } from "../providers/auth";
+import { useLoginForm } from "../hooks/useLoginForm";
+import { Logo } from "../components/ui/logo";
 import { toast } from "sonner";
 
 const Login = () => {

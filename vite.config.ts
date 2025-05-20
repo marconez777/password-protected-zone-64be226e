@@ -124,7 +124,7 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['./src/components/ui/button.tsx', './src/components/ui/card.tsx'] // Using relative paths to avoid alias resolution issues
+          'ui': ['./src/components/ui/button.tsx', './src/components/ui/card.tsx']
         }
       }
     }
