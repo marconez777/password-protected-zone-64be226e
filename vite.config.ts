@@ -45,7 +45,7 @@ function preRenderPlugin(): Plugin {
             });
             
             // Carrega o componente App - usando require diretamente sem path aliases
-            const { App } = require('../src/App.tsx');
+            const App = require('./src/App.tsx').default;
             
             // Renderiza o componente para string HTML
             const appHtml = renderToString(createElement(App));
@@ -124,7 +124,7 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui': ['@/components/ui']
+          'ui': ['@/components/ui/button', '@/components/ui/card'] // Specify individual UI components instead of the directory
         }
       }
     }
