@@ -1,10 +1,7 @@
-
 import React from 'react';
-
 const TextoSEOLPArticleContent = () => {
-  return (
-    <div className="bg-[#1A1A1A] rounded-lg p-8">
-      <h1 className="text-3xl font-bold text-white mb-6">Texto SEO para Landing Page</h1>
+  return <div className="bg-[#1A1A1A] rounded-lg p-8">
+      <h1 className="text-3xl font-bold text-white mb-6">Texto SEO para Landing Page com IA</h1>
       
       <div className="prose prose-invert max-w-none">
         <p className="text-gray-300 mb-6">
@@ -12,11 +9,7 @@ const TextoSEOLPArticleContent = () => {
         </p>
         
         <div className="my-10">
-          <img 
-            src="/lovable-uploads/ca37c3b5-1129-4d7a-b057-fde482705157.png" 
-            alt="Exemplo de Texto SEO para LP" 
-            className="w-full rounded-lg border border-gray-700"
-          />
+          <img src="/lovable-uploads/ca37c3b5-1129-4d7a-b057-fde482705157.png" alt="Exemplo de Texto SEO para LP" className="w-full rounded-lg border border-gray-700" />
         </div>
         
         <h2 className="text-2xl font-bold text-white mt-10 mb-4">O Que é um Gerador de Texto SEO IA?</h2>
@@ -74,8 +67,6 @@ const TextoSEOLPArticleContent = () => {
           Transforme seu conteúdo, impulsione suas vendas. Aproveite essa tecnologia inovadora agora mesmo!
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default TextoSEOLPArticleContent;
