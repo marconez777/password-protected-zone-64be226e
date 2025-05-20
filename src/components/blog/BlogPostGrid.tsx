@@ -19,8 +19,18 @@ interface Post {
 }
 
 const BlogPostGrid: React.FC<BlogPostProps> = ({ category }) => {
-  // Empty blog posts array
-  const posts: Post[] = [];
+  // Blog posts array with the new post
+  const posts: Post[] = [
+    {
+      id: '1',
+      title: 'O que é IA de SEO e como ela pode transformar sua estratégia de SEO',
+      excerpt: 'Descubra como a Inteligência Artificial para SEO pode revolucionar sua estratégia de marketing digital e impulsionar seus resultados online.',
+      date: '20 Mai 2025',
+      category: 'on-page',
+      image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
+      slug: 'o-que-e-ia-de-seo'
+    }
+  ];
 
   // Filter posts based on selected category
   const filteredPosts = category === 'all' 

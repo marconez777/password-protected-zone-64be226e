@@ -15,8 +15,8 @@ interface Category {
 
 const BlogSidebar: React.FC<BlogSidebarProps> = ({ activeCategory, setActiveCategory }) => {
   const categories: Category[] = [
-    { id: 'all', label: 'Todos os Artigos', count: 0 },
-    { id: 'on-page', label: 'On Page', count: 0 },
+    { id: 'all', label: 'Todos os Artigos', count: 1 },
+    { id: 'on-page', label: 'On Page', count: 1 },
     { id: 'seo-tecnico', label: 'SEO Técnico', count: 0 },
     { id: 'estrategia', label: 'Estratégia', count: 0 },
     { id: 'redacao', label: 'Redação', count: 0 },

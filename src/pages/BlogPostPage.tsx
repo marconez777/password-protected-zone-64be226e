@@ -7,40 +7,144 @@ import { Card } from '@/components/ui/card';
 import { Calendar, ArrowLeft } from 'lucide-react';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
 
+interface Post {
+  slug: string;
+  title: string;
+  date: string;
+  content: string;
+  image: string;
+  category: string;
+}
+
+const posts: Post[] = [
+  {
+    slug: 'o-que-e-ia-de-seo',
+    title: 'O que é IA de SEO e como ela pode transformar sua estratégia de SEO',
+    date: '20 Mai 2025',
+    category: 'on-page',
+    image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
+    content: `
+      <div class="prose prose-invert max-w-none">
+        <p class="text-gray-300 mb-6">
+          A IA de SEO (Inteligência Artificial para Otimização de Motores de Busca) se tornou um aliado indispensável para empresas que buscam se destacar no mundo digital. Com o aumento da competição online, entender como essa tecnologia pode moldar sua estratégia de marketing digital é essencial. Neste artigo, vamos explorar o que é a IA de SEO, como ela funciona e quais benefícios pode trazer para o seu negócio.
+        </p>
+        
+        <h2 class="text-2xl font-bold text-white mt-10 mb-4">O que faz uma IA de SEO?</h2>
+        <p class="text-gray-300 mb-6">
+          A IA de SEO utiliza algoritmos avançados para analisar grandes volumes de dados relacionados ao comportamento do usuário, tendências de busca e competitividade. Ela pode ajudar a identificar palavras-chave eficazes, analisar concorrentes e prever mudanças nas preferências dos consumidores.
+        </p>
+        
+        <h2 class="text-2xl font-bold text-white mt-10 mb-4">Benefícios da IA de SEO</h2>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">Análise Eficiente de Dados</h3>
+        <p class="text-gray-300 mb-4">
+          A IA de SEO processa dados em uma velocidade e volume que superam qualquer análise manual. Isso significa que você pode obter insights valiosos em tempo real.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">Otimização de Conteúdo</h3>
+        <p class="text-gray-300 mb-4">
+          Uma IA de SEO pode sugerir melhorias nos textos, como o uso adequado de palavras-chave, estrutura de conteúdo e até mesmo a experiência do usuário em seu site.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">Identificação de Tendências</h3>
+        <p class="text-gray-300 mb-4">
+          Através da análise de dados históricos, a IA consegue prever futuras tendências de busca, ajudando seus esforços de SEO a estarem sempre à frente da concorrência.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">Criação de Conteúdo Personalizado</h3>
+        <p class="text-gray-300 mb-4">
+          Com a IA, você pode criar conteúdo altamente relevante e direcionado às necessidades dos seus usuários, aumentando assim as chances de engajamento e conversão.
+        </p>
+        
+        <h2 class="text-2xl font-bold text-white mt-10 mb-4">Como posso usar inteligência artificial para SEO?</h2>
+        <p class="text-gray-300 mb-4">
+          Agora que sabemos o que faz uma IA de SEO, é importante entender como você pode utilizá-la na prática. Veja algumas sugestões:
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">1. Ferramentas de Análise de SEO</h3>
+        <p class="text-gray-300 mb-4">
+          Utilize ferramentas baseadas em IA, como o SEMrush ou o Ahrefs, que oferecem análises aprofundadas de palavras-chave, backlinks e competitividade. Essas ferramentas podem orientar suas decisões, tornando sua estratégia mais eficaz.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">2. Geração de Conteúdo</h3>
+        <p class="text-gray-300 mb-4">
+          Com ferramentas como o ChatGPT, você pode otimizar textos para SEO de forma mais rápida e eficiente. Sugestões de títulos, subtítulos e até mesmo conteúdos inteiros podem ser gerados a partir de simples comandos, garantindo que você tenha um texto otimizado para SEO em questão de minutos.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">3. A/B Testing</h3>
+        <p class="text-gray-300 mb-4">
+          A IA permite que você realize testes A/B com mais eficácia. Isso significa que, ao experimentar diferentes versões do seu conteúdo, você pode determinar qual delas traz melhores resultados e otimizar sua estratégia com base nessas descobertas.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">4. Análise de Concorrência</h3>
+        <p class="text-gray-300 mb-4">
+          A IA pode analisar os sites dos concorrentes e identificar o que eles estão fazendo certo. Com essas informações, você pode ajustar sua estratégia para não apenas alcançar, mas superar seu concorrente.
+        </p>
+        
+        <h2 class="text-2xl font-bold text-white mt-10 mb-4">Como escrever texto otimizado usando o ChatGPT?</h2>
+        <p class="text-gray-300 mb-4">
+          Ao implementar o ChatGPT na sua estratégia de SEO, você pode seguir algumas dicas simples para garantir que o conteúdo gerado seja otimizado:
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">1. Defina Tópicos Relevantes</h3>
+        <p class="text-gray-300 mb-4">
+          Antes de começar, faça uma lista de tópicos que você gostaria de cobrir, incluindo a palavra-chave em foco e as palavras-chave relacionadas. Isso ajuda a manter o foco e a coerência durante a escrita.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">2. Use Palavras-Chave de Forma Natural</h3>
+        <p class="text-gray-300 mb-4">
+          Sempre que possível, incorpore a palavra-chave em foco "IA de SEO" de forma natural ao longo do texto. Não exagere na repetição; o objetivo é garantir que o texto flua e seja legível.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">3. Crie Estruturas Claras</h3>
+        <p class="text-gray-300 mb-4">
+          Utilize cabeçalhos e listas para organizar a informação. Isso não apenas melhora a legibilidade, mas também ajuda os motores de busca a entenderem melhor o conteúdo, aumentando suas chances de ranquear.
+        </p>
+        
+        <h3 class="text-xl font-bold text-white mt-6 mb-3">4. Revisão e Ajustes Finais</h3>
+        <p class="text-gray-300 mb-4">
+          Após gerar o texto com o ChatGPT, revise-o atentamente. Verifique a ortografia, gramática e se todos os pontos-chave foram abordados. Isso assegura que o texto não apenas esteja otimizado, mas também seja de alta qualidade.
+        </p>
+        
+        <h2 class="text-2xl font-bold text-white mt-10 mb-4">Transforme sua estratégia de marketing digital com a IA de SEO</h2>
+        <p class="text-gray-300 mb-4">
+          Investir em IA de SEO não é apenas uma tendência; é uma necessidade para quem deseja se destacar no mercado digital. Com essa tecnologia à sua disposição, você pode otimizar sua estratégia de marketing digital de maneira robusta e eficaz.
+        </p>
+        
+        <p class="text-gray-300 mb-4">
+          Se você deseja implementar a IA de SEO em sua empresa e precisa de ajuda para transformar sua estratégia de marketing digital, entre em contato conosco! Estamos prontos para auxiliar você a alcançar resultados incríveis!
+        </p>
+      </div>
+    `
+  }
+];
+
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
+  const post = posts.find(p => p.slug === slug);
   
   useEffect(() => {
     // Scroll to top on component mount
     window.scrollTo(0, 0);
   }, []);
 
-  // This would normally come from a database or API
-  // For now, we'll just hard-code a sample post
-  const post = {
-    title: 'Como a Inteligência Artificial está Revolucionando o SEO',
-    date: '15 Mai 2025',
-    content: `
-      <h2 class="text-2xl font-bold text-white mt-6 mb-3">A Nova Era do SEO com Inteligência Artificial</h2>
-      <p class="text-gray-300 mb-4">A inteligência artificial está transformando radicalmente a forma como abordamos o SEO. Desde algoritmos de pesquisa mais inteligentes até ferramentas de análise avançada, a IA está redefinindo as regras do jogo.</p>
-      
-      <h3 class="text-xl font-bold text-white mt-6 mb-3">Como a IA Está Mudando os Algoritmos de Busca</h3>
-      <p class="text-gray-300 mb-4">Os motores de busca como o Google estão cada vez mais sofisticados graças à inteligência artificial. O RankBrain, sistema de IA do Google, ajuda a interpretar consultas de pesquisa e entender a intenção por trás delas, proporcionando resultados mais relevantes.</p>
-      
-      <h3 class="text-xl font-bold text-white mt-6 mb-3">Ferramentas de SEO Impulsionadas por IA</h3>
-      <p class="text-gray-300 mb-4">Hoje, existem diversas ferramentas de SEO que utilizam IA para analisar dados e fornecer insights valiosos. Essas ferramentas podem identificar oportunidades de palavras-chave, analisar a concorrência e até mesmo prever tendências de pesquisa.</p>
-      
-      <h3 class="text-xl font-bold text-white mt-6 mb-3">Criação de Conteúdo com IA</h3>
-      <p class="text-gray-300 mb-4">A IA está revolucionando a criação de conteúdo para SEO. Ferramentas como o GPT-4 podem gerar textos otimizados para SEO, sugerir títulos atraentes e até mesmo identificar lacunas de conteúdo que podem ser exploradas.</p>
-      
-      <h3 class="text-xl font-bold text-white mt-6 mb-3">O Futuro do SEO com IA</h3>
-      <p class="text-gray-300 mb-4">À medida que a IA continua a evoluir, podemos esperar um SEO ainda mais personalizado e eficiente. A análise preditiva, a automação de tarefas e a otimização contínua serão fundamentais para o sucesso das estratégias de SEO no futuro.</p>
-
-      <h3 class="text-xl font-bold text-white mt-6 mb-3">Conclusão</h3>
-      <p class="text-gray-300 mb-4">A inteligência artificial não é apenas uma tendência passageira no mundo do SEO, mas sim uma revolução que veio para ficar. As empresas que adotarem ferramentas e estratégias baseadas em IA terão uma vantagem competitiva significativa nos próximos anos.</p>
-    `,
-    image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
-  };
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-[#121016] w-full">
+        <HomeNavbar />
+        <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+          <div className="max-w-4xl mx-auto text-center py-20">
+            <h1 className="text-3xl font-bold text-white mb-4">Artigo não encontrado</h1>
+            <p className="text-gray-400 mb-6">O artigo que você está procurando não existe ou foi removido.</p>
+            <Link to="/blog" className="inline-flex items-center text-[#9b87f5] hover:text-[#805af5] transition-colors">
+              <ArrowLeft className="w-4 h-4 mr-2" /> Voltar para o blog
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
@@ -59,8 +163,8 @@ const BlogPostPage = () => {
           },
           "headline": "${post.title}",
           "image": "${post.image}",
-          "datePublished": "2025-05-15T08:00:00+00:00",
-          "dateModified": "2025-05-15T09:00:00+00:00",
+          "datePublished": "2025-05-20T08:00:00+00:00",
+          "dateModified": "2025-05-20T09:00:00+00:00",
           "author": {
             "@type": "Organization",
             "name": "MKRanker"
@@ -104,7 +208,7 @@ const BlogPostPage = () => {
               
               <div 
                 dangerouslySetInnerHTML={{ __html: post.content }}
-                className="text-content"
+                className="blog-content"
               />
             </div>
           </Card>
