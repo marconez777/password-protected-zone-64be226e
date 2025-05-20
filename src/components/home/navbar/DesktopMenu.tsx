@@ -36,7 +36,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({
           
           <li className="relative group">
             <Link 
-              to="/cadastro" 
+              to="/blog" 
               className="text-white hover:opacity-90 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
             >
               Blog
