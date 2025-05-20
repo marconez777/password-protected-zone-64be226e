@@ -27,7 +27,7 @@ const BlogPostGrid: React.FC<BlogPostProps> = ({ category }) => {
       excerpt: 'Descubra como a Inteligência Artificial para SEO pode revolucionar sua estratégia de marketing digital e impulsionar seus resultados online.',
       date: '20 Mai 2025',
       category: 'on-page',
-      image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
+      image: '/lovable-uploads/328ab6d6-16f1-40f9-ba23-3e99279b9ec6.png',
       slug: 'o-que-e-ia-de-seo'
     }
   ];

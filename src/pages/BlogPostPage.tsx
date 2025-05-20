@@ -22,7 +22,7 @@ const posts: Post[] = [
     title: 'O que é IA de SEO e como ela pode transformar sua estratégia de SEO',
     date: '20 Mai 2025',
     category: 'on-page',
-    image: '/lovable-uploads/50f3c28a-69bd-4dfa-80d9-09cb9ce62299.png',
+    image: '/lovable-uploads/328ab6d6-16f1-40f9-ba23-3e99279b9ec6.png',
     content: `
       <div class="prose prose-invert max-w-none">
         <p class="text-gray-300 mb-6">
