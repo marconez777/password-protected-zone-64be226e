@@ -1,16 +1,11 @@
-
 import React from 'react';
 import { BookOpen, FileText, Sparkles } from 'lucide-react';
-
 export function PautasBlogArticleContent() {
-  return (
-    <div className="bg-[#1A1A1A] rounded-lg p-8">
-      <h1 className="text-3xl font-bold text-white mb-6">Pautas para Blog</h1>
+  return <div className="bg-[#1A1A1A] rounded-lg p-8">
+      <h1 className="text-3xl font-bold text-white mb-6">Gerador de Ideias de Conteúdo para Blog com IA</h1>
       
       <div className="prose prose-invert max-w-none">
-        <p className="text-gray-300 mb-6">
-          Impulsione Seu Blog com um Gerador de Ideias de Conteúdo para Blog com IA
-        </p>
+        
         
         <p className="text-gray-300 mb-6">
           No cenário digital atual, criar conteúdo de alta qualidade não é apenas uma necessidade; é uma estratégia imperativa para se destacar e engajar seu público.
@@ -25,11 +20,7 @@ export function PautasBlogArticleContent() {
         </p>
         
         <div className="my-10">
-          <img 
-            src="/lovable-uploads/b3ecf7b9-a53a-47f1-8e1f-f2fc1469766a.png" 
-            alt="Gerador de Pautas para Blog com IA" 
-            className="w-full rounded-lg border border-gray-700"
-          />
+          <img src="/lovable-uploads/b3ecf7b9-a53a-47f1-8e1f-f2fc1469766a.png" alt="Gerador de Pautas para Blog com IA" className="w-full rounded-lg border border-gray-700" />
         </div>
         
         <h2 className="text-2xl font-bold text-white mt-10 mb-4">Por Que Usar um Gerador de Ideias para Blog com IA?</h2>
@@ -117,6 +108,5 @@ export function PautasBlogArticleContent() {
           </p>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
