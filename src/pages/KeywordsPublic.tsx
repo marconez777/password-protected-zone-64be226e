@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { KeyRound, BarChart } from 'lucide-react';
+import { KeyRound, BarChart, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
@@ -29,23 +29,6 @@ const KeywordsPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
-  // Conteúdo pré-renderizado para SEO
-  const seoContent = `
-    <div class="seo-content">
-      <h1>Palavras-chave</h1>
-      <p>Palavras-chave são termos e frases que os usuários digitam nos mecanismos de busca. Identificar e utilizar as palavras-chave certas é fundamental para o sucesso da sua estratégia de SEO.</p>
-      
-      <h2>Importância das palavras-chave</h2>
-      <p>Palavras-chave bem pesquisadas podem gerar tráfego qualificado para seu site, aumentar conversões e melhorar seu posicionamento nos mecanismos de busca. Nossa ferramenta de IA ajuda a identificar as melhores palavras-chave para o seu negócio.</p>
-      
-      <h2>Como selecionar palavras-chave eficientes</h2>
-      <ul>
-        <li>Pesquisa de intenção: Identifique termos que correspondem à intenção do seu público-alvo e ao estágio do funil de vendas.</li>
-        <li>Análise de concorrência: Compare palavras-chave dos concorrentes e encontre oportunidades únicas para seu negócio.</li>
-      </ul>
-    </div>
-  `;
-
   // SEO JSON-LD data
   const jsonLdData = `
 {
@@ -62,12 +45,30 @@ const KeywordsPublic = () => {
 }
   `;
 
+  // Conteúdo pré-renderizado para SEO - atualizado com o novo texto
+  const seoContent = `
+    <div class="seo-content">
+      <h1>Descubra o Poder da Pesquisa de Palavras-Chave com IA do Gemini Treinada</h1>
+      <p>A Pesquisa de palavras-chave com IA está revolucionando a maneira como as empresas planejam suas estratégias de marketing digital.</p>
+      
+      <h2>Por Que a Pesquisa de Palavras-Chave com IA é Essencial?</h2>
+      <p>No ambiente digital de hoje, a visibilidade é fundamental. As palavras-chave são o cerne de qualquer estratégia de SEO bem-sucedida.</p>
+      
+      <h2>Vantagens da Ferramenta de Pesquisa de Palavras-Chave com IA</h2>
+      <ul>
+        <li>Precisão Avançada</li>
+        <li>Sugestões de Palavras-Chave Relacionadas</li>
+        <li>Melhora o Conteúdo sem Esforço</li>
+      </ul>
+    </div>
+  `;
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
         title="Ferramenta de Pesquisa de Palavras-chave com I.A | MKRanker"
-        description="Descubra as melhores palavras-chave para seu negócio com nossa ferramenta de pesquisa otimizada com inteligência artificial."
-        keywords="palavras-chave, SEO, pesquisa de palavras-chave, ferramenta SEO, tráfego orgânico, MKRanker, inteligência artificial"
+        description="Descubra o poder da pesquisa de palavras-chave com IA do Gemini Treinada para revolucionar suas estratégias de marketing digital."
+        keywords="palavras-chave, SEO, pesquisa de palavras-chave, ferramenta SEO, IA, Gemini Treinada, marketing digital"
         ogImage="https://mkranker.com.br/assets/img/keywords-tool.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/palavras-chave-com-ia"
         jsonLd={jsonLdData}
@@ -91,16 +92,32 @@ const KeywordsPublic = () => {
           {/* Main Content */}
           <div className="lg:w-3/4 xl:w-4/5">
             <article className="bg-[#1A1A1A] rounded-lg p-8" itemScope itemType="https://schema.org/Article">
-              <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">Palavras-chave</h1>
+              <h1 className="text-3xl font-bold text-white mb-6" itemProp="headline">
+                Descubra o Poder da Pesquisa de Palavras-Chave com IA do Gemini Treinada
+              </h1>
               
               <div className="prose prose-invert max-w-none" itemProp="articleBody">
                 <p className="text-gray-300 mb-6">
-                  Palavras-chave são termos e frases que os usuários digitam nos mecanismos de busca. Identificar e utilizar as palavras-chave certas é fundamental para o sucesso da sua estratégia de SEO.
+                  A Pesquisa de palavras-chave com IA está revolucionando a maneira como as empresas planejam suas estratégias de marketing digital. 
+                  Com a tecnologia avançada do Gemini Treinada, você pode transformar seus esforços online e superar a concorrência. 
+                  Neste artigo, exploraremos como essa ferramenta inovadora pode alavancar sua presença digital e impulsionar suas conversões.
                 </p>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Importância das palavras-chave</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">
+                  Por Que a Pesquisa de Palavras-Chave com IA é Essencial?
+                </h2>
                 <p className="text-gray-300 mb-6">
-                  Palavras-chave bem pesquisadas podem gerar tráfego qualificado para seu site, aumentar conversões e melhorar seu posicionamento nos mecanismos de busca. Nossa ferramenta de IA ajuda a identificar as melhores palavras-chave para o seu negócio.
+                  No ambiente digital de hoje, a visibilidade é fundamental. As palavras-chave são o cerne de qualquer estratégia de SEO bem-sucedida. 
+                  A Seleção precisa de palavras-chave adequadas pode determinar o sucesso ou fracasso da sua campanha online. 
+                  A Pesquisa de palavras-chave com IA não só identifica as melhores palavras-chave para o seu negócio, 
+                  mas também otimiza sua aplicação para maximizar resultados.
+                </p>
+
+                <p className="text-gray-300 mb-6">
+                  O diferencial da Pesquisa de palavras-chave com IA do Gemini Treinada é sua capacidade de gerar sugestões de palavras-chave relacionadas, 
+                  ampliando seu alcance semântico. Isso significa que, além de atingir diretamente seu público-alvo, 
+                  você também enriquece seu conteúdo com termos que os motores de busca identificam como relevantes, 
+                  melhorando assim seu ranqueamento.
                 </p>
                 
                 <figure className="my-10">
@@ -114,16 +131,35 @@ const KeywordsPublic = () => {
                   <figcaption className="text-xs text-center text-gray-400 mt-2">Ferramenta de pesquisa de palavras-chave com IA</figcaption>
                 </figure>
                 
-                <h2 className="text-2xl font-bold text-white mt-10 mb-4">Como selecionar palavras-chave eficientes</h2>
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">
+                  Vantagens da Ferramenta de Pesquisa de Palavras-Chave com IA
+                </h2>
                 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-[#805af5] rounded-full p-2 mt-1">
+                      <Search size={18} className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-white">Precisão Avançada</h3>
+                      <p className="text-gray-300">
+                        Ao contrário dos métodos tradicionais, a tecnologia de IA do Gemini Treinada analisa grandes volumes de dados em tempo real, 
+                        garantindo que você sempre trabalhe com as informações mais atualizadas e relevantes.
+                      </p>
+                    </div>
+                  </div>
+                  
                   <div className="flex items-start gap-4">
                     <div className="bg-[#805af5] rounded-full p-2 mt-1">
                       <KeyRound size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Pesquisa de intenção</h3>
-                      <p className="text-gray-300">Identifique termos que correspondem à intenção do seu público-alvo e ao estágio do funil de vendas.</p>
+                      <h3 className="text-xl font-medium text-white">Sugestões de Palavras-Chave Relacionadas</h3>
+                      <p className="text-gray-300">
+                        Um dos recursos mais valiosos é o gerador de palavras-chave relacionadas. 
+                        Esta funcionalidade sugere palavras-chave complementares à sua palavra em foco, 
+                        enriquecendo seu conteúdo e ampliando seu campo semântico.
+                      </p>
                     </div>
                   </div>
                   
@@ -132,9 +168,93 @@ const KeywordsPublic = () => {
                       <BarChart size={18} className="text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-medium text-white">Análise de concorrência</h3>
-                      <p className="text-gray-300">Compare palavras-chave dos concorrentes e encontre oportunidades únicas para seu negócio.</p>
+                      <h3 className="text-xl font-medium text-white">Melhora o Conteúdo sem Esforço</h3>
+                      <p className="text-gray-300">
+                        Com termos semânticos cuidadosamente sugeridos, seu conteúdo não só se torna mais rico, 
+                        mas também facilita a compreensão do seu público, enquanto captura a atenção dos motores de busca.
+                      </p>
                     </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="bg-[#805af5] rounded-full p-2 mt-1">
+                      <BarChart size={18} className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-white">Experiência Personalizada</h3>
+                      <p className="text-gray-300">
+                        A Ferramenta de pesquisa de palavras-chave com IA é adaptável às necessidades específicas de cada usuário, 
+                        garantindo que as palavras-chave sugeridas estejam alinhadas com seus objetivos de negócios.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">
+                  Como Integrar a Pesquisa de Palavras-Chave com IA em Sua Estratégia
+                </h2>
+                <p className="text-gray-300 mb-3">
+                  A implementação da Pesquisa de palavras-chave com IA na sua estratégia digital envolve algumas etapas cruciais:
+                </p>
+                
+                <ol className="list-decimal pl-6 mb-6 space-y-3 text-gray-300">
+                  <li>
+                    <span className="font-medium text-white">Escolher a Palavra-Chave Correta:</span> Comece identificando uma palavra em foco que resuma seu produto ou serviço. 
+                    Utilize o recurso de gerador de palavras-chave com IA para expandir essa base inicial, 
+                    considerando sempre as sugestões de termos relacionados que a ferramenta oferece.
+                  </li>
+                  <li>
+                    <span className="font-medium text-white">Enriquecer o Conteúdo com Termos Semânticos:</span> Incorporando palavras-chave relacionadas sugeridas pela ferramenta, 
+                    você pode melhorar a compreensão e o engajamento do conteúdo. 
+                    Ferramentas de pesquisa de palavras-chave com IA são perfeitas para essa tarefa.
+                  </li>
+                  <li>
+                    <span className="font-medium text-white">Monitore e Ajuste Regularmente:</span> O ambiente online está em constante evolução. 
+                    Revise suas escolhas e ajuste suas estratégias com base no desempenho das palavras-chave. 
+                    As ferramentas de pesquisa de palavras-chave com IA oferecem insights valiosos para apoiar esse processo de ajuste.
+                  </li>
+                </ol>
+                
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">
+                  Benefícios Comprovados
+                </h2>
+                <p className="text-gray-300 mb-6">
+                  As empresas que adotam a Pesquisa de palavras-chave com IA do Gemini Treinada têm visto melhorias significativas 
+                  no tráfego de seus sites e no engajamento dos usuários. A otimização com palavras-chave relacionadas contribui para 
+                  um melhor posicionamento nos motores de busca, resultando em maior visibilidade e oportunidades de conversão.
+                </p>
+                
+                <p className="text-gray-300 mb-6">
+                  Incorporar palavras-chave relacionadas e otimizar para termos semânticos são passos críticos para garantir que 
+                  seu conteúdo não apenas seja encontrado, mas também apreciado pelo público-alvo. 
+                  Isso se traduz em credibilidade e autoridade no seu nicho de mercado.
+                </p>
+                
+                <h2 className="text-2xl font-bold text-white mt-10 mb-4">
+                  Transforme Seu Negócio Hoje
+                </h2>
+                <p className="text-gray-300 mb-6">
+                  A tecnologia de IA pode parecer complexa, mas a integração de suas capacidades na estratégia de palavras-chave 
+                  do seu negócio nunca foi tão simples. Aproveite o poder da pesquisa de palavras-chave com IA para posicionar 
+                  seu negócio à frente da concorrência.
+                </p>
+                
+                <p className="text-gray-300 mb-6">
+                  Comece agora a otimizar sua estratégia digital com a Pesquisa de palavras-chave com IA do Gemini Treinada. 
+                  Transforme suas campanhas com uma abordagem baseada em dados e alcance novos patamares de sucesso online.
+                </p>
+                
+                <div className="bg-[#805af5]/20 border border-[#805af5] rounded-lg p-6 mt-8 mb-6">
+                  <p className="text-white text-center text-lg font-medium">
+                    Experimente a eficácia da Pesquisa de palavras-chave com IA e veja a diferença.
+                  </p>
+                  <div className="flex justify-center mt-4">
+                    <Link
+                      to="/cadastro"
+                      className="bg-[#805af5] hover:bg-[#6b46c1] text-white font-medium py-2 px-6 rounded-md transition-colors"
+                    >
+                      Começar Agora
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -143,7 +263,7 @@ const KeywordsPublic = () => {
                 <meta itemProp="name" content="MKRanker" />
               </div>
               <meta itemProp="datePublished" content="2023-05-15" />
-              <meta itemProp="dateModified" content="2025-05-19" />
+              <meta itemProp="dateModified" content="2025-05-20" />
             </article>
           </div>
         </div>
