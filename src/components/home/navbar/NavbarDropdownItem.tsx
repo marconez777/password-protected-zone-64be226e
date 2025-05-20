@@ -3,38 +3,32 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface NavbarDropdownItemProps {
-  to: string;
-  onClick?: () => void;
-  isUpcoming?: boolean;
+  href: string;
+  title: string;
+  description: string;
+  isNew?: boolean;
 }
 
-const NavbarDropdownItem: React.FC<NavbarDropdownItemProps & { children: React.ReactNode }> = ({
-  to,
-  children,
-  onClick,
-  isUpcoming = false
+const NavbarDropdownItem: React.FC<NavbarDropdownItemProps> = ({
+  href,
+  title,
+  description,
+  isNew = false
 }) => {
-  if (isUpcoming) {
-    return (
-      <li className="flex items-center px-4 py-2 text-white hover:bg-[#cd99ff]/10 group">
-        <span>{children}</span>
-        <span className="ml-2 bg-[#805af5] text-xs text-white px-2 py-0.5 rounded-full whitespace-nowrap">
-          em breve
-        </span>
-      </li>
-    );
-  }
-
   return (
-    <li className="group">
-      <Link
-        to={to}
-        className="block px-4 py-2 text-white hover:bg-[#cd99ff]/10 transition-all"
-        onClick={onClick}
-      >
-        {children}
-      </Link>
-    </li>
+    <Link to={href} className="flex items-start gap-2 w-full">
+      <div className="flex flex-col w-full">
+        <div className="flex items-center">
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{title}</span>
+          {isNew && (
+            <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white">
+              novo
+            </span>
+          )}
+        </div>
+        <span className="text-xs text-gray-600 dark:text-gray-400">{description}</span>
+      </div>
+    </Link>
   );
 };
 

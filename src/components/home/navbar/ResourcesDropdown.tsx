@@ -1,88 +1,113 @@
 
-import React, { useRef, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import NavbarDropdownItem from './NavbarDropdownItem';
 
 interface ResourcesDropdownProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  startAutoCloseTimer: () => void;
-  onItemClick: () => void;
+  isMobile?: boolean;
 }
 
-const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({
-  isOpen,
-  setIsOpen,
-  startAutoCloseTimer,
-  onItemClick
-}) => {
-  const resourcesRef = useRef<HTMLLIElement>(null);
-
-  // Handle clicks outside the dropdown to close it
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (resourcesRef.current && !resourcesRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [setIsOpen]);
-
+const ResourcesDropdown: React.FC<ResourcesDropdownProps> = ({ isMobile = false }) => {
   return (
-    <li className="relative group" 
-      ref={resourcesRef}
-      onClick={() => setIsOpen(!isOpen)}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseMove={() => isOpen && startAutoCloseTimer()}>
-      <Link
-        to="/recursos"
-        className="text-white hover:opacity-90 flex items-center gap-1 hover:bg-[#cd99ff]/10 px-2 py-1 rounded-md transition-all"
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={`inline-flex items-center gap-1 font-medium transition-colors ${
+            isMobile
+              ? 'text-gray-300 hover:text-white w-full justify-between'
+              : 'text-gray-300 hover:text-white'
+          }`}
+        >
+          <span>Recursos</span>
+          {isMobile ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4 transition group-hover:rotate-180" />
+          )}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className={`w-[240px] ${
+          isMobile ? 'bg-[#252525] text-white border-gray-700' : ''
+        }`}
       >
-        Recursos <ChevronDown className="h-4 w-4 ml-1" />
-      </Link>
-      
-      {isOpen && (
-        <div 
-          className="absolute left-0 top-full mt-2 bg-[#222222] rounded-md shadow-lg z-50 min-w-[240px]"
-          onMouseMove={() => startAutoCloseTimer()}
-          onMouseEnter={() => startAutoCloseTimer()}>
-          <ul className="py-2">
-            <NavbarDropdownItem to="/recursos/funil-de-busca-com-ia" onClick={onItemClick}>
-              Funil de Busca
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/palavras-chave-com-ia" onClick={onItemClick}>
-              Palavras-chave
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/mercado-e-publico-alvo-com-ia" onClick={onItemClick}>
-              Mercado e Público-alvo
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/texto-seo-lp-com-ia" onClick={onItemClick}>
-              Texto SEO para LP
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/texto-seo-produto-com-ia" onClick={onItemClick}>
-              Texto SEO para Produto
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/texto-seo-blog-com-ia" onClick={onItemClick}>
-              Texto SEO para Blog
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/pautas-blog-com-ia" onClick={onItemClick}>
-              Pautas para Blog
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="/recursos/meta-dados-com-ia" onClick={onItemClick}>
-              Meta Dados
-            </NavbarDropdownItem>
-            <NavbarDropdownItem to="#" isUpcoming>
-              Gerador de Imagens
-            </NavbarDropdownItem>
-          </ul>
-        </div>
-      )}
-    </li>
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/funil-de-busca-com-ia"
+              title="Funil de Busca"
+              description="Palavras-chave para cada etapa do funil"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/palavras-chave-com-ia"
+              title="Palavras-chave"
+              description="Encontre palavras-chave relevantes"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/mercado-e-publico-alvo-com-ia"
+              title="Mercado e Público-alvo"
+              description="Defina seu mercado e público ideal"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/texto-seo-lp-com-ia"
+              title="Texto SEO para LP"
+              description="Crie textos otimizados para landing pages"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/texto-seo-produto-com-ia"
+              title="Texto SEO para Produto"
+              description="Otimize descrições de produtos"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/texto-seo-blog-com-ia"
+              title="Texto SEO para Blog"
+              description="Gere conteúdo otimizado para blogs"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/pautas-blog-com-ia"
+              title="Pautas para Blog"
+              description="Crie pautas de conteúdo relevantes"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/recursos/meta-dados-com-ia"
+              title="Meta Dados"
+              description="Otimize meta tags para SEO"
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <NavbarDropdownItem
+              href="/blog"
+              title="Blog"
+              description="Artigos e novidades sobre SEO"
+              isNew={true}
+            />
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
