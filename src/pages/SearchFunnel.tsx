@@ -1,6 +1,6 @@
 
-import { DashboardLayout } from "../components/dashboard/DashboardLayout";
-import { SearchFunnelForm } from "../components/search-funnel/SearchFunnelForm";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SearchFunnelForm } from "@/components/search-funnel/SearchFunnelForm";
 
 const SearchFunnel = () => {
   return (

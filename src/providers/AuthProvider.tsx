@@ -4,4 +4,4 @@
 import { AuthProvider, ProtectedRoute } from "./auth";
 
 export { AuthProvider, ProtectedRoute };
-export { useAuth } from "./auth/useAuth";
+export { useAuth } from "./auth";

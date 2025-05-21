@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 import { useLocation } from 'react-router-dom';
 
 export interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {

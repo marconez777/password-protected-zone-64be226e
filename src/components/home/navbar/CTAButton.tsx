@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../providers/auth';
+import { useAuth } from '@/providers/auth';
 
 const CTAButton: React.FC = () => {
   const { user } = useAuth();
