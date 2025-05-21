@@ -119,46 +119,89 @@ const RecursosPage = () => {
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Recursos e Ferramentas de SEO com IA | MKRanker"
-        description="Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico."
-        keywords="ferramentas SEO, recursos marketing digital, SEO com IA, otimização de sites, análise de palavras-chave, conteúdo SEO"
-        ogImage="https://mkranker.com.br/assets/img/recursos-cover.jpg"
+        title="Recursos da MKRanker | Ferramentas de SEO com Inteligência Artificial"
+        description="Conheça todas as ferramentas de SEO com I.A. da MKRanker e potencialize sua estratégia de conteúdo, palavras-chave e análise de mercado para alcançar melhores posições no Google."
+        keywords="ferramentas de SEO, recursos de SEO, inteligência artificial, otimização de conteúdo, análise de palavras-chave, MKRanker"
+        ogImage="https://mkranker.com.br/assets/img/recursos-capa.jpg"
         canonicalUrl="https://mkranker.com.br/recursos"
         jsonLd={`{
           "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "Recursos e Ferramentas de SEO com IA | MKRanker",
-          "description": "Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico.",
+          "@type": "ItemList",
+          "name": "Recursos da MKRanker",
           "url": "https://mkranker.com.br/recursos",
-          "mainEntity": {
-            "@type": "ItemList",
-            "itemListElement": [
-              {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Funil de Busca com IA",
-                "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia"
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "Palavras-chave com IA",
-                "url": "https://mkranker.com.br/recursos/palavras-chave-com-ia"
-              },
-              {
-                "@type": "ListItem",
-                "position": 3,
-                "name": "Público-alvo com IA",
-                "url": "https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
-              }
-            ]
-          }
+          "description": "Lista completa de ferramentas de SEO com Inteligência Artificial oferecidas pela MKRanker.",
+          "numberOfItems": 9,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Funil de Busca com IA",
+              "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia",
+              "description": "Otimize sua estratégia de busca orgânica com análises geradas por GPT para conquistar melhores posições nos buscadores."
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Palavras-chave com IA",
+              "url": "https://mkranker.com.br/recursos/palavras-chave-com-ia",
+              "description": "Encontre as melhores keywords com alto potencial de conversão usando inteligência artificial GPT."
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Público-alvo com IA",
+              "url": "https://mkranker.com.br/recursos/publico-alvo-com-ia",
+              "description": "Análise detalhada do seu mercado e público-alvo gerada por IA Gemini para estratégias mais assertivas."
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Texto SEO LP com IA",
+              "url": "https://mkranker.com.br/recursos/texto-seo-lp-com-ia",
+              "description": "Conteúdo otimizado para landing pages gerado por GPT que convertem e ranqueiam melhor nos buscadores."
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "name": "Texto SEO Produto com IA",
+              "url": "https://mkranker.com.br/recursos/texto-seo-produto-com-ia",
+              "description": "Descrições poderosas para seus produtos criadas com IA Gemini com foco em SEO e conversão."
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "name": "Texto SEO Blog com IA",
+              "url": "https://mkranker.com.br/recursos/texto-seo-blog-com-ia",
+              "description": "Artigos otimizados gerados por GPT para seu blog alcançar as primeiras posições nos buscadores."
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "name": "Pautas de Blog com IA",
+              "url": "https://mkranker.com.br/recursos/pautas-de-blog-com-ia",
+              "description": "Ideias e estruturas completas geradas por IA Gemini para conteúdos de blog otimizados para SEO."
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "name": "Meta Dados com IA",
+              "url": "https://mkranker.com.br/recursos/meta-dados-com-ia",
+              "description": "Títulos e descrições otimizados com GPT para atrair mais cliques e melhorar seu ranqueamento."
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "name": "Gerador de Imagens com IA",
+              "url": "https://mkranker.com.br/recursos/gerador-de-imagens-com-ia",
+              "description": "Crie imagens profissionais usando IA Gemini para ilustrar seus conteúdos. (Em breve)"
+            }
+          ]
         }`}
         contentHTML={`
           <div class="seo-content">
-            <h1>Recursos e Ferramentas de SEO com IA</h1>
-            <p>Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico.</p>
-            <p>Encontre soluções avançadas para palavra-chave, conteúdo, análise de mercado e muito mais.</p>
+            <h1>Recursos e Ferramentas de SEO com Inteligência Artificial</h1>
+            <p>Conheça todas as ferramentas de SEO com I.A. da MKRanker e potencialize sua estratégia de conteúdo, palavras-chave e análise de mercado para alcançar melhores posições no Google.</p>
+            <p>Explore soluções para otimização de textos, criação de metadados, análise de público e muito mais.</p>
           </div>
         `}
       />
