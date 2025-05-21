@@ -1,6 +1,6 @@
 
-import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { TextoSEOProdutoForm } from "@/components/texto-seo-produto/TextoSEOProdutoForm";
+import { DashboardLayout } from "../components/dashboard/DashboardLayout";
+import { TextoSEOProdutoForm } from "../components/texto-seo-produto/TextoSEOProdutoForm";
 
 const TextoSEOProduto = () => {
   return (

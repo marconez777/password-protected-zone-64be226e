@@ -1,6 +1,6 @@
 
-import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { MetaDadosForm } from "@/components/meta-dados/MetaDadosForm";
+import { DashboardLayout } from "../components/dashboard/DashboardLayout";
+import { MetaDadosForm } from "../components/meta-dados/MetaDadosForm";
 
 const MetaDados = () => {
   return (

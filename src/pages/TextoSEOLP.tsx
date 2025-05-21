@@ -1,6 +1,6 @@
 
-import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { TextoSEOLPForm } from "@/components/texto-seo-lp/TextoSEOLPForm";
+import { DashboardLayout } from "../components/dashboard/DashboardLayout";
+import { TextoSEOLPForm } from "../components/texto-seo-lp/TextoSEOLPForm";
 
 const TextoSEOLP = () => {
   return (

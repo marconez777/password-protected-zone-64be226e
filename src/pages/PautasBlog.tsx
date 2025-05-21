@@ -1,6 +1,6 @@
 
-import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
-import { PautasBlogForm } from "@/components/pautas-blog/PautasBlogForm";
+import { DashboardLayout } from "../components/dashboard/DashboardLayout";
+import { PautasBlogForm } from "../components/pautas-blog/PautasBlogForm";
 
 const PautasBlog = () => {
   return (
