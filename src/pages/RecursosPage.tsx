@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 
 type CardItem = {
   icon: React.ElementType;
@@ -117,6 +118,50 @@ const CardItem = ({ item, index }: { item: CardItem; index: number }) => {
 const RecursosPage = () => {
   return (
     <div className="min-h-screen bg-[#121016] w-full">
+      <SEOMetadata 
+        title="Recursos e Ferramentas de SEO com IA | MKRanker"
+        description="Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico."
+        keywords="ferramentas SEO, recursos marketing digital, SEO com IA, otimização de sites, análise de palavras-chave, conteúdo SEO"
+        ogImage="https://mkranker.com.br/assets/img/recursos-cover.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos"
+        jsonLd={`{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Recursos e Ferramentas de SEO com IA | MKRanker",
+          "description": "Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico.",
+          "url": "https://mkranker.com.br/recursos",
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Funil de Busca com IA",
+                "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Palavras-chave com IA",
+                "url": "https://mkranker.com.br/recursos/palavras-chave-com-ia"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Público-alvo com IA",
+                "url": "https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
+              }
+            ]
+          }
+        }`}
+        contentHTML={`
+          <div class="seo-content">
+            <h1>Recursos e Ferramentas de SEO com IA</h1>
+            <p>Explore nossas ferramentas de SEO potencializadas por inteligência artificial para melhorar o rankeamento do seu site e aumentar seu tráfego orgânico.</p>
+            <p>Encontre soluções avançadas para palavra-chave, conteúdo, análise de mercado e muito mais.</p>
+          </div>
+        `}
+      />
       <HomeNavbar />
       <div className="pt-16 pb-8 text-center">
         <h2 className="text-3xl md:text-4xl lg:text-5xl text-white font-bold">

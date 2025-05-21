@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
-import { Link } from 'react-router-dom';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import TextoSEOProdutoArticleContent from '@/components/texto-seo-produto/TextoSEOProdutoArticleContent';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 import { textoSEOProdutoJsonLdData } from '@/components/texto-seo-produto/TextoSEOProdutoJSONLD';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 
@@ -26,13 +26,23 @@ const TextoSEOProdutoPublic = () => {
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
-      <HomeNavbar />
-      
-      {/* Add JSON-LD for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: textoSEOProdutoJsonLdData }}
+      <SEOMetadata 
+        title="Gerador de Texto SEO para Produtos com IA | MKRanker"
+        description="Crie descrições de produtos otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas vendas e visibilidade."
+        keywords="texto SEO produto, descrição produto, copy produto, e-commerce SEO, otimização produto, MKRanker, inteligência artificial"
+        ogImage="https://mkranker.com.br/assets/img/texto-seo-produto.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos/texto-seo-produto-com-ia"
+        jsonLd={textoSEOProdutoJsonLdData}
+        contentHTML={`
+          <div class="seo-content">
+            <h1>Gerador de Texto SEO para Produtos com IA</h1>
+            <p>Crie descrições de produtos otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas vendas e visibilidade.</p>
+            <p>Desenvolva conteúdo persuasivo que destaca os benefícios dos seus produtos e converte visitantes em compradores.</p>
+          </div>
+        `}
       />
+      
+      <HomeNavbar />
       
       <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}

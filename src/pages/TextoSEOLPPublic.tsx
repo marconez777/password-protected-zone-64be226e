@@ -6,6 +6,7 @@ import Footer from '@/components/home/Footer';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import TextoSEOLPArticleContent from '@/components/texto-seo-lp/TextoSEOLPArticleContent';
+import SEOMetadata from '@/components/recursos/SEOMetadata';
 import { textoSEOLPJsonLdData } from '@/components/texto-seo-lp/TextoSEOLPJSONLD';
 
 const TextoSEOLPPublic = () => {
@@ -25,13 +26,23 @@ const TextoSEOLPPublic = () => {
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
-      <HomeNavbar />
-      
-      {/* Add JSON-LD for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: textoSEOLPJsonLdData }}
+      <SEOMetadata 
+        title="Gerador de Texto SEO para Landing Pages com IA | MKRanker"
+        description="Crie textos otimizados para landing pages com nossa ferramenta de inteligência artificial e aumente suas conversões e rankeamento."
+        keywords="texto SEO, landing page, copy SEO, textos persuasivos, otimização de conteúdo, MKRanker, inteligência artificial"
+        ogImage="https://mkranker.com.br/assets/img/texto-seo-lp.jpg"
+        canonicalUrl="https://mkranker.com.br/recursos/texto-seo-lp-com-ia"
+        jsonLd={textoSEOLPJsonLdData}
+        contentHTML={`
+          <div class="seo-content">
+            <h1>Gerador de Texto SEO para Landing Pages com IA</h1>
+            <p>Crie textos otimizados para landing pages com nossa ferramenta de inteligência artificial e aumente suas conversões e rankeamento.</p>
+            <p>Desenvolva conteúdo persuasivo que não apenas atrai visitantes, mas os converte em leads e clientes.</p>
+          </div>
+        `}
       />
+      
+      <HomeNavbar />
       
       <div className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
         {/* Breadcrumb */}
