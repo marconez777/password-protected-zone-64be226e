@@ -17,6 +17,9 @@ const injectSEOContent = () => {
     seoContainer.style.width = '0';
     seoContainer.style.height = '0';
     seoContainer.style.overflow = 'hidden';
+    seoContainer.style.top = '0';
+    seoContainer.style.left = '0';
+    seoContainer.style.opacity = '0.01'; // Quase invisível, mas ainda legível para crawlers
     
     seoContentElements.forEach(element => {
       if (element instanceof HTMLMetaElement && element.content) {
@@ -32,8 +35,11 @@ const injectSEOContent = () => {
 // Executa antes da hidratação do React
 document.addEventListener('DOMContentLoaded', injectSEOContent);
 
+// Configuração mais robusta do Helmet para garantir que os metadados sejam aplicados corretamente
+const helmetContext = {};
+
 createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
+  <HelmetProvider context={helmetContext}>
     <App />
     <SonnerToaster position="bottom-right" />
   </HelmetProvider>

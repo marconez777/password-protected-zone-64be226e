@@ -31,6 +31,8 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
       <meta name="robots" content="index, follow" />
       <meta name="author" content="MKRanker" />
       <meta name="theme-color" content="#6B46C1" />
+      <meta name="language" content="Portuguese" />
+      <meta name="revisit-after" content="7 days" />
 
       {/* SEO: Título e descrição */}
       <title>{title}</title>
@@ -43,9 +45,12 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:site_name" content="MKRanker" />
+      <meta property="og:locale" content="pt_BR" />
 
       {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@mkranker" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
