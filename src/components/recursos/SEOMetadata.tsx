@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 interface SEOMetadataProps {
@@ -25,39 +25,24 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
   contentHTML,
   pageType
 }) => {
-  // Atualiza os metadados no HTML inicial para rastreadores que não executam JavaScript
-  useEffect(() => {
-    // Atualiza os metadados básicos
-    document.title = title;
+  // Injeção direta do conteúdo SEO no container criado no main.tsx
+  React.useEffect(() => {
+    if (contentHTML) {
+      const seoContainer = document.getElementById('seo-content-container');
+      if (seoContainer) {
+        // Limpa o conteúdo anterior e adiciona o novo
+        seoContainer.innerHTML = contentHTML;
+      }
+    }
     
-    // Atualiza metatags com IDs específicos
-    const updateMetaContent = (id: string, content: string) => {
-      const element = document.getElementById(id);
-      if (element && element instanceof HTMLMetaElement) {
-        element.content = content;
+    return () => {
+      // Limpa o conteúdo ao desmontar o componente
+      const seoContainer = document.getElementById('seo-content-container');
+      if (seoContainer) {
+        seoContainer.innerHTML = '';
       }
     };
-    
-    // Atualiza link canônico
-    const canonicalElement = document.getElementById('canonicalUrl');
-    if (canonicalElement && canonicalElement instanceof HTMLLinkElement) {
-      canonicalElement.href = canonicalUrl;
-    }
-    
-    // Atualiza metadados específicos
-    updateMetaContent('ogTitle', title);
-    updateMetaContent('ogDescription', description);
-    updateMetaContent('ogImage', ogImage);
-    updateMetaContent('ogUrl', canonicalUrl);
-    updateMetaContent('twitterTitle', title);
-    updateMetaContent('twitterDescription', description);
-    updateMetaContent('twitterImage', ogImage);
-    
-    // Define o tipo de página
-    if (pageType) {
-      updateMetaContent('pageType', pageType);
-    }
-  }, [title, description, ogImage, canonicalUrl, pageType]);
+  }, [contentHTML]);
   
   return (
     <Helmet>
@@ -102,15 +87,8 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
       {/* Dados Estruturados (JSON-LD) */}
       <script type="application/ld+json">{jsonLd}</script>
       
-      {/* Conteúdo SEO para pré-renderização - visível para mecanismos de busca */}
-      {contentHTML && (
-        <>
-          <meta name="seo-content" content={contentHTML} />
-          
-          {/* Este conteúdo é injetado diretamente no HTML - FIXED: wrapping children in braces */}
-          <noscript>{contentHTML}</noscript>
-        </>
-      )}
+      {/* Informamos aos motores de busca qual o tipo de página */}
+      {pageType && <meta name="page-type" content={pageType} />}
     </Helmet>
   );
 };
