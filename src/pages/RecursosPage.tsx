@@ -1,4 +1,3 @@
-
 import React from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import { Card, CardContent } from '@/components/ui/card';
@@ -124,6 +123,7 @@ const RecursosPage = () => {
         keywords="ferramentas de SEO, recursos de SEO, inteligência artificial, otimização de conteúdo, análise de palavras-chave, MKRanker"
         ogImage="https://mkranker.com.br/assets/img/recursos-capa.jpg"
         canonicalUrl="https://mkranker.com.br/recursos"
+        pageType="recursos"
         jsonLd={`{
           "@context": "https://schema.org",
           "@type": "ItemList",

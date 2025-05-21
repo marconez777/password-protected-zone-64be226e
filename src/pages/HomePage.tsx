@@ -1,4 +1,3 @@
-
 import React from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import HeroSection from '@/components/home/HeroSection';
@@ -18,6 +17,7 @@ const HomePage = () => {
         keywords="SEO com IA, rankeamento Google, marketing digital, otimização de sites, tráfego orgânico, inteligência artificial"
         ogImage="https://mkranker.com.br/assets/img/home-cover.jpg"
         canonicalUrl="https://mkranker.com.br/"
+        pageType="home"
         jsonLd={`{
           "@context": "https://schema.org",
           "@type": "WebSite",

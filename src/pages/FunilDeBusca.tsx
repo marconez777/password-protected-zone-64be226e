@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HomeNavbar from '@/components/home/HomeNavbar';
 import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
@@ -23,6 +22,31 @@ const FunilDeBusca = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Efeito para atualizar metadados específicos da página quando o componente montar
+  useEffect(() => {
+    // Atualiza os metadados no HTML para rastreadores que não executam JavaScript
+    const updatePageSpecificMetaTags = () => {
+      document.title = "Gerador de Funil de Busca com IA | MKRanker";
+      
+      const updateMetaContent = (id: string, content: string) => {
+        const element = document.getElementById(id);
+        if (element && element instanceof HTMLMetaElement) {
+          element.content = content;
+        }
+      };
+      
+      updateMetaContent('pageType', 'recurso-detalhe');
+      
+      // Atualiza o link canônico
+      const canonicalElement = document.getElementById('canonicalUrl');
+      if (canonicalElement && canonicalElement instanceof HTMLLinkElement) {
+        canonicalElement.href = "https://mkranker.com.br/recursos/funil-de-busca-com-ia";
+      }
+    };
+    
+    updatePageSpecificMetaTags();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
@@ -31,6 +55,7 @@ const FunilDeBusca = () => {
         keywords="funil de busca, SEO, keyword funnel, jornada de busca, funil de palavras-chave, MKRanker, inteligência artificial"
         ogImage="https://mkranker.com.br/assets/img/funil-busca.jpg"
         canonicalUrl="https://mkranker.com.br/recursos/funil-de-busca-com-ia"
+        pageType="recurso-detalhe"
         jsonLd={`{
           "@context": "https://schema.org",
           "@type": "WebPage",

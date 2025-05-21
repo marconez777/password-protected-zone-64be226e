@@ -4,6 +4,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Metadados dinâmicos que serão substituídos via JavaScript -->
     <title>MKRanker | Ferramentas de SEO com Inteligência Artificial</title>
     <meta name="description" content="Plataforma de otimização de SEO com inteligência artificial para análise de palavras-chave, geração de conteúdo e estratégias para primeira página do Google." />
     <meta name="author" content="MKRanker" />
@@ -13,23 +15,26 @@
     <meta name="revisit-after" content="7 days" />
 
     <link rel="icon" href="/lovable-uploads/66079de7-3561-4f58-be8d-a718cbbe92de.png" type="image/png">
-    <link rel="canonical" href="https://mkranker.com.br/" />
+    <link rel="canonical" href="https://mkranker.com.br/" id="canonicalUrl" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="MKRanker | Ferramentas de SEO com Inteligência Artificial" />
-    <meta property="og:description" content="Plataforma de otimização de SEO com inteligência artificial para análise de palavras-chave, geração de conteúdo e estratégias para primeira página do Google." />
-    <meta property="og:image" content="/lovable-uploads/24b2e9b5-6bc9-4fd7-bb5e-9d14c3769b5a.png" />
-    <meta property="og:url" content="https://mkranker.com.br/" />
+    <meta property="og:title" content="MKRanker | Ferramentas de SEO com Inteligência Artificial" id="ogTitle" />
+    <meta property="og:description" content="Plataforma de otimização de SEO com inteligência artificial para análise de palavras-chave, geração de conteúdo e estratégias para primeira página do Google." id="ogDescription" />
+    <meta property="og:image" content="/lovable-uploads/24b2e9b5-6bc9-4fd7-bb5e-9d14c3769b5a.png" id="ogImage" />
+    <meta property="og:url" content="https://mkranker.com.br/" id="ogUrl" />
     <meta property="og:site_name" content="MKRanker" />
     <meta property="og:locale" content="pt_BR" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@mkranker" />
-    <meta name="twitter:title" content="MKRanker | Ferramentas de SEO com Inteligência Artificial" />
-    <meta name="twitter:description" content="Plataforma de otimização de SEO com inteligência artificial para análise de palavras-chave, geração de conteúdo e estratégias para primeira página do Google." />
-    <meta name="twitter:image" content="/lovable-uploads/24b2e9b5-6bc9-4fd7-bb5e-9d14c3769b5a.png" />
+    <meta name="twitter:title" content="MKRanker | Ferramentas de SEO com Inteligência Artificial" id="twitterTitle" />
+    <meta name="twitter:description" content="Plataforma de otimização de SEO com inteligência artificial para análise de palavras-chave, geração de conteúdo e estratégias para primeira página do Google." id="twitterDescription" />
+    <meta name="twitter:image" content="/lovable-uploads/24b2e9b5-6bc9-4fd7-bb5e-9d14c3769b5a.png" id="twitterImage" />
+    
+    <!-- Metadados específicos por página -->
+    <meta name="page-type" content="home" id="pageType" />
     
     <style>
       /* Home page specific styles that won't affect the dashboard */

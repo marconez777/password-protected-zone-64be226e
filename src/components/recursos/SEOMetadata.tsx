@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 interface SEOMetadataProps {
@@ -11,6 +11,7 @@ interface SEOMetadataProps {
   jsonLd: string;
   preload?: {href: string, as: string}[];
   contentHTML?: string; // Propriedade para conteúdo SEO
+  pageType?: string; // Identificador do tipo de página
 }
 
 const SEOMetadata: React.FC<SEOMetadataProps> = ({
@@ -21,8 +22,43 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
   canonicalUrl,
   jsonLd,
   preload,
-  contentHTML
+  contentHTML,
+  pageType
 }) => {
+  // Atualiza os metadados no HTML inicial para rastreadores que não executam JavaScript
+  useEffect(() => {
+    // Atualiza os metadados básicos
+    document.title = title;
+    
+    // Atualiza metatags com IDs específicos
+    const updateMetaContent = (id: string, content: string) => {
+      const element = document.getElementById(id);
+      if (element && element instanceof HTMLMetaElement) {
+        element.content = content;
+      }
+    };
+    
+    // Atualiza link canônico
+    const canonicalElement = document.getElementById('canonicalUrl');
+    if (canonicalElement && canonicalElement instanceof HTMLLinkElement) {
+      canonicalElement.href = canonicalUrl;
+    }
+    
+    // Atualiza metadados específicos
+    updateMetaContent('ogTitle', title);
+    updateMetaContent('ogDescription', description);
+    updateMetaContent('ogImage', ogImage);
+    updateMetaContent('ogUrl', canonicalUrl);
+    updateMetaContent('twitterTitle', title);
+    updateMetaContent('twitterDescription', description);
+    updateMetaContent('twitterImage', ogImage);
+    
+    // Define o tipo de página
+    if (pageType) {
+      updateMetaContent('pageType', pageType);
+    }
+  }, [title, description, ogImage, canonicalUrl, pageType]);
+  
   return (
     <Helmet>
       {/* Metadados essenciais */}
