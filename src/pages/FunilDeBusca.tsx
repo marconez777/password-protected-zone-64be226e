@@ -5,7 +5,7 @@ import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
-import { FunilDeBuscaContent } from '@/components/recursos/FunilDeBuscaContent';
+import FunilDeBuscaContent from '@/components/recursos/FunilDeBuscaContent';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
 
 const FunilDeBusca = () => {
