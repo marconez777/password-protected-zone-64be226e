@@ -66,7 +66,7 @@ const FunilDeBusca = () => {
     "operatingSystem": "Web", // MOVIDO DO mainEntity
     "offers": { // MOVIDO DO mainEntity
       "@type": "Offer",
-      "price": "47.00",
+      "price": "97.00",
       "priceCurrency": "BRL"
     }
   }`}
