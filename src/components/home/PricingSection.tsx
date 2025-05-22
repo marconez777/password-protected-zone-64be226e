@@ -3,8 +3,10 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+
 const PricingSection = () => {
   const features = ['Palavras-chave', 'Funil de Busca', 'Mercado e Público-alvo', 'Texto SEO para LP', 'Texto SEO para Produto', 'Texto SEO para Blog', 'Pautas para Blog', 'Meta Dados', 'Treinamentos gravados', 'Treinamentos ao vivo (1x por semana)', 'Mentoria em Grupo (1x por mês)', 'Grupo Whatsapp para dúvidas'];
+  
   return <div className="w-full py-24 bg-[#121016]">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto mb-16 text-center">
@@ -25,15 +27,15 @@ const PricingSection = () => {
                 <h3 className="text-white text-2xl font-bold mb-1">Por tempo limitado</h3>
                 
                 <div className="mt-4 mb-8">
-                  <div className="flex items-baseline text-white">
-                    <div className="flex flex-col">
-                      <div className="flex items-baseline">
-                        <span className="text-gray-400 line-through text-xl mr-2">de R$297</span>
-                        <span className="text-white">por</span>
-                      </div>
-                      <span className="text-5xl font-extrabold tracking-tight">R$ 97,00</span>
+                  <div className="flex flex-col text-white">
+                    <div className="flex items-baseline">
+                      <span className="text-gray-400 line-through text-xl mr-2">de R$297</span>
+                      <span className="text-white">por</span>
                     </div>
-                    <span className="ml-1 text-xl text-muted-foreground">/mês</span>
+                    <div className="flex items-baseline">
+                      <span className="text-5xl font-extrabold tracking-tight">R$ 97,00</span>
+                      <span className="ml-1 text-xl text-muted-foreground">/mês</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -71,15 +73,15 @@ const PricingSection = () => {
                 <h3 className="text-white text-2xl font-bold mb-1">Por tempo limitado</h3>
                 
                 <div className="mt-4 mb-8">
-                  <div className="flex items-baseline text-white">
-                    <div className="flex flex-col">
-                      <div className="flex items-baseline">
-                        <span className="text-gray-400 line-through text-xl mr-2">de R$3.564</span>
-                        <span className="text-white">por</span>
-                      </div>
-                      <span className="text-5xl font-extrabold tracking-tight">R$ 777,00</span>
+                  <div className="flex flex-col text-white">
+                    <div className="flex items-baseline">
+                      <span className="text-gray-400 line-through text-xl mr-2">de R$3.564</span>
+                      <span className="text-white">por</span>
                     </div>
-                    <span className="ml-1 text-xl text-muted-foreground">/ano</span>
+                    <div className="flex items-baseline">
+                      <span className="text-5xl font-extrabold tracking-tight">R$ 777,00</span>
+                      <span className="ml-1 text-xl text-muted-foreground">/ano</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -92,8 +94,6 @@ const PricingSection = () => {
                       <span className="text-gray-300 text-sm">{feature}</span>
                     </li>)}
                 </ul>
-                
-                
               </div>
               
               <div className="mt-auto">
@@ -110,4 +110,5 @@ const PricingSection = () => {
       </div>
     </div>;
 };
+
 export default PricingSection;
