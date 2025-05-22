@@ -7,7 +7,7 @@ import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import TextoSEOLPArticleContent from '@/components/texto-seo-lp/TextoSEOLPArticleContent';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
-import { textoSEOLPJsonLdData } from '@/components/texto-seo-lp/TextoSEOLPJSONLD';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const TextoSEOLPPublic = () => {
   const [activeItem, setActiveItem] = useState('texto-seo-lp');
@@ -24,15 +24,32 @@ const TextoSEOLPPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Gerador de Texto SEO para Landing Pages com IA | MKRanker";
+  const pageDescription = "Crie textos otimizados para landing pages com nossa ferramenta de inteligência artificial e aumente suas conversões e rankeamento.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/texto-seo-lp-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/texto-seo-lp.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Gerador de Texto SEO para Landing Pages MKRanker",
+    "ContentApplication",
+    "97.00"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Gerador de Texto SEO para Landing Pages com IA | MKRanker"
-        description="Crie textos otimizados para landing pages com nossa ferramenta de inteligência artificial e aumente suas conversões e rankeamento."
+        title={pageTitle}
+        description={pageDescription}
         keywords="texto SEO, landing page, copy SEO, textos persuasivos, otimização de conteúdo, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/texto-seo-lp.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/texto-seo-lp-com-ia"
-        jsonLd={textoSEOLPJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={`
           <div class="seo-content">
             <h1>Gerador de Texto SEO para Landing Pages com IA</h1>
@@ -40,6 +57,7 @@ const TextoSEOLPPublic = () => {
             <p>Desenvolva conteúdo persuasivo que não apenas atrai visitantes, mas os converte em leads e clientes.</p>
           </div>
         `}
+        pageType="recurso-detalhe"
       />
       
       <HomeNavbar />

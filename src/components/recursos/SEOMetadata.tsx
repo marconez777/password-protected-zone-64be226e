@@ -88,7 +88,7 @@ const SEOMetadata: React.FC<SEOMetadataProps> = ({
       <script type="application/ld+json">{jsonLd}</script>
       
       {/* Informamos aos motores de busca qual o tipo de página */}
-      {pageType && <meta name="page-type" content={pageType} />}
+      {pageType && <meta name="page-type" content={pageType} id="pageType" />}
     </Helmet>
   );
 };

@@ -7,7 +7,8 @@ import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
 import { KeywordArticleContent } from '@/components/keywords-public/KeywordArticleContent';
-import { keywordJsonLdData, keywordSeoContent } from '@/components/keywords-public/KeywordJSONLD';
+import { keywordSeoContent } from '@/components/keywords-public/KeywordJSONLD';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const KeywordsPublic = () => {
   const [activeItem, setActiveItem] = useState('palavras-chave');
@@ -29,16 +30,34 @@ const KeywordsPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Ferramenta de Pesquisa de Palavras-chave com I.A | MKRanker";
+  const pageDescription = "Descubra as melhores palavras-chave para seu negócio com nossa ferramenta de pesquisa otimizada com inteligência artificial.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/palavras-chave-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/keywords-tool.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Pesquisa de Palavras-chave MKRanker",
+    "SEOApplication",
+    "97.00"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Ferramenta de Pesquisa de Palavras-chave com I.A | MKRanker"
-        description="Descubra as melhores palavras-chave para seu negócio com nossa ferramenta de pesquisa otimizada com inteligência artificial."
+        title={pageTitle}
+        description={pageDescription}
         keywords="palavras-chave, SEO, pesquisa de palavras-chave, ferramenta SEO, tráfego orgânico, MKRanker, inteligência artificial, Gemini Treinada"
-        ogImage="https://mkranker.com.br/assets/img/keywords-tool.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/palavras-chave-com-ia"
-        jsonLd={keywordJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={keywordSeoContent}
+        pageType="recurso-detalhe"
       />
 
       <HomeNavbar />

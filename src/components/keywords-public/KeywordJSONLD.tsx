@@ -4,15 +4,23 @@ import React from 'react';
 export const keywordJsonLdData = `
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "MKRanker",
-  "applicationCategory": "SEOApplication",
-  "offers": {
-    "@type": "Offer",
-    "price": "97.00",
-    "priceCurrency": "BRL"
-  },
-  "description": "Ferramenta de Pesquisa de Palavras-chave com Inteligência Artificial para melhorar o posicionamento nos motores de busca."
+  "@type": "WebPage",
+  "name": "Ferramenta de Pesquisa de Palavras-chave com I.A | MKRanker",
+  "description": "Descubra as melhores palavras-chave para seu negócio com nossa ferramenta de pesquisa otimizada com inteligência artificial.",
+  "url": "https://mkranker.com.br/recursos/palavras-chave-com-ia",
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "Pesquisa de Palavras-chave MKRanker",
+    "applicationCategory": "SEOApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "97.00",
+      "priceCurrency": "BRL"
+    },
+    "image": "https://mkranker.com.br/assets/img/keywords-tool.jpg",
+    "description": "Ferramenta de inteligência artificial para descoberta de palavras-chave relevantes ao seu negócio."
+  }
 }
 `;
 

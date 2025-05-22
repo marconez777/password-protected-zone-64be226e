@@ -6,8 +6,8 @@ import Footer from '@/components/home/Footer';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import TextoSEOBlogArticleContent from '@/components/texto-seo-blog/TextoSEOBlogArticleContent';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
-import { textoSEOBlogJsonLdData } from '@/components/texto-seo-blog/TextoSEOBlogJSONLD';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const TextoSEOBlogPublic = () => {
   const [activeItem, setActiveItem] = useState('texto-seo-blog');
@@ -24,15 +24,32 @@ const TextoSEOBlogPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Gerador de Texto SEO para Blog com IA | MKRanker";
+  const pageDescription = "Crie artigos otimizados para SEO com nossa ferramenta de inteligência artificial e alcance as primeiras posições nos motores de busca.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/texto-seo-blog-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/texto-seo-blog.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Gerador de Texto SEO para Blog MKRanker",
+    "ContentApplication",
+    "97.00"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Gerador de Texto SEO para Blog com IA | MKRanker"
-        description="Crie artigos otimizados para SEO com nossa ferramenta de inteligência artificial e alcance as primeiras posições nos motores de busca."
+        title={pageTitle}
+        description={pageDescription}
         keywords="texto SEO blog, artigos otimizados, blog SEO, conteúdo otimizado, redação SEO, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/texto-seo-blog.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/texto-seo-blog-com-ia"
-        jsonLd={textoSEOBlogJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={`
           <div class="seo-content">
             <h1>Gerador de Texto SEO para Blog com IA</h1>
@@ -40,6 +57,7 @@ const TextoSEOBlogPublic = () => {
             <p>Desenvolva conteúdo de alta qualidade que engaja leitores e é reconhecido pelo Google como autoridade.</p>
           </div>
         `}
+        pageType="recurso-detalhe"
       />
       
       <HomeNavbar />

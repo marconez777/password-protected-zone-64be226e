@@ -7,7 +7,8 @@ import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import { PautasBlogArticleContent } from '@/components/pautas-blog/PautasBlogArticleContent';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
-import { pautasBlogJsonLdData, pautasBlogSeoContent } from '@/components/pautas-blog/PautasBlogJSONLD';
+import { pautasBlogSeoContent } from '@/components/pautas-blog/PautasBlogJSONLD';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const PautasBlogPublic = () => {
   const [activeItem, setActiveItem] = useState('pautas-blog');
@@ -29,16 +30,35 @@ const PautasBlogPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Gerador de Pautas para Blog com IA | MKRanker";
+  const pageDescription = "Crie ideias de pautas otimizadas para SEO com nossa ferramenta de inteligência artificial e impulsione seu blog.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/pautas-blog-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/pautas-blog.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Gerador de Pautas para Blog MKRanker",
+    "ContentApplication",
+    "97.00",
+    "Ferramenta de IA para geração de ideias e pautas de blog otimizadas para SEO"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Gerador de Pautas para Blog com IA | MKRanker"
-        description="Crie ideias de pautas otimizadas para SEO com nossa ferramenta de inteligência artificial e impulsione seu blog."
+        title={pageTitle}
+        description={pageDescription}
         keywords="pautas para blog, ideias para blog, gerador de pautas, conteúdo para blog, planejamento editorial, IA para blog"
-        ogImage="https://mkranker.com.br/assets/img/pautas-blog.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/pautas-blog-com-ia"
-        jsonLd={pautasBlogJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={pautasBlogSeoContent}
+        pageType="recurso-detalhe"
       />
 
       <HomeNavbar />

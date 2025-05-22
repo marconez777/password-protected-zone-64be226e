@@ -7,7 +7,8 @@ import RecursosSidebar from '@/components/recursos/RecursosSidebar';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
 import { MetaDadosArticleContent } from '@/components/meta-dados/MetaDadosArticleContent';
-import { metaDadosJsonLdData, metaDadosSeoContent } from '@/components/meta-dados/MetaDadosJSONLD';
+import { metaDadosSeoContent } from '@/components/meta-dados/MetaDadosJSONLD';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const MetaDadosPublic = () => {
   const [activeItem, setActiveItem] = useState('meta-dados');
@@ -29,16 +30,35 @@ const MetaDadosPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Gerador de Meta Dados com I.A para SEO | MKRanker";
+  const pageDescription = "Crie meta títulos e descrições otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas taxas de cliques.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/meta-dados-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/meta-dados.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Gerador de Meta Dados MKRanker",
+    "SEOApplication",
+    "97.00",
+    "Ferramenta que utiliza inteligência artificial para criar meta títulos e descrições otimizados para maior CTR nos resultados de busca"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Gerador de Meta Dados com I.A para SEO | MKRanker"
-        description="Crie meta títulos e descrições otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas taxas de cliques."
+        title={pageTitle}
+        description={pageDescription}
         keywords="meta dados, SEO, meta título, meta descrição, tag title, tag description, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/meta-dados.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/meta-dados-com-ia"
-        jsonLd={metaDadosJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={metaDadosSeoContent}
+        pageType="recurso-detalhe"
       />
 
       <HomeNavbar />

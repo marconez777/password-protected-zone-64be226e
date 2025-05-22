@@ -6,8 +6,8 @@ import Footer from '@/components/home/Footer';
 import RecursoBreadcrumb from '@/components/recursos/RecursoBreadcrumb';
 import TextoSEOProdutoArticleContent from '@/components/texto-seo-produto/TextoSEOProdutoArticleContent';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
-import { textoSEOProdutoJsonLdData } from '@/components/texto-seo-produto/TextoSEOProdutoJSONLD';
 import RecursosSidebar from '@/components/recursos/RecursosSidebar';
+import { generateResourceSchemaLD } from '@/utils/schemaGenerator';
 
 const TextoSEOProdutoPublic = () => {
   const [activeItem, setActiveItem] = useState('texto-seo-produto');
@@ -24,15 +24,32 @@ const TextoSEOProdutoPublic = () => {
     { id: 'gerador-imagens', label: 'Gerador de Imagens', path: '#', soon: true },
   ];
 
+  // Title and description for the page
+  const pageTitle = "Gerador de Texto SEO para Produtos com IA | MKRanker";
+  const pageDescription = "Crie descrições de produtos otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas vendas e visibilidade.";
+  const canonicalUrl = "https://mkranker.com.br/recursos/texto-seo-produto-com-ia";
+  const ogImage = "https://mkranker.com.br/assets/img/texto-seo-produto.jpg";
+  
+  // Generate standardized JSON-LD
+  const jsonLdData = generateResourceSchemaLD(
+    pageTitle,
+    pageDescription,
+    canonicalUrl,
+    ogImage,
+    "Gerador de Texto SEO para Produtos MKRanker",
+    "ContentApplication",
+    "97.00"
+  );
+
   return (
     <div className="min-h-screen bg-[#121016] w-full">
       <SEOMetadata 
-        title="Gerador de Texto SEO para Produtos com IA | MKRanker"
-        description="Crie descrições de produtos otimizadas para SEO com nossa ferramenta de inteligência artificial e aumente suas vendas e visibilidade."
+        title={pageTitle}
+        description={pageDescription}
         keywords="texto SEO produto, descrição produto, copy produto, e-commerce SEO, otimização produto, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/texto-seo-produto.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/texto-seo-produto-com-ia"
-        jsonLd={textoSEOProdutoJsonLdData}
+        ogImage={ogImage}
+        canonicalUrl={canonicalUrl}
+        jsonLd={jsonLdData}
         contentHTML={`
           <div class="seo-content">
             <h1>Gerador de Texto SEO para Produtos com IA</h1>
@@ -40,6 +57,7 @@ const TextoSEOProdutoPublic = () => {
             <p>Desenvolva conteúdo persuasivo que destaca os benefícios dos seus produtos e converte visitantes em compradores.</p>
           </div>
         `}
+        pageType="recurso-detalhe"
       />
       
       <HomeNavbar />
