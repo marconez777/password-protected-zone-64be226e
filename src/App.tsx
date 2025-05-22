@@ -5,6 +5,7 @@ import { AuthProvider, ProtectedRoute } from "@/providers/auth";
 import { HelmetProvider } from "react-helmet-async";
 
 import HomePage from "@/pages/HomePage";
+import AssinarPage from "@/pages/AssinarPage";
 import Login from "@/pages/Login";
 import Cadastro from "@/pages/Cadastro";
 import CadastroEnviado from "@/pages/CadastroEnviado";
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/recursos" element={<RecursosPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/assinar" element={<AssinarPage />} />
           
           {/* Institutional Resource Pages - New URL Pattern */}
           <Route path="/recursos/funil-de-busca-com-ia" element={<FunilDeBusca />} />
