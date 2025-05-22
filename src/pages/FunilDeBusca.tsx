@@ -49,31 +49,30 @@ const FunilDeBusca = () => {
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
-      <SEOMetadata 
-        title="Gerador de Funil de Busca com IA | MKRanker"
-        description="Crie funis de busca otimizados para SEO com nossa ferramenta de inteligência artificial e aumente seu tráfego orgânico."
-        keywords="funil de busca, SEO, keyword funnel, jornada de busca, funil de palavras-chave, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/funil-busca.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/funil-de-busca-com-ia"
-        pageType="recurso-detalhe"
-        jsonLd={`{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "Gerador de Funil de Busca com IA | MKRanker",
-          "description": "Crie funis de busca otimizados para SEO com nossa ferramenta de inteligência artificial e aumente seu tráfego orgânico.",
-          "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia",
-          "mainEntity": {
-            "@type": "SoftwareApplication",
-            "name": "Funil de Busca MKRanker",
-            "applicationCategory": "SEOApplication",
-            "operatingSystem": "Web",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "BRL"
-            }
-          }
-        }`}
+  <SEOMetadata
+  title="Gerador de Funil de Busca com IA | MKRanker"
+  description="Crie funis de busca otimizados para SEO com nossa ferramenta de inteligência artificial e aumente seu tráfego orgânico."
+  keywords="funil de busca, SEO, keyword funnel, jornada de busca, funil de palavras-chave, MKRanker, inteligência artificial"
+  ogImage="https://mkranker.com.br/assets/img/funil-busca.jpg"
+  canonicalUrl="https://mkranker.com.br/recursos/funil-de-busca-com-ia"
+  pageType="recurso-detalhe"
+  jsonLd={`{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication", // ALTERADO AQUI
+    "name": "Gerador de Funil de Busca com IA | MKRanker", // MOVIDO DO mainEntity
+    "description": "Crie funis de busca otimizados para SEO com nossa ferramenta de inteligência artificial e aumente seu tráfego orgânico.", // MOVIDO DO mainEntity
+    "url": "https://mkranker.com.br/recursos/funil-de-busca-com-ia", // A URL permanece a mesma
+    "applicationCategory": "SEOApplication", // MOVIDO DO mainEntity
+    "operatingSystem": "Web", // MOVIDO DO mainEntity
+    "offers": { // MOVIDO DO mainEntity
+      "@type": "Offer",
+      "price": "47.00",
+      "priceCurrency": "BRL"
+    }
+  }`}
+  // ...
+/>
+// ...
         contentHTML={`
           <div class="seo-content">
             <h1>Gerador de Funil de Busca com IA</h1>
