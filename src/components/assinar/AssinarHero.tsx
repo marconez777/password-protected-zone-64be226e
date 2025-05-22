@@ -37,6 +37,20 @@ const AssinarHero = () => {
             Com a MK Ranker, você descobre o que realmente funciona, posiciona com precisão e converte visitantes em clientes — usando o poder da IA (ChatGPT + Gemini).
           </p>
           
+          {/* Embedded Video - Moved before the button */}
+          <div className="max-w-4xl mx-auto bg-[#121016]/80 rounded-xl overflow-hidden border border-gray-800 shadow-xl mb-8">
+            <div className="aspect-video w-full">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/your-video-id" 
+                title="MK Ranker: A Inteligência Artificial de SEO"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+          
           <Button 
             size="lg"
             className="bg-gradient-to-r from-[#805af5] to-[#cd99ff] text-white font-medium px-8 py-6 text-lg rounded-md hover:opacity-90 transition"
@@ -44,20 +58,6 @@ const AssinarHero = () => {
           >
             <Link to="/cadastro">Comece Agora e Veja a Diferença</Link>
           </Button>
-        </div>
-        
-        {/* Embedded Video */}
-        <div className="max-w-4xl mx-auto bg-[#121016]/80 rounded-xl overflow-hidden border border-gray-800 shadow-xl">
-          <div className="aspect-video w-full">
-            <iframe 
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/your-video-id" 
-              title="MK Ranker: A Inteligência Artificial de SEO"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
         </div>
       </div>
     </div>
