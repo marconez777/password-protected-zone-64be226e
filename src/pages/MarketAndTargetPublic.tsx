@@ -29,30 +29,29 @@ const MarketAndTargetPublic = () => {
 
   return (
     <div className="min-h-screen bg-[#121016] w-full">
-      <SEOMetadata 
-        title="Análise de Mercado e Público-Alvo com IA | MKRanker"
-        description="Gere análises detalhadas de mercado e público-alvo com nossa ferramenta de inteligência artificial e desenvolva estratégias mais eficazes."
-        keywords="análise de mercado, público-alvo, persona, buyer persona, pesquisa de mercado, MKRanker, inteligência artificial"
-        ogImage="https://mkranker.com.br/assets/img/market-target.jpg"
-        canonicalUrl="https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
-        jsonLd={`{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "Análise de Mercado e Público-Alvo com IA | MKRanker",
-          "description": "Gere análises detalhadas de mercado e público-alvo com nossa ferramenta de inteligência artificial e desenvolva estratégias mais eficazes.",
-          "url": "https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia",
-          "mainEntity": {
-            "@type": "SoftwareApplication",
-            "name": "Análise de Mercado MKRanker",
-            "applicationCategory": "MarketingApplication",
-            "operatingSystem": "Web",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "BRL"
-            }
-          }
-        }`}
+      <SEOMetadata
+  title="Análise de Mercado e Público-Alvo com IA | MKRanker"
+  description="Gere análises detalhadas de mercado e público-alvo com nossa ferramenta de inteligência artificial e desenvolva estratégias mais eficazes."
+  keywords="análise de mercado, público-alvo, persona, buyer persona, pesquisa de mercado, MKRanker, inteligência artificial"
+  ogImage="https://mkranker.com.br/assets/img/market-target.jpg"
+  canonicalUrl="https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia"
+  jsonLd={`{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication", // ALTERADO AQUI
+    "name": "Análise de Mercado e Público-Alvo com IA | MKRanker", // MOVIDO DO mainEntity
+    "description": "Gere análises detalhadas de mercado e público-alvo com nossa ferramenta de inteligência artificial e desenvolva estratégias mais eficazes.", // MOVIDO DO mainEntity
+    "url": "https://mkranker.com.br/recursos/mercado-e-publico-alvo-com-ia",
+    "applicationCategory": "MarketingApplication", // MOVIDO DO mainEntity
+    "operatingSystem": "Web", // MOVIDO DO mainEntity
+    "offers": { // MOVIDO DO mainEntity
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "BRL"
+    }
+  }`}
+  // ...
+/>
+// ...
         contentHTML={`
           <div class="seo-content">
             <h1>Análise de Mercado e Público-Alvo com IA</h1>
