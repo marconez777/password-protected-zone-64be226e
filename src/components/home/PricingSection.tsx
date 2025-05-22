@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,7 +26,13 @@ const PricingSection = () => {
                 
                 <div className="mt-4 mb-8">
                   <div className="flex items-baseline text-white">
-                    <span className="text-5xl font-extrabold tracking-tight">R$ 97,00</span>
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline">
+                        <span className="text-gray-400 line-through text-xl mr-2">de R$297</span>
+                        <span className="text-white">por</span>
+                      </div>
+                      <span className="text-5xl font-extrabold tracking-tight">R$ 97,00</span>
+                    </div>
                     <span className="ml-1 text-xl text-muted-foreground">/mês</span>
                   </div>
                 </div>
@@ -65,7 +72,13 @@ const PricingSection = () => {
                 
                 <div className="mt-4 mb-8">
                   <div className="flex items-baseline text-white">
-                    <span className="text-5xl font-extrabold tracking-tight">R$ 777,00</span>
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline">
+                        <span className="text-gray-400 line-through text-xl mr-2">de R$3.564</span>
+                        <span className="text-white">por</span>
+                      </div>
+                      <span className="text-5xl font-extrabold tracking-tight">R$ 777,00</span>
+                    </div>
                     <span className="ml-1 text-xl text-muted-foreground">/ano</span>
                   </div>
                 </div>
