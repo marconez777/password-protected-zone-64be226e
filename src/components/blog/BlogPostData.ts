@@ -1,3 +1,4 @@
+
 export interface Post {
   id: string;
   title: string;
@@ -134,7 +135,7 @@ export const posts: Post[] = [
       </div>
     `,
     date: '23 Mai 2025',
-    image: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
+    image: '/lovable-uploads/7326a70d-364c-4ab8-b8f0-5f091dbdf355.png',
     datePublished: '2025-05-23',
     dateModified: '2025-05-23',
     author: 'MKRanker',
