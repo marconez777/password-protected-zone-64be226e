@@ -1,4 +1,3 @@
-
 export interface Post {
   id: string;
   title: string;
@@ -114,13 +113,28 @@ export const posts: Post[] = [
           A otimização da pesquisa de palavras-chave é uma parte fundamental do sucesso no SEO. Com ferramentas de IA como a MK Ranker, você pode não apenas encontrar palavras-chave relevantes, mas também aprofundar o conhecimento sobre seu público, adaptando sua estratégia às suas necessidades.
         </p>
         
-        <p class="text-gray-700 mb-4">
+        <p class="text-gray-700 mb-6">
           Se você deseja aprimorar suas ações de SEO de forma significativa, considere investir em uma solução que combine eficiência e inteligência, como a MK Ranker. Transforme sua abordagem digital e colha os benefícios de uma estratégia de palavras-chave bem estruturada e sustentada por inteligência artificial.
         </p>
+
+        <div class="mt-8 mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Vídeo: Como Fazer Pesquisa de Palavras-Chave com IA</h3>
+          <div class="relative w-full" style="padding-bottom: 56.25%; height: 0;">
+            <iframe 
+              src="https://www.youtube.com/embed/w9m9fLy1JbA" 
+              title="Como Fazer Pesquisa de Palavras-Chave usando IA"
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
+              allowfullscreen
+              class="absolute top-0 left-0 w-full h-full rounded-lg"
+            ></iframe>
+          </div>
+        </div>
       </div>
     `,
     date: '23 Mai 2025',
-    image: '/lovable-uploads/7326a70d-364c-4ab8-b8f0-5f091dbdf355.png',
+    image: '/lovable-uploads/d50d4456-17be-4c31-83fe-3f1c54fa9527.png',
     datePublished: '2025-05-23',
     dateModified: '2025-05-23',
     author: 'MKRanker',
