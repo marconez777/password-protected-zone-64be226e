@@ -3,35 +3,13 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar } from 'lucide-react';
+import { posts } from './BlogPostData';
 
 interface BlogPostProps {
   category: string;
 }
 
-interface Post {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  category: string;
-  image: string;
-  slug: string;
-}
-
 const BlogPostGrid: React.FC<BlogPostProps> = ({ category }) => {
-  // Blog posts array with the new post
-  const posts: Post[] = [
-    {
-      id: '1',
-      title: 'O que é IA de SEO e como ela pode transformar sua estratégia de SEO',
-      excerpt: 'Descubra como a Inteligência Artificial para SEO pode revolucionar sua estratégia de marketing digital e impulsionar seus resultados online.',
-      date: '20 Mai 2025',
-      category: 'on-page',
-      image: '/lovable-uploads/328ab6d6-16f1-40f9-ba23-3e99279b9ec6.png',
-      slug: 'o-que-e-ia-de-seo'
-    }
-  ];
-
   // Filter posts based on selected category
   const filteredPosts = category === 'all' 
     ? posts 
