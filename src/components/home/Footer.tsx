@@ -64,10 +64,10 @@ const Footer = () => {
           <div>
             <h3 className="font-medium mb-4">Links Rápidos</h3>
             <ul className="space-y-3">
-              <li><a href="/#" className="hover:text-white transition-colors">Página Inicial</a></li>
+              <li><a href="/" className="hover:text-white transition-colors">Página Inicial</a></li>
+              <li><a href="/assinar" className="hover:text-white transition-colors">Assinar</a></li>
               <li><a href="/login" className="hover:text-white transition-colors">Login</a></li>
               <li><a href="/cadastro" className="hover:text-white transition-colors">Cadastro</a></li>
-              <li><a href="/#pricing" className="hover:text-white transition-colors">Preços</a></li>
             </ul>
           </div>
           
@@ -75,11 +75,11 @@ const Footer = () => {
           <div>
             <h3 className="font-medium mb-4">Serviços</h3>
             <ul className="space-y-3">
-              <li><a href="/keywords" className="hover:text-white transition-colors">Palavras-chave</a></li>
-              <li><a href="/search-funnel" className="hover:text-white transition-colors">Funil de Busca</a></li>
-              <li><a href="/market-and-target" className="hover:text-white transition-colors">Mercado e Público-alvo</a></li>
-              <li><a href="/texto-seo-lp" className="hover:text-white transition-colors">Texto SEO para LP</a></li>
-              <li><a href="/texto-seo-produto" className="hover:text-white transition-colors">Texto SEO para Produto</a></li>
+              <li><a href="/recursos/palavras-chave-com-ia" className="hover:text-white transition-colors">Palavras-chave</a></li>
+              <li><a href="/recursos/funil-de-busca-com-ia" className="hover:text-white transition-colors">Funil de Busca</a></li>
+              <li><a href="/recursos/mercado-e-publico-alvo-com-ia" className="hover:text-white transition-colors">Mercado e Público-alvo</a></li>
+              <li><a href="/recursos/texto-seo-lp-com-ia" className="hover:text-white transition-colors">Texto SEO para LP</a></li>
+              <li><a href="/recursos/texto-seo-produto-com-ia" className="hover:text-white transition-colors">Texto SEO para Produto</a></li>
             </ul>
           </div>
           
@@ -87,9 +87,13 @@ const Footer = () => {
           <div>
             <h3 className="font-medium mb-4">Contato</h3>
             <ul className="space-y-4">
-              <li className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-[#805af5]" />
-                <span>São Paulo, Brasil</span>
+              <li className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 text-[#805af5] mt-0.5 flex-shrink-0" />
+                <span>
+                  Rua Caminho do Pilar, 401
+                  <br />
+                  Santo André – SP
+                </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-[#805af5]" />
@@ -109,10 +113,13 @@ const Footer = () => {
         
         <Separator className="bg-gray-800" />
         
-        <div className="flex flex-col md:flex-row justify-between items-center py-6">
+        <div className="flex flex-col md:flex-row justify-between items-center pt-6 pb-2">
           <div className="mb-4 md:mb-0">
             <p className="text-sm text-gray-400">
               Copyright © {new Date().getFullYear()} MKRanker. Todos os direitos reservados.
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              Mk Art Trafego Organico Ltda - CNPJ: 26.248.684/0001-39
             </p>
           </div>
           <div className="flex space-x-6">
