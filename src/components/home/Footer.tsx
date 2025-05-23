@@ -1,29 +1,21 @@
-
 import React from 'react';
 import { Mail, Phone, MapPin, ArrowUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'smooth'
     });
   };
-
-  return (
-    <footer className="bg-[#0c0a11] pt-16 pb-6 text-gray-300">
+  return <footer className="bg-[#0c0a11] pt-16 pb-6 text-gray-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo & Newsletter */}
           <div className="md:col-span-1">
             <div className="flex items-center mb-6">
-              <img 
-                src="/lovable-uploads/f9dd956a-b8fd-41f7-9443-284daab02a2e.png" 
-                alt="MKRanker Logo" 
-                className="h-8 w-auto"
-              />
+              <img src="/lovable-uploads/f9dd956a-b8fd-41f7-9443-284daab02a2e.png" alt="MKRanker Logo" className="h-8 w-auto" />
             </div>
             <p className="mb-6 text-sm">
               Utilizamos as melhores tecnologias de IA para otimizar seu conteúdo SEO
@@ -31,29 +23,10 @@ const Footer = () => {
             <div className="mb-6">
               <h3 className="font-medium mb-4">Inscreva-se na Newsletter</h3>
               <div className="flex">
-                <input 
-                  type="email" 
-                  placeholder="Seu e-mail aqui" 
-                  className="px-4 py-2 bg-[#121016] border border-gray-800 rounded-l-md flex-1 text-sm"
-                />
-                <Button 
-                  type="button" 
-                  className="bg-[#805af5] hover:bg-[#6a4ac9] rounded-l-none"
-                >
-                  <svg 
-                    width="15" 
-                    height="15" 
-                    viewBox="0 0 15 15" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path 
-                      d="M1 7.5H12M12 7.5L7 2.5M12 7.5L7 12.5" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    />
+                <input type="email" placeholder="Seu e-mail aqui" className="px-4 py-2 bg-[#121016] border border-gray-800 rounded-l-md flex-1 text-sm" />
+                <Button type="button" className="bg-[#805af5] hover:bg-[#6a4ac9] rounded-l-none">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 7.5H12M12 7.5L7 2.5M12 7.5L7 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Button>
               </div>
@@ -65,7 +38,7 @@ const Footer = () => {
             <h3 className="font-medium mb-4">Links Rápidos</h3>
             <ul className="space-y-3">
               <li><a href="/" className="hover:text-white transition-colors">Página Inicial</a></li>
-              <li><a href="/assinar" className="hover:text-white transition-colors">Assinar</a></li>
+              
               <li><a href="/login" className="hover:text-white transition-colors">Login</a></li>
               <li><a href="/cadastro" className="hover:text-white transition-colors">Cadastro</a></li>
             </ul>
@@ -133,15 +106,9 @@ const Footer = () => {
         </div>
       </div>
       
-      <Button 
-        onClick={scrollToTop}
-        className="fixed bottom-6 right-6 bg-[#805af5] hover:bg-[#6a4ac9] rounded-full w-10 h-10 p-0 shadow-lg"
-        aria-label="Voltar ao topo"
-      >
+      <Button onClick={scrollToTop} className="fixed bottom-6 right-6 bg-[#805af5] hover:bg-[#6a4ac9] rounded-full w-10 h-10 p-0 shadow-lg" aria-label="Voltar ao topo">
         <ArrowUp className="h-5 w-5" />
       </Button>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
