@@ -5,6 +5,7 @@ import PricingSection from '@/components/home/PricingSection';
 import Footer from '@/components/home/Footer';
 import BlogSidebar from '@/components/blog/BlogSidebar';
 import BlogPostGrid from '@/components/blog/BlogPostGrid';
+import BlogBreadcrumb from '@/components/blog/BlogBreadcrumb';
 import SEOMetadata from '@/components/recursos/SEOMetadata';
 import { blogJsonLdData, blogSeoContent } from '@/components/blog/BlogJSONLD';
 
@@ -31,6 +32,8 @@ const BlogPage = () => {
       <HomeNavbar />
       
       <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
+        <BlogBreadcrumb currentPage="Blog MKRanker" />
+        
         <div className="mb-10">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Blog MKRanker</h1>
           <p className="text-gray-400 text-lg max-w-3xl">

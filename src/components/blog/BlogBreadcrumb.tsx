@@ -10,11 +10,12 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 
-interface RecursoBreadcrumbProps {
+interface BlogBreadcrumbProps {
   currentPage: string;
+  category?: string;
 }
 
-const RecursoBreadcrumb: React.FC<RecursoBreadcrumbProps> = ({ currentPage }) => {
+const BlogBreadcrumb: React.FC<BlogBreadcrumbProps> = ({ currentPage, category }) => {
   return (
     <Breadcrumb className="mb-8">
       <BreadcrumbList>
@@ -28,9 +29,20 @@ const RecursoBreadcrumb: React.FC<RecursoBreadcrumbProps> = ({ currentPage }) =>
         
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/recursos">Recursos</Link>
+            <Link to="/blog">Blog</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
+        
+        {category && (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to={`/blog?category=${category}`}>{category}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </>
+        )}
         
         <BreadcrumbSeparator />
         
@@ -42,4 +54,4 @@ const RecursoBreadcrumb: React.FC<RecursoBreadcrumbProps> = ({ currentPage }) =>
   );
 };
 
-export default RecursoBreadcrumb;
+export default BlogBreadcrumb;

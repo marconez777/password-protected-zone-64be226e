@@ -6,7 +6,7 @@ import Footer from '@/components/home/Footer';
 import BlogPost from '@/components/blog/BlogPost';
 import NotFoundPost from '@/components/blog/NotFoundPost';
 import BlogSEO from '@/components/blog/BlogSEO';
-import BackToBlog from '@/components/blog/BackToBlog';
+import BlogBreadcrumb from '@/components/blog/BlogBreadcrumb';
 import { posts } from '@/components/blog/BlogPostData';
 
 const BlogPostPage = () => {
@@ -36,7 +36,7 @@ const BlogPostPage = () => {
       <HomeNavbar />
       
       <main className="pt-10 pb-4 px-4 md:px-8 lg:px-16">
-        <BackToBlog />
+        <BlogBreadcrumb currentPage={post.title} category={post.category} />
         
         <div className="max-w-4xl mx-auto">
           <BlogPost post={post} />
